@@ -1,0 +1,12 @@
+.simpleCaptchaSelected {
+	border: 2px solid #393;
+}
+
+#apptDetailsCaptcha {
+	float: right;
+	vertical-align: text-top;
+	width: 343px;
+}
+
+.simpleCaptcha .captchaText { font-weight: bold; }
+

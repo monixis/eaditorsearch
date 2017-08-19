@@ -1,0 +1,50 @@
+
+h2 {
+  font: 28px Helvetica, Verdana, sans-serif;
+  margin: 5px;
+  padding: 0;
+  color: #b31b1b;
+}
+
+#emplist{
+	/*border: 1px solid #000000;*/
+	width:660px;
+	height: 600px;
+	margin-bottom: 10px;
+	padding-left: 0px;
+	z-index: 9;
+	position: relative;
+	float: right;
+	margin-top: 20px;
+	overflow: hidden;
+}
+
+li.emp {
+  font: 18px Helvetica, Verdana, sans-serif;
+  border-bottom: 1px solid #ccc;
+  width: 400px;
+  padding: 5px;
+}
+ 
+li.emp:last-child {
+  border: none;
+}
+ 
+li.emp a {
+  text-decoration: none;
+  color: #000;
+  display: block;
+  width: 400px;
+ 
+  -webkit-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -moz-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -o-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -ms-transition: font-size 0.3s ease, background-color 0.3s ease;
+  transition: font-size 0.3s ease, background-color 0.3s ease;
+}
+ 
+li.emp a:hover {
+  font-size: 25px;
+  background: #f6f6f6;
+}
+

@@ -1,0 +1,116 @@
+body, html {
+	margin: 0px;
+	font-family : sans-serif, Helvetica, arial;
+	background: #ffffff;
+	font-size: 14px;
+}
+
+/* 
+Generic Styling, for Desktops/Laptops 
+*/
+table#resTable { 
+  width: 1000px; 
+  border-collapse: collapse; 
+}
+/* Zebra striping */
+tr:nth-of-type(odd) { 
+  background: #eee; 
+}
+th { 
+  background: #333; 
+  color: white; 
+  font-weight: bold; 
+}
+td, th { 
+  padding: 6px; 
+  border: 1px solid #ccc; 
+  text-align: left; 
+}
+
+li.results {
+    font: 18px Helvetica, Verdana, sans-serif;
+    border-bottom: 1px solid #ccc;
+    width: 100%;
+    padding: 10px;
+    padding-bottom:0px;
+    list-style-type:none
+}
+
+li.results a {
+  text-decoration: none;
+  color: #000;
+  display: block;
+  width: 100%;
+  -webkit-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -moz-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -o-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -ms-transition: font-size 0.3s ease, background-color 0.3s ease;
+  transition: font-size 0.3s ease, background-color 0.3s ease;
+}
+
+li.results a:hover {
+  font-size: 25px;
+  background: #f6f6f6;
+}
+
+/*---*/
+
+ul.ui-tabs-nav{
+		height: 50px;
+		background: #ffffff;
+		border: none;
+	}
+	
+	div#tabs{
+		border-top: none;
+		border-left: none;
+		border-right: none;
+		border-bottom: none;
+	}
+	
+	button.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: 0.4s;
+    margin-bottom: 15px;
+    height: 35px;
+    padding-left: 20px;
+    font-weight: bold;
+	}
+
+button.accordion.active, button.accordion:hover {
+    background-color: #ddd; 
+}
+
+div.panel {
+    padding: 10px 18px;
+    display: none;
+    background-color: white;
+    border: 1px solid #ccc;
+    margin-top: -15px;
+}
+
+button.accordion:after {
+    content: "\02795"; /* Unicode character for "plus" sign (+) */
+    font-size: 13px;
+    color: #777;
+    float: right;
+    margin-left: 5px;
+}
+
+button.accordion.active:after {
+    content: "\2796"; /* Unicode character for "minus" sign (-) */
+}		
+
+#selectedFacet{
+	width: auto;
+	height: auto;
+
+}
+
