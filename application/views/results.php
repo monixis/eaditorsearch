@@ -34,14 +34,11 @@
 <link rel="stylesheet" type="text/css" href="./styles/main.css" />
 <link rel="stylesheet" type="text/css" href="./styles/nprogress.css" />
 
-
 	<div class="row">	
 		<div id="facets" class="page-sidebar col-md-3">
 			<h4>Filter By:</h4>
 			<?php
-
 				$facets = (array) $results->facet_counts->facet_fields;
-
 				foreach ($facets as $key => $value){
 					if(sizeof($value)>0){
 			?>
@@ -65,43 +62,34 @@
              }
 				}
 			?>
-		</div>
-		
-	
+		</div> <!-- facets ends -->
+
+
 	<div class="col-md-9">
 		<h2>Results:</h2>
 		 <div id="tabs-1" >
   	<!--ol id="list"-->
 			<?php
 				foreach ($results->response->docs as $row) {
-					$title = $row -> Title;
-					$year = $row -> Year;
-					$date = $row -> Date;
-					$collection = $row -> Collection[0];
-					$id = $row -> unitid;
-					$abstract = $row -> abstract;
-					$author = $row -> Publisher;
-					$department = $row -> Department[0];
-					$display = $row -> Display;
+					$title = $row -> unittitle_display;
+					$date = (isset($row -> unitdate_display) ? $row -> unitdate_display : FALSE) ;
+					$publisher = (isset($row -> publisher_display) ? $row -> publisher_display : FALSE) ;
+					$collection = str_replace('US-','',$row -> agencycode_facet[0]);
+					$link = "https://www.empireadc.org/ead/". $collection ."/id/".$row -> id.".xml"; 
 			?>
 				<li class="results" style="height: auto; padding: 10px;">
-						<a href="<?php echo base_url("?c=repository&m=fileInfo&id=".$id)?>" target="_blank"><?php echo $title; ?> -  <?php echo $year; ?></a></br>
-						<p class="labelInfo"><span class="labelName">Author: </span><?php echo $author ?></p>
-						<p class="labelInfo"><span class="labelName">Department: </span><?php echo $department ?></p>
-						<p class="labelInfo"><span class="labelName">Collection: </span><?php echo $collection ?></p>
-						<p class="labelInfo"><span class="labelName">Abstract: </span><?php echo $abstract ?></p>
-						<p class="labelInfo" style="font-size: 8pt;"><?php echo $display ?></p>
+						<p class="labelInfo"><span class="labelName">Title:</span><a href=<?php echo $link ?> target="_blank"><?php echo $title ?></a></p>
+						<p class="labelInfo"><span class="labelName">Date: </span><?php echo $date ?></p>
+						<p class="labelInfo"><span class="labelName">Publisher: </span><?php echo $publisher ?></p>
 				</li>
 			<?php
 				}
 			?>	
 		<!--/ol></br-->
-		<div id="pagination"></div>
-</div><!-- Tab 1 ends -->
-</br>
-		
-	</div>
-</div>
+				<div id="pagination"></div>
+		</div><!-- Tab 1 ends --></br>
+	</div><!-- col-md-9 ends -->
+	</div><!-- row ends -->
 	
 <script type="text/javascript">
 	var acc = document.getElementsByClassName("accordion");

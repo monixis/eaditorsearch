@@ -1,1 +1,1 @@
-# Honors Thesis Repository
+# Search interface for EADitor
