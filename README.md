@@ -1,1 +1,1 @@
-# Honors Thesis Repository
+# Eaditor search
