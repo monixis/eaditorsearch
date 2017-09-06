@@ -7,6 +7,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/list.pagination.js/0.1.1/list.pagination.min.js"></script>
 <script src="./js/jquery.easyPaginate.js"></script>
 <script src="./js/nprogress.js"></script>
+
 <style>
 	p.labelInfo {font-size: 10pt; margin-top: -10px;}
 	span.labelName {color: #b31b1b;font-weight:bold; }
@@ -39,12 +40,16 @@
 			<h4>Filter By:</h4>
 			<?php
 				$facets = (array) $results->facet_counts->facet_fields;
+
 				foreach ($facets as $key => $value){
 					if(sizeof($value)>0){
 			?>
 					<button class="accordion" id="<?php echo $key ; ?>"><?php echo $key ; ?></button>
 					<div class="panel" id="<?php echo $key ; ?>">
-					<?php
+
+                        <input id="searchInput" class="form-control multiselect-search" oninput="sFacet.filterHTML('#<?php echo $key ; ?>', 'li', this.value)" type="text" placeholder="Search">
+                        <ul id="<?php echo $key?>">
+                        <?php
 						$facetList = " ";
 						$i = 0;
 						foreach ($value as $row) {
@@ -52,11 +57,14 @@
 								$facetList = $row;
 							}else{
 								$facetList = $facetList . " - " . $row ;
-					?><a href="#" class='tags'><?php echo $facetList ; ?></a><br/><?php
+
+					?>
+								<li><a href="#" class='tags'><?php echo $facetList ; ?></a></li><?php
 							}
 							$i += 1;
 						}
 					?>
+                        </ul>
 					</div>
 			<?php
              }
@@ -146,8 +154,70 @@
         elementsPerPage: 10
         /* effect: 'climb'*/
   });
-   
 
+/*	function myFunction() {
+		// Declare variables
+		var input, filter, ul, li, a, i;
+		input = document.getElementById('searchInput');
+	//	filter = input.value.toUpperCase();
+		ul = document.getElementById("facetList");
+		li = ul.getElementsByTagName('li');
+
+		// Loop through all list items, and hide those who don't match the search query
+		for (i = 0; i < li.length; i++) {
+			a = li[i].getElementsByTagName("a")[0];
+			if (a.innerHTML.toUpperCase().indexOf(input) > -1) {
+				li[i].style.display = "";
+			} else {
+				li[i].style.display = "none";
+			}
+		}
+	}*/
+
+/*        var input = document.getElementById('searchInput');
+        input.onkeyup = function () {
+            var filter = input.value.toUpperCase();
+            var lis = document.getElementsByTagName('li');
+            for (var i = 0; i < lis.length; i++) {
+                var a = lis[i].getElementsByTagName('a')[0];
+                if (a.innerHTML.toUpperCase().indexOf(input) > -1)
+                    lis[i].style.display = '';
+                else
+                    lis[i].style.display = 'none';
+            }
+        }*/
+    var sFacet = {};
+    sFacet.filterHTML = function(id, sel, filter) {
+        var a, b, c, i, ii, iii, hit;
+        a = sFacet.getElements(id);
+        for (i = 0; i < a.length; i++) {
+            b = sFacet.getElements(sel);
+            for (ii = 0; ii < b.length; ii++) {
+                hit = 0;
+                if (b[ii].innerHTML.toUpperCase().indexOf(filter.toUpperCase()) > -1) {
+                    hit = 1;
+                }
+                c = b[ii].getElementsByTagName("*");
+                for (iii = 0; iii < c.length; iii++) {
+                    if (c[iii].innerHTML.toUpperCase().indexOf(filter.toUpperCase()) > -1) {
+                        hit = 1;
+                    }
+                }
+                if (hit == 1) {
+                    b[ii].style.display = "";
+                } else {
+                    b[ii].style.display = "none";
+                }
+            }
+        }
+    };
+    sFacet.getElements = function (id) {
+        if (typeof id == "object") {
+            return [id];
+        } else {
+            return document.querySelectorAll(id);
+        }
+    };
 
 </script>
 
