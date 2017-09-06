@@ -155,37 +155,6 @@
         /* effect: 'climb'*/
   });
 
-/*	function myFunction() {
-		// Declare variables
-		var input, filter, ul, li, a, i;
-		input = document.getElementById('searchInput');
-	//	filter = input.value.toUpperCase();
-		ul = document.getElementById("facetList");
-		li = ul.getElementsByTagName('li');
-
-		// Loop through all list items, and hide those who don't match the search query
-		for (i = 0; i < li.length; i++) {
-			a = li[i].getElementsByTagName("a")[0];
-			if (a.innerHTML.toUpperCase().indexOf(input) > -1) {
-				li[i].style.display = "";
-			} else {
-				li[i].style.display = "none";
-			}
-		}
-	}*/
-
-/*        var input = document.getElementById('searchInput');
-        input.onkeyup = function () {
-            var filter = input.value.toUpperCase();
-            var lis = document.getElementsByTagName('li');
-            for (var i = 0; i < lis.length; i++) {
-                var a = lis[i].getElementsByTagName('a')[0];
-                if (a.innerHTML.toUpperCase().indexOf(input) > -1)
-                    lis[i].style.display = '';
-                else
-                    lis[i].style.display = 'none';
-            }
-        }*/
     var sFacet = {};
     sFacet.filterHTML = function(id, sel, filter) {
         var a, b, c, i, ii, iii, hit;
