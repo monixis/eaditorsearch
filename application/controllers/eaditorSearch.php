@@ -8,7 +8,6 @@ class eaditorSearch extends CI_Controller
 
     }
 
-    private $limit = 10;
 
     public function index()
     {

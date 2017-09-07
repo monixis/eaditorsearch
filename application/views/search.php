@@ -8,7 +8,7 @@
 		<meta name="description" content="">
 		<meta name="author" content="">
 
-		<title>Honors Program Thesis Repository</title>
+		<title>Empire Archival Discovery Cooperative | Finding Aids at Your Fingertips</title>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 		<!-- Bootstrap core CSS -->
 		<link href="styles/bootstrap.css" rel="stylesheet">

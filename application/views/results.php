@@ -1,5 +1,5 @@
 <!--script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script-->
-<meta charset="utf-8">
+<meta charset="utf-8" xmlns="http://www.w3.org/1999/html">
 <!--script type="text/javascript" src="http://library.marist.edu/crrs/js/jquery-ui.js"></script-->
  <script type="text/javascript" src="http://library.marist.edu/js/jquery-ui.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -31,6 +31,7 @@
 		}
 	}
 */
+
 </style>
 <link rel="stylesheet" type="text/css" href="./styles/main.css" />
 <link rel="stylesheet" type="text/css" href="./styles/nprogress.css" />
@@ -46,9 +47,14 @@
 			?>
 					<button class="accordion" id="<?php echo $key ; ?>"><?php echo $key ; ?></button>
 					<div class="panel" id="<?php echo $key ; ?>">
+							<form class="form-horizontal">
+								<div class="form-group has-feedback">
+                        <input id="searchInput_<?php echo $key;?>" class="form-control hasclear" oninput="sFacet.filterHTML('#<?php echo $key ; ?>', 'li#li_<?php echo $key;?>', this.value)" type="text" placeholder="Search">
+						<span class="clearer glyphicon glyphicon-remove-circle form-control-feedback"></span>
 
-                        <input id="searchInput" class="form-control multiselect-search" oninput="sFacet.filterHTML('#<?php echo $key ; ?>', 'li', this.value)" type="text" placeholder="Search">
-                        <ul id="<?php echo $key?>">
+						</div>
+							</form>
+						<ul id="<?php echo $key?>">
                         <?php
 						$facetList = " ";
 						$i = 0;
@@ -59,7 +65,7 @@
 								$facetList = $facetList . " - " . $row ;
 
 					?>
-								<li><a href="#" class='tags'><?php echo $facetList ; ?></a></li><?php
+								<li id="li_<?php echo $key;?>"><a href="#" class='tags'><?php echo $facetList ; ?></a></li><?php
 							}
 							$i += 1;
 						}
@@ -187,6 +193,18 @@
             return document.querySelectorAll(id);
         }
     };
+
+	$(".hasclear").keyup(function () {
+		var t = $(this);
+		t.next('span').toggle(Boolean(t.val()));
+	});
+
+	$(".clearer").hide($(this).prev('input').val());
+
+	$(".clearer").click(function () {
+		$(this).prev('input').val('').focus();
+		$(this).hide();
+	});
 
 </script>
 
