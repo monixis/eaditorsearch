@@ -1,5 +1,19 @@
 <<<<<<< HEAD
-# Search interface for EADitor
-=======
+<<<<<<< HEAD
+<<<<<<< HEAD
 # Eaditor search
->>>>>>> a10aff578666fda99fcebef9b1c63e993c659bcf
+=======
+
+# Search interface for EADitor
+
+>>>>>>> af8aa82b03a0dd1489b7332486eefddfda68a379
+=======
+
+# Search interface for EADitor
+
+>>>>>>> af8aa82b03a0dd1489b7332486eefddfda68a379
+=======
+
+# Search interface for EADitor
+
+>>>>>>> af8aa82b03a0dd1489b7332486eefddfda68a379

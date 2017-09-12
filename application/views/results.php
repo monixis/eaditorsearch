@@ -1,5 +1,5 @@
 <!--script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script-->
-<meta charset="utf-8">
+<meta charset="utf-8" xmlns="http://www.w3.org/1999/html">
 <!--script type="text/javascript" src="http://library.marist.edu/crrs/js/jquery-ui.js"></script-->
  <script type="text/javascript" src="http://library.marist.edu/js/jquery-ui.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -7,6 +7,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/list.pagination.js/0.1.1/list.pagination.min.js"></script>
 <script src="./js/jquery.easyPaginate.js"></script>
 <script src="./js/nprogress.js"></script>
+
 <style>
 	p.labelInfo {font-size: 10pt; margin-top: -10px;}
 	span.labelName {color: #b31b1b;font-weight:bold; }
@@ -30,6 +31,7 @@
 		}
 	}
 */
+
 </style>
 <link rel="stylesheet" type="text/css" href="./styles/main.css" />
 <link rel="stylesheet" type="text/css" href="./styles/nprogress.css" />
@@ -39,12 +41,21 @@
 			<h4>Filter By:</h4>
 			<?php
 				$facets = (array) $results->facet_counts->facet_fields;
+
 				foreach ($facets as $key => $value){
 					if(sizeof($value)>0){
 			?>
 					<button class="accordion" id="<?php echo $key ; ?>"><?php echo $key ; ?></button>
 					<div class="panel" id="<?php echo $key ; ?>">
-					<?php
+							<form class="form-horizontal">
+								<div class="form-group has-feedback">
+                        <input id="searchInput_<?php echo $key;?>" class="form-control hasclear" oninput="sFacet.filterHTML('#<?php echo $key ; ?>', 'li#li_<?php echo $key;?>', this.value)" type="text" placeholder="Search">
+						<span class="clearer glyphicon glyphicon-remove-circle form-control-feedback"></span>
+
+						</div>
+							</form>
+						<ul id="<?php echo $key?>">
+                        <?php
 						$facetList = " ";
 						$i = 0;
 						foreach ($value as $row) {
@@ -52,11 +63,14 @@
 								$facetList = $row;
 							}else{
 								$facetList = $facetList . " - " . $row ;
-					?><a href="#" class='tags'><?php echo $facetList ; ?></a><br/><?php
+
+					?>
+								<li id="li_<?php echo $key;?>"><a href="#" class='tags'><?php echo $facetList ; ?></a></li><?php
 							}
 							$i += 1;
 						}
 					?>
+                        </ul>
 					</div>
 			<?php
              }
@@ -146,8 +160,51 @@
         elementsPerPage: 10
         /* effect: 'climb'*/
   });
-   
 
+    var sFacet = {};
+    sFacet.filterHTML = function(id, sel, filter) {
+        var a, b, c, i, ii, iii, hit;
+        a = sFacet.getElements(id);
+        for (i = 0; i < a.length; i++) {
+            b = sFacet.getElements(sel);
+            for (ii = 0; ii < b.length; ii++) {
+                hit = 0;
+                if (b[ii].innerHTML.toUpperCase().indexOf(filter.toUpperCase()) > -1) {
+                    hit = 1;
+                }
+                c = b[ii].getElementsByTagName("*");
+                for (iii = 0; iii < c.length; iii++) {
+                    if (c[iii].innerHTML.toUpperCase().indexOf(filter.toUpperCase()) > -1) {
+                        hit = 1;
+                    }
+                }
+                if (hit == 1) {
+                    b[ii].style.display = "";
+                } else {
+                    b[ii].style.display = "none";
+                }
+            }
+        }
+    };
+    sFacet.getElements = function (id) {
+        if (typeof id == "object") {
+            return [id];
+        } else {
+            return document.querySelectorAll(id);
+        }
+    };
+
+	$(".hasclear").keyup(function () {
+		var t = $(this);
+		t.next('span').toggle(Boolean(t.val()));
+	});
+
+	$(".clearer").hide($(this).prev('input').val());
+
+	$(".clearer").click(function () {
+		$(this).prev('input').val('').focus();
+		$(this).hide();
+	});
 
 </script>
 
