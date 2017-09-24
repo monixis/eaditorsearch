@@ -88,8 +88,10 @@
 					$title = $row -> unittitle_display;
 					$date = (isset($row -> unitdate_display) ? $row -> unitdate_display : FALSE) ;
 					$publisher = (isset($row -> publisher_display) ? $row -> publisher_display : FALSE) ;
-					$collection = str_replace('US-','',$row -> agencycode_facet[0]);
-					$link = "https://www.empireadc.org/ead/". $collection ."/id/".$row -> id.".xml"; 
+					$collId = str_replace('US-','',$row -> agencycode_facet[0]);
+					$fileId = $row -> id ;
+					//$link = "https://www.empireadc.org/ead/". $collection ."/id/".$row -> id.".xml"; 
+					$link = base_url('?c=eaditorSearch&m=viewEAD&collId='.$collId.'&eadId='.$row -> id);
 			?>
 				<li class="results" style="height: auto; padding: 10px;">
 						<p class="labelInfo"><span class="labelName">Title:</span><a href=<?php echo $link ?> target="_blank"><?php echo $title ?></a></p>

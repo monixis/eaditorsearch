@@ -33,7 +33,9 @@ class eaditorSearch extends CI_Controller
 
      public function viewEAD()
 	{
-        $this->load->view('ead_view');
+        $data['collId'] = $this->input->get('collId');
+        $data['eadId'] = $this->input->get('eadId');
+        $this->load->view('ead_view', $data);
      }
 }
 ?>

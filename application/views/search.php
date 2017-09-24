@@ -47,7 +47,7 @@
 		
 		<!-- Main jumbotron for a primary marketing message or call to action -->
 		<div id="main-container" class="container">
-			<div class="jumbotron">
+			<div class="jumbotron" style="background: #ffffff;">
 				<div class="container" style="margin-top: -36px;">
 					<!-- Example row of columns -->
 					<div class="row">
