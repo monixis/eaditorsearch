@@ -102,22 +102,24 @@ label{
   // $xml = simplexml_load_file('https://www.empireadc.org/ead/nalsu/id/ua950.015.xml');
    //$xml = simplexml_load_file('https://www.empireadc.org/ead/nalsu/id/apap134.xml');
    $link = "https://www.empireadc.org/ead/". $collId ."/id/".$eadId.".xml"; 
+   $rdf = "https://www.empireadc.org/ead/". $collId ."/id/".$eadId.".rdf";
    $xml = simplexml_load_file($link);
    $title = $xml->archdesc->did->unittitle;
-   $repository = $xml->archdesc->did->repository->corpname;
+   $repository = (isset($xml->archdesc->did->repository->corpname)? $xml->archdesc->did->repository->corpname : $xml->archdesc->did->repository);
    $extent = $xml->archdesc->did->physdesc->extent;
-   $creator =  $xml->archdesc->did->origination->corpname;
-   $location = $xml->archdesc->did->physloc;
-   $language = $xml->archdesc->did->langmaterial;
+   $creator =  (isset($xml->archdesc->did->origination->corpname)? $xml->archdesc->did->origination->corpname : $xml->archdesc->did->origination->persname);
+   $location = (isset($xml->archdesc->did->physloc)? $xml->archdesc->did->physloc : 'Unspecified');
+   $language = (isset($xml->archdesc->did->langmaterial-> language)? $xml->archdesc->did->langmaterial-> language : $xml->archdesc->did->langmaterial);
    $abstract = $xml->archdesc->did->abstract;
-   $processInfo = $xml->archdesc->processinfo->p;
+   $processInfo = (isset($xml->archdesc->processinfo->p)? $xml->archdesc->processinfo->p : 'Unspecified');
    $access = $xml->archdesc->accessrestrict->p;
    $copyright = $xml->archdesc->userestrict->p;
-   $acqInfo = $xml->archdesc->acqinfo->p;
+   $acqInfo = (isset($xml->archdesc->acqinfo->p)? $xml->archdesc->acqinfo->p : 'Unspecified');
    $prefCitation = $xml->archdesc->prefercite->p[1];
    $histNote = $xml->archdesc->bioghist->p;
    $scopeContent = $xml->archdesc->scopecontent->p;
    $arrangement = $xml->archdesc->arrangement->p; 
+   $componentList = (isset($xml->archdesc->dsc->c)? TRUE : FALSE);
 ?>
 <div id="eadInfo" style="margin-bottom: 30px;">
        <h1><?php echo $title; ?></h1> 
@@ -125,8 +127,10 @@ label{
        <div>
          <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#descId" style="font-size: 14px;">Descriptive Identification</button>
          <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#adminInfo" style="font-size: 14px;">Administrative Information</button>
-        </div>
-      
+       </div>
+		<h4>Output formats:</h4>
+		 <button type="button" class="btn btn-info" ><a href='<?php echo $link; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'>XML</a></button>
+      	 <button type="button" class="btn btn-info" ><a href='<?php echo $rdf; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'>RDF/XML</a></button>       
 </div> 
  
 <div id="descId" class="modal fade" role="dialog">
@@ -179,6 +183,7 @@ label{
 
 <div id="componentList">	
 <?php		
+	if ($componentList == TRUE){
     foreach ($xml->archdesc->dsc->c as $file){
 ?>		
 	<div class="fileRow">
@@ -201,7 +206,7 @@ label{
 		}
 	?>
 	</div>	
-<?php } ?>	
+<?php }} ?>	
 		</div>
     </div>
   </div>
