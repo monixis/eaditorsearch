@@ -36,7 +36,7 @@
 <link rel="stylesheet" type="text/css" href="./styles/main.css" />
 <link rel="stylesheet" type="text/css" href="./styles/nprogress.css" />
 
-	<div class="row">	
+	<div class="row">
 		<div id="facets" class="page-sidebar col-md-3">
 			<h4>Filter By:</h4>
 			<?php
@@ -85,6 +85,7 @@
   	<!--ol id="list"-->
 			<?php
 				foreach ($results->response->docs as $row) {
+
 					$title = $row -> unittitle_display;
 					$date = (isset($row -> unitdate_display) ? $row -> unitdate_display : FALSE) ;
 					$publisher = (isset($row -> publisher_display) ? $row -> publisher_display : FALSE) ;
@@ -102,11 +103,10 @@
 				}
 			?>	
 		<!--/ol></br-->
-				<div id="pagination"></div>
 		</div><!-- Tab 1 ends --></br>
 	</div><!-- col-md-9 ends -->
 	</div><!-- row ends -->
-	
+
 <script type="text/javascript">
 	var acc = document.getElementsByClassName("accordion");
 	var i;
@@ -134,7 +134,7 @@
         var queryTag = $('input#queryTag').val();
         searchTerm = searchTerm + queryTag;
         searchTerm = searchTerm.replace(/ /g,"%20");
-        var resultUrl = "<?php echo base_url("?c=repository&m=searchKeyWords&key=")?>"+searchTerm;
+        var resultUrl = "<?php echo base_url("?c=eaditorSearch&m=searchKeyWords&key=")?>"+searchTerm;
         NProgress.start();
         NProgress.configure({ showSpinner: true });
         $('#searchResults').load(resultUrl);
@@ -152,7 +152,7 @@
         searchTerm = searchTerm.replace(/ /g,"%20");
         NProgress.start();
         NProgress.configure({ showSpinner: true });
-        var resultUrl = "<?php echo base_url("?c=repository&m=searchKeyWords&key=")?>"+searchTerm;
+        var resultUrl = "<?php echo base_url("?c=eaditorSearch&m=searchKeyWords&key=")?>"+searchTerm;
         $('#searchResults').load(resultUrl);
         NProgress.done();
     });

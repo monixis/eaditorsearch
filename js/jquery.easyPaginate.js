@@ -28,7 +28,7 @@ $.fn.easyPaginate = function (options) {
         hashPage: 'page',
         elementsPerPage: 10,
         effect: 'default',
-        slideOffset: 200,
+        slideOffset: 20,
         firstButton: true,
         firstButtonText: '<<',
         lastButton: true,
@@ -67,7 +67,7 @@ $.fn.easyPaginate = function (options) {
             }
             
             for(i = 1;i <= plugin.settings.pages;i++) {
-                htmlNav += '<a href="#'+plugin.settings.hashPage+':'+i+'" title="Page '+i+'" rel="'+i+'" class="page">'+i+'</a>';
+                    htmlNav += '<a href="#'+plugin.settings.hashPage+':'+i+'" title="Page '+i+'" rel="'+i+'" class="page">'+i+'</a>';
             };
             
             if(plugin.settings.nextButton) {
@@ -183,7 +183,7 @@ $.fn.easyPaginate = function (options) {
                     }, function() {
                         $(this).remove();
                     });
-                }, i * 200);
+                }, i * 20);
             });
             
             plugin.currentElements = plugin.settings.objElements.slice(offsetStart, offsetEnd).clone();
@@ -201,7 +201,7 @@ $.fn.easyPaginate = function (options) {
                         'margin-left': 0,
                         'opacity': 1
                     });
-                }, i * 200);
+                }, i * 20);
             });
         };
                 
