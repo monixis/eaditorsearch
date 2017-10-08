@@ -61,6 +61,9 @@ label{
   margin-right: 25px;
 }
 
+button{
+  margin-bottom: 5px;
+}
 
   </style>
 </head>
@@ -118,19 +121,85 @@ label{
    $prefCitation = $xml->archdesc->prefercite->p[1];
    $histNote = $xml->archdesc->bioghist->p;
    $scopeContent = $xml->archdesc->scopecontent->p;
-   $arrangement = $xml->archdesc->arrangement->p; 
+   $arrangement = (isset($xml->archdesc->arrangement->p)? $xml->archdesc->arrangement->p : 'Unspecified');  
    $componentList = (isset($xml->archdesc->dsc->c)? TRUE : FALSE);
+   $digitalObject = (isset($xml->archdesc->did->daogrp)? TRUE : FALSE);
 ?>
 <div id="eadInfo" style="margin-bottom: 30px;">
        <h1><?php echo $title; ?></h1> 
-       <h4><?php echo $repository; ?></h4> 
+       <h4 style="font-style: italic"><?php echo $repository; ?></h4> 
        <div>
          <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#descId" style="font-size: 14px;">Descriptive Identification</button>
          <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#adminInfo" style="font-size: 14px;">Administrative Information</button>
+         <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#controlHeadings" style="font-size: 14px;">Controlled Access Headings</button>
        </div>
 		<h4>Output formats:</h4>
-		 <button type="button" class="btn btn-info" ><a href='<?php echo $link; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'>XML</a></button>
-      	 <button type="button" class="btn btn-info" ><a href='<?php echo $rdf; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'>RDF/XML</a></button>       
+		  <button type="button" class="btn btn-info" ><a href='<?php echo $link; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'>XML</a></button>
+      <button type="button" class="btn btn-info" ><a href='<?php echo $rdf; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'>RDF/XML</a></button>       
+  
+      <!--?php if($digitalObject == TRUE) { ?>
+          <h5> Digital Images: </h5>
+          <!--?php foreach ($xml->archdesc->did->daogrp->daoloc as $file){ ?>
+              
+                  <p><!--?php echo $file['xlink:label']; ?></p>
+         
+     
+      <!--?php }} ?-->
+
+<div id="controlHeadings" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" style="text-align:center;">Controlled Access Headings</h4>
+      </div>
+      <div class="modal-body">
+         <?php 
+      $controlHeading = array();
+        foreach($xml->archdesc->controlaccess->children() as $list) {
+          $included = FALSE;
+            foreach($controlHeading as $value){
+              if ($value == $list->getname()){
+                $included = TRUE;
+              }
+            } 
+            if($included == FALSE){
+              array_push($controlHeading, $list->getname());
+            } 
+        }
+    foreach($controlHeading as $value){
+        $headValue = $value;
+         if($value == 'subject'){
+           $headValue = 'Subject:';
+         } elseif($value == 'persname'){
+           $headValue = 'Person:';
+         } elseif($value == 'genreform'){
+           $headValue = 'Genre/Format:';
+         } elseif($value == 'corpname'){
+           $headValue = 'Corporation:';
+         } elseif($value == 'geogname'){
+           $headValue = 'Place:';
+         }
+
+
+
+         ?> <h5><?php echo $headValue; ?></h5>
+          <?php  foreach($xml->archdesc->controlaccess->children() as $list) {
+              if ($value == $list->getname()){ ?>
+                  <ul><li><?php echo $list; ?></li></ul>
+          <?php }
+           }
+        }
+      ?>  
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div> 
  
 <div id="descId" class="modal fade" role="dialog">
@@ -181,11 +250,14 @@ label{
   </div>
 </div>
 
-<div id="componentList">	
+
 <?php		
-	if ($componentList == TRUE){
-    foreach ($xml->archdesc->dsc->c as $file){
+if ($componentList == TRUE){?>
+<h4>Components List</h4>
+<div id="componentList">	
+<?php  foreach ($xml->archdesc->dsc->c as $file){
 ?>		
+  
 	<div class="fileRow">
 	<?php	
 		foreach ($file->did->children() as $child){
@@ -218,7 +290,6 @@ label{
 
 </body>
 </html>
-
 
 
 
