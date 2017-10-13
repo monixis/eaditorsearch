@@ -4,7 +4,8 @@
   <title>Bootstrap Example</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"-->
+    <link rel="stylesheet" href="styles/bootstrap.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <style>
@@ -69,7 +70,7 @@ button{
 </head>
 <body>
 
-<nav class="navbar navbar-inverse">
+<!--nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
@@ -77,7 +78,7 @@ button{
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button>
-      <a class="navbar-brand" href="#">Logo</a>
+      <a class="navbar-brand" href="#"><img src='https://www.empireadc.org/sites/www.empireadc.org/files/ead_logo.gif' class="navbar-brand" style='height: 150px;'/></a>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
@@ -88,6 +89,29 @@ button{
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      </ul>
+    </div>
+  </div>
+</nav-->
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#"><img src='https://www.empireadc.org/sites/www.empireadc.org/files/ead_logo.gif' style='height:85px; width:165px;'/></a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <!--li class="active"><a href="#">Home</a></li-->
+       </ul>
+      <ul class="nav navbar-nav navbar-left">
+        <!--li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li-->
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
       </ul>
     </div>
   </div>
@@ -250,11 +274,11 @@ button{
   </div>
 </div>
 
-
+<div id="componentList">
 <?php		
 if ($componentList == TRUE){?>
 <h4>Components List</h4>
-<div id="componentList">	
+	
 <?php  foreach ($xml->archdesc->dsc->c as $file){
 ?>		
   
