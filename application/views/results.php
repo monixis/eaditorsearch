@@ -45,16 +45,16 @@
 				foreach ($facets as $key => $value){
 					if(sizeof($value)>0){
 			?>
-					<button class="accordion" id="<?php echo $key ; ?>"><?php echo $key ; ?></button>
+					<button class="accordion" id="<?php echo $key ; ?>"><?php echo ucfirst(str_replace('_facet','',$key)); ?></button>
 					<div class="panel" id="<?php echo $key ; ?>">
 							<form class="form-horizontal">
 								<div class="form-group has-feedback">
-                        <input id="searchInput_<?php echo $key;?>" class="form-control hasclear" oninput="sFacet.filterHTML('#<?php echo $key ; ?>', 'li#li_<?php echo $key;?>', this.value)" type="text" placeholder="Search">
-						<span class="clearer glyphicon glyphicon-remove-circle form-control-feedback"></span>
+                        <input id="searchInput_<?php echo $key;?>" class="form-control hasclear" oninput="sFacet.filterHTML('#<?php echo $key ; ?>', 'li#<?php echo $key;?>', this.value)" type="text" placeholder="Search">
+						<span></span>
 
 						</div>
 							</form>
-						<ul id="<?php echo $key?>">
+						<ul id="<?php echo $key?>" style="padding-left: 5px;">
                         <?php
 						$facetList = " ";
 						$i = 0;
@@ -62,10 +62,10 @@
 							if ($i % 2 == 0){
 								$facetList = $row;
 							}else{
-								$facetList = $facetList . " - " . $row ;
+								$facetList = $facetList . "[" . $row ."]";
 
 					?>
-								<li id="li_<?php echo $key;?>"><a href="#" class='tags'><?php echo $facetList ; ?></a></li><?php
+								<li id="<?php echo $key;?>" style="margin-bottom:5px;"><a href="#" class='tags'><?php echo $facetList ; ?></a></li><?php
 							}
 							$i += 1;
 						}
@@ -95,7 +95,7 @@
 					$link = base_url('?c=eaditorSearch&m=viewEAD&collId='.$collId.'&eadId='.$row -> id);
 			?>
 				<li class="results" style="height: auto; padding: 10px;">
-						<p class="labelInfo"><span class="labelName">Title:</span><a href=<?php echo $link ?> target="_blank"><?php echo $title ?></a></p>
+						<a href=<?php echo $link ?> target="_blank"><?php echo $title ?></a></br>
 						<p class="labelInfo"><span class="labelName">Date: </span><?php echo $date ?></p>
 						<p class="labelInfo"><span class="labelName">Publisher: </span><?php echo $publisher ?></p>
 				</li>
@@ -128,8 +128,9 @@
 
     $('a.tags').click(function(){
         var searchTerm = $('input#searchBox').val();
-        var selectedTag = ($(this).parents('div.panel').attr('id')) + ' : ' + ($(this).text().substr(0, $(this).text().indexOf('-')));
-        $('#selectedFacet').append('<button class="taglist" style="border: 1px solid #cccccc; background: #eeeeee; padding: 5px; margin-right: 10px; margin-top: 5px;">'+ selectedTag +'<a href="#" class="remove" id="'+ selectedTag +'" style="margin-left:10px;"> X </a></button>');
+        var selectedTag = ($(this).parents().attr('id')) + ':"' + ($(this).text().substr(0, $(this).text().indexOf('['))) + '"';
+        var selectedTagId = selectedTag.replace(/"/g, '');
+        $('#selectedFacet').append('<button class="taglist" style="border: 1px solid #cccccc; background: #eeeeee; padding: 5px; margin-right: 10px; margin-top: 5px;">'+ selectedTag +'<a href="#" class="remove" id="'+ selectedTagId +'" style="margin-left:10px;"> X </a></button>');
         $('input#queryTag').val($('input#queryTag').val() + "fq=" + selectedTag);
         var queryTag = $('input#queryTag').val();
         searchTerm = searchTerm + queryTag;
@@ -144,8 +145,9 @@
 
     $('#selectedFacet').on('click', '.remove', function() {
         var searchTerm = $('input#searchBox').val();
-        var unselectedTag ="fq=" + $(this).attr('id');
-        $(this).closest('button.taglist').remove();
+        var unselectedTag ='fq=' + $(this).attr('id');
+        unselectedTag = unselectedTag.replace(':',':"')+'"';
+       	$(this).closest('button.taglist').remove();
         $('input#queryTag').val($('input#queryTag').val().replace(unselectedTag, ' '));
         var queryTag = $('input#queryTag').val();
         searchTerm = searchTerm + queryTag;
