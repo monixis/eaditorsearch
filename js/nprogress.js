@@ -204,10 +204,10 @@
       $promise.always(function() {
         current--;
         if (current === 0) {
-            initial = 0;
-            NProgress.done();
+          initial = 0;
+          NProgress.done();
         } else {
-            NProgress.set((initial - current) / initial);
+          NProgress.set((initial - current) / initial);
         }
       });
 
@@ -282,9 +282,9 @@
 
     // Sniff prefixes
     var vendorPrefix = ('WebkitTransform' in bodyStyle) ? 'Webkit' :
-                       ('MozTransform' in bodyStyle) ? 'Moz' :
-                       ('msTransform' in bodyStyle) ? 'ms' :
-                       ('OTransform' in bodyStyle) ? 'O' : '';
+        ('MozTransform' in bodyStyle) ? 'Moz' :
+            ('msTransform' in bodyStyle) ? 'ms' :
+                ('OTransform' in bodyStyle) ? 'O' : '';
 
     if (vendorPrefix + 'Perspective' in bodyStyle) {
       // Modern browsers with 3D support, e.g. Webkit, IE10

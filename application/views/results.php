@@ -6,7 +6,6 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/list.pagination.js/0.1.1/list.pagination.min.js"></script>
 <script src="./js/jquery.easyPaginate.js"></script>
-<script src="./js/nprogress.js"></script>
 
 <style>
 	p.labelInfo {font-size: 10pt; margin-top: -10px;}
@@ -34,7 +33,6 @@
 
 </style>
 <link rel="stylesheet" type="text/css" href="./styles/main.css" />
-<link rel="stylesheet" type="text/css" href="./styles/nprogress.css" />
 
 	<div class="row">
 		<div id="facets" class="page-sidebar col-md-3">
@@ -134,8 +132,11 @@
         $('input#queryTag').val($('input#queryTag').val() + "fq=" + selectedTag);
         var queryTag = $('input#queryTag').val();
         searchTerm = searchTerm + queryTag;
-        searchTerm = searchTerm.replace(/ /g,"%20");
-        var resultUrl = "<?php echo base_url("?c=eaditorSearch&m=searchKeyWords&key=")?>"+searchTerm;
+		//var searchTerm = searchTerm.replace(/ /g,"%20");
+		// encoding string into UTF - 8 to carry all the required characters in the ajax request.
+		var searchTerm = encodeURIComponent(searchTerm);
+
+		var resultUrl = "<?php echo base_url("?c=eaditorSearch&m=searchKeyWords&key=")?>"+searchTerm;
         NProgress.start();
         NProgress.configure({ showSpinner: true });
         $('#searchResults').load(resultUrl);
@@ -151,7 +152,10 @@
         $('input#queryTag').val($('input#queryTag').val().replace(unselectedTag, ' '));
         var queryTag = $('input#queryTag').val();
         searchTerm = searchTerm + queryTag;
-        searchTerm = searchTerm.replace(/ /g,"%20");
+		//searchTerm = searchTerm.replace(/ /g,"%20");
+		// encoding string into UTF - 8 to carry all the required characters in the ajax request.
+		var searchTerm = encodeURIComponent(searchTerm);
+
         NProgress.start();
         NProgress.configure({ showSpinner: true });
         var resultUrl = "<?php echo base_url("?c=eaditorSearch&m=searchKeyWords&key=")?>"+searchTerm;
