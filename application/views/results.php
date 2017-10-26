@@ -80,7 +80,8 @@
 
 
 	<div class="col-md-9">
-		<h2>Results:</h2>
+		
+		<h4>Total <?php echo $results->response->numFound; ?> Results:</h4>
 		 <div id="tabs-1" >
   	<!--ol id="list"-->
 			<?php
@@ -89,7 +90,7 @@
 					$title = $row -> unittitle_display;
 					$date = (isset($row -> unitdate_display) ? $row -> unitdate_display : FALSE) ;
 					$publisher = (isset($row -> publisher_display) ? $row -> publisher_display : FALSE) ;
-					$collId = str_replace('US-','',$row -> agencycode_facet[0]);
+					$collId = (isset($row -> agencycode_facet[0] ) ? str_replace('US-','',$row -> agencycode_facet[0]) : FALSE);
 					$fileId = $row -> id ;
 					//$link = "https://www.empireadc.org/ead/". $collection ."/id/".$row -> id.".xml"; 
 					$link = base_url('?c=eaditorSearch&m=viewEAD&collId='.$collId.'&eadId='.$row -> id);

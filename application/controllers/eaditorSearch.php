@@ -23,6 +23,7 @@ class eaditorSearch extends CI_Controller
         $key = $this -> input -> get('key');
         $key = trim($key);
         $key = str_replace(" ","%20", $key);
+		 $key = str_replace("&","%26", $key);
 		$key = str_replace("fq","&fq", $key);
             // $resultsLink = "http://www.empireadc.org:8080/solr/eaditor-published/select?q=".$key."&wt=json";
         $resultsLink = "http://www.empireadc.org:8080/solr/eaditor-published/select?indent=on&q=". $key ."&wt=json&facet=true&facet.field=subject_facet&facet.field=agency_facet&facet.field=corpname_facet&facet.field=genreform_facet&facet.field=persname_facet&facet.field=language_facet&facet.field=century_num&facet.field=famname_facet&facet.field=geogname_facet&rows=200";
