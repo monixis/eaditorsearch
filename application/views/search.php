@@ -24,19 +24,22 @@
 		<script type="text/javascript" src="http://library.marist.edu/js/jquery-ui.js"></script>
 		<link rel="stylesheet" href="http://library.marist.edu/font-awesome/css/font-awesome.min.css">
 		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-	<!--style>
-		@media all and (min-width:1000px) {
+		<script src="./js/nprogress.js"></script>
+		<link rel="stylesheet" type="text/css" href="./styles/nprogress.css" />
+
+		<!--style>
+            @media all and (min-width:1000px) {
 
 
-		#searchResults{
-			width: 100%;
-			float: right;
-			clear: right;
+            #searchResults{
+                width: 100%;
+                float: right;
+                clear: right;
 
-		}
-		}
+            }
+            }
 
-	</style-->
+        </style-->
 
 	</head>
 	<body>
@@ -93,6 +96,7 @@
 			var searchTerm = $('input#searchBox').val();
 			var searchTerm = searchTerm.trim();
 			var searchTerm = searchTerm.replace(/ /g,"%20");
+			var searchTerm = encodeURIComponent(searchTerm);
 			if(searchTerm != "" ) {
 				var resultUrl = "<?php echo base_url("?c=eaditorSearch&m=searchKeyWords&key=")?>" + searchTerm;
 				$('#searchResults').load(resultUrl);
@@ -108,6 +112,8 @@
 				var searchTerm = $('input#searchBox').val();
 				var searchTerm = searchTerm.trim();
 				var searchTerm = searchTerm.replace(/ /g,"%20");
+				var searchTerm = encodeURIComponent(searchTerm);
+
 				if(searchTerm != "") {
 					var resultUrl = "<?php echo base_url("?c=eaditorSearch&m=searchKeyWords&key=")?>" + searchTerm;
 					$('#searchResults').load(resultUrl);
