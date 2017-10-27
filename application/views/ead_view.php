@@ -52,6 +52,7 @@
     line-height:10pt;
     padding: 5px;
     border-top: 1px solid #ddd;
+    padding-left: 20px;
 }
 
 .seriesRow {
@@ -68,6 +69,7 @@ button{
   margin-bottom: 5px;
 }
 
+
 </style>
 <!--script>
   	$(document).ready(function() {
@@ -78,30 +80,72 @@ button{
 </head>
 <body>
 
-<!--nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>                        
-      </button>
-      <a class="navbar-brand" href="#"><img src='https://www.empireadc.org/sites/www.empireadc.org/files/ead_logo.gif' class="navbar-brand" style='height: 150px;'/></a>
-    </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Projects</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-      </ul>
-    </div>
-  </div>
-</nav-->
-
+<?php 
+	function seriesLevel($level, $obj){ //recursive function that creates placeholder for series and other sub levels
+		$flag = 0;
+	?>
+		<div class="<?php echo $level; ?> seriesRow">
+					<?php 
+						foreach ($obj->did->children() as $childObj){
+							if($childObj->getname() == 'unittitle'){
+            					if(count($childObj) > 0){?>
+            						<h4><?php echo $childObj->title; ?></h4>
+                					<h4><?php echo $childObj->title->emph; ?></h4>
+           						<?php }else{?>
+           							<h4><?php echo ucfirst($level) . " " . $obj->did->unitid . ": " . $childObj; ?></h4>
+           						<?php }
+          					}elseif($childObj->getname() == 'unitdate'){?>
+          						<p><?php echo ucfirst($childObj['type']).' Date: '.$childObj; ?></p><?php
+          					}elseif($childObj->getname() == 'container'){?>
+          						<p><?php echo ucfirst($childObj['type']).": ". $childObj; ?></p><?php
+          					}?>
+          			<?php } ?>
+          			<p style="line-height: 24px;"><?php echo isset($obj->scopecontent->p)?$obj->scopecontent->p : '' ;?></p>	
+          			
+          			<!-- Check if this series has children levels -->
+          			<?php
+          			foreach ($obj->children() as $grandchildObj){
+          					if($grandchildObj->getname() == 'c'){
+          						$cAttr1 = $grandchildObj->attributes();
+								$cLevel1 = $cAttr1["level"]; 
+									if($cLevel1 == 'otherlevel' || $cLevel1 == 'subseries'){
+										$flag = 1;	
+										seriesLevel($cLevel1, $grandchildObj);
+										
+									}
+								}	
+							}
+					if ($flag == 0){ // if no other level exists, display the files 
+					?>
+						<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#<?php echo $obj['id']; ?>" style="margin-bottom: 5px;">View the files.</button>
+						<div id="<?php echo $obj['id']; ?>" class="collapse" style="width: 75%; border-left: 1px solid #ccc; border-right: 1px solid #ccc; margin-left:auto; margin-right: auto;">
+								<?php 
+									foreach ($obj->c as $fileObj){?>
+										<div class="fileRow">
+											<?php	
+												foreach ($fileObj->did->children() as $file){
+													if($file->getname() == 'unittitle'){
+     													if(count($file) > 0){?>
+            												<h4><?php echo $file->title; ?></h4>
+                											<h4><?php echo $file->emph; ?><?php	echo $file; ?></h4>
+           												<?php }else{?>
+           													<h4><?php	echo $file; ?></h4>
+           												<?php }
+													}elseif($file->getname() == 'unitdate'){?>
+          												<p><?php echo ucfirst($file['type']).' Date: '.$file; ?></p><?php
+          											}elseif($file->getname() == 'container'){?>
+          												<p><?php echo ucfirst($file['type']).": ". $file; ?></p><?php
+          											}	
+												}?>
+										</div>
+								<?php } ?>	
+						</div>	
+					<?php
+					}
+					?>
+          </div>			
+<?php	} 
+?>
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -110,13 +154,13 @@ button{
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button>
-      <a class="navbar-brand" href="#"><img src='https://www.empireadc.org/sites/www.empireadc.org/files/ead_logo.gif' style='height:85px; width:165px;'/></a>
+      <!--a class="navbar-brand" href="#"><img src='https://www.empireadc.org/sites/www.empireadc.org/files/ead_logo.gif' /></a-->
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
         <!--li class="active"><a href="#">Home</a></li-->
        </ul>
-      <ul class="nav navbar-nav navbar-left">
+      <ul class="nav navbar-nav navbar-right">
         <!--li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li-->
         <li><a href="#">About</a></li>
         <li><a href="#">Contact</a></li>
@@ -128,11 +172,13 @@ button{
 <div class="container-fluid text-center">    
   <div class="row content">
     <div class="col-sm-2 sidenav">
+		<img src='https://www.empireadc.org/sites/www.empireadc.org/files/ead_logo.gif' style='width:220px; margin-top: -75px'/>
       <!--p><a href="#">Link</a></p>
       <p><a href="#">Link</a></p>
       <p><a href="#">Link</a></p-->
     </div>
     <div class="col-sm-8 text-left"> 
+    	
 <?php
   // $xml = simplexml_load_file('https://www.empireadc.org/ead/nalsu/id/ua950.015.xml');
    //$xml = simplexml_load_file('https://www.empireadc.org/ead/nalsu/id/apap134.xml');
@@ -280,91 +326,13 @@ button{
   </div>
 </div>
 
-<h4>Components List</h4>
+<h4>Components List:</h4>
 <div id="componentList">
 <?php if ($componentList == TRUE){
 	foreach ($xml->archdesc->dsc->c as $c){
 		$cAttr = $c->attributes();
 		$cLevel = $cAttr["level"];
-			if ($cLevel == 'series'){?>
-				<div class="seriesRow">
-					<?php 
-						foreach ($c->did->children() as $seriesObj){
-							if($seriesObj->getname() == 'unittitle'){
-            					if(count($seriesObj) > 0){?>
-            						<h4><?php echo $seriesObj->title; ?></h4>
-                					<h4><?php echo $seriesObj->title->emph; ?></h4>
-           						<?php }else{?>
-           							<h4><?php echo ucfirst($cLevel) . " " . $c->did->unitid . ": " . $seriesObj; ?></h4>
-           						<?php }
-          					}elseif($seriesObj->getname() == 'unitdate'){?>
-          						<p><?php echo ucfirst($seriesObj['type']).' Date: '.$seriesObj; ?></p><?php
-          					}elseif($seriesObj->getname() == 'container'){?>
-          						<p><?php echo ucfirst($seriesObj['type']).": ". $seriesObj; ?></p><?php
-          					}?>
-          					
-          			<?php } ?>
-          			<p style="line-height: 24px;"><?php echo isset($c->scopecontent->p)?$c->scopecontent->p : '' ;?></p>
-          			<?php /* when component list includes sub series (otherlevel) */	
-          				foreach ($c->children() as $seriesChild){
-          					if($seriesChild->getname() == 'c'){
-          						$cAttr1 = $seriesChild->attributes();
-								$cLevel1 = $cAttr1["level"]; 
-									if($cLevel1 == 'otherlevel'){?>
-										<div class="otherLevel">
-											<h4><?php echo $seriesChild->did->unitid . ": " . $seriesChild->did->unittitle ;?></h4>
-											<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#<?php echo str_replace(".", "-", $seriesChild->did->unitid); ?>" style="margin-bottom: 5px;">View the files.</button>
-											<div id="<?php echo str_replace(".", "-", $seriesChild->did->unitid); ?>" class="collapse" style="width: 75%; border-left: 1px solid #ccc; border-right: 1px solid #ccc; margin-left:auto; margin-right: auto;">
-												<?php 
-													foreach ($seriesChild->c as $fileObj){?>
-														<div class="fileRow">
-															<?php	
-															foreach ($fileObj->did->children() as $file){
-																if($file->getname() == 'unittitle'){
-           															
-           															if(count($file) > 0){?>
-            															<h4><?php echo $file->title; ?></h4>
-                														<h4><?php echo $file->emph; ?><?php	echo $file; ?></h4>
-           															<?php }else{?>
-           																<h4><?php	echo $file; ?></h4>
-           															<?php }
-
-																}elseif($file->getname() == 'unitdate'){?>
-          															<p><?php echo ucfirst($file['type']).' Date: '.$file; ?></p><?php
-          														}elseif($file->getname() == 'container'){?>
-          															<p><?php echo ucfirst($file['type']).": ". $file; ?></p><?php
-          														}	
-															}?>
-														</div>
-													<?php } ?>	
-											</div>
-										</div> <!-- otherlevel -->
-									<?php }
-          					}
-          				}
-          			if($cLevel1 == 'file'){?>
-									<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#<?php echo $c->did->unitid; ?>" style="margin-bottom: 5px;">View the files.</button>
-									<div id="<?php echo $c->did->unitid;?>" class="collapse" style="width: 75%; border-left: 1px solid #ccc; border-right: 1px solid #ccc; margin-left:auto; margin-right: auto;">
-									<?php	
-										foreach ($c->c as $fileObj){?>
-											<div class="fileRow">
-												<?php	
-													foreach ($fileObj->did->children() as $file){
-													if($file->getname() == 'unittitle'){?>
-           												<h4><?php echo $file; ?></h4>
-        											<?php 
-													}elseif($file->getname() == 'unitdate'){?>
-          												<p><?php echo ucfirst($file['type']).' Date: '.$file; ?></p><?php
-          											}elseif($file->getname() == 'container'){?>
-          												<p><?php echo ucfirst($file['type']).": ". $file; ?></p><?php
-          											}	
-												}?>
-											</div>
-										<?php } ?>	
-									</div> <!-- collapsable div listing files -->
-					<?php } ?> <!-- if level is file -->
-				</div> <!-- seriesRow -->	
-			<?php }else{?> <!-- when the component list only has files -->
+			if ($cLevel == 'file'){?> 
 				<div class="fileRow">
 					<?php	
 						foreach ($c->did->children() as $child){
@@ -373,7 +341,7 @@ button{
             						<h4><?php echo $child->title; ?></h4>
                 					<h4><?php echo $child->title->emph; ?></h4>
            						<?php }else{?>
-           							<h4><?php	echo $child; ?></h4>
+           							<h4><?php echo $child; ?></h4>
            						<?php }
           					}elseif($child->getname() == 'unitdate'){?>
           						<p><?php echo ucfirst($child['type']).' Date: '.$child; ?></p><?php
@@ -382,8 +350,14 @@ button{
           					}
 						}?>
 				</div>
-			<?php }		
+			<?php }elseif ($cLevel == 'series'){ 
+					seriesLevel($cLevel, $c);
+			 }	
 	} /* for each */
+}else{
+	?>
+		<h4 style="font-style: italic">Not available</h4>
+	<?php	
 }?>
 				</div><!-- componentList -->
 			</div>
@@ -397,7 +371,6 @@ button{
 
 </body>
 </html>
-
 
 
 

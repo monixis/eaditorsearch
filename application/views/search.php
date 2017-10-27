@@ -55,11 +55,11 @@
 					<!-- Example row of columns -->
 					<div class="row">
 						<div class="col-md-12">
-							<h2 style="text-align: center; margin: 30px; font-size: 40px;">EMPIRE Archival Discovery Coorperative</h2>
+							<div id="logo"><img src='https://www.empireadc.org/sites/www.empireadc.org/files/ead_logo.gif' style='width:300px;'/></div>
 							<!--input type="text" id="searchBox" placeholder="Search Honor's Thesis Repository" /-->
 							<div id="custom-search-input">
 								<div class="input-group col-md-12">
-									<input type="text" class="form-control input-lg" id="searchBox" placeholder="Search EMPIRE Archival Discovery Coorperative" />
+									<input type="text" class="form-control input-lg" id="searchBox" placeholder="Finding Aids at Your Fingertips" />
 									<input type="hidden" class="form-control input-lg" id="queryTag" />
 									<span class="input-group-btn">
 										<button id="initiateSearch" class="btn btn-info btn-lg" type="button" style="background: #ffffff; border-color: #ccc;">
