@@ -7,13 +7,7 @@
   <!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"-->
     <link rel="stylesheet" href="styles/bootstrap.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-  <script src="./js/cart.js"></script>
-  <script src="./js/cart.min.js"></script>
-  <script src="./js/rivets-cart.js"></script>
-  <script src="./js/rivets-cart.min.js"></script>
-
-
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <style>
     /* Remove the navbar's default margin-bottom and rounded borders */ 
     .navbar {
@@ -58,7 +52,7 @@
     line-height:10pt;
     padding: 5px;
     border-top: 1px solid #ddd;
-
+    padding-left: 20px;
 }
     .big-checkbox {width: 20px; height: 20px; float: right}
 
@@ -104,30 +98,38 @@ button{
       text-align: left;
 
     }
+
 </style>
 <script>
   function removeCartItem(a)
   {
-    var row = document.getElementById("trow"+a);
+    var row = document.getElementById("trow-"+a);
 
     row.parentNode.removeChild(row);
     document.getElementById(a).checked = false;
     localStorage.removeItem(a);
+      if($('#researchCart tbody tr').length == 1) {
 
+          document.getElementById("researchCart").style.visibility = "hidden";
+      }
 
   }
 
   $(document).ready(function () {
 
 
-    //var i, checkboxes = document.querySelectorAll('input[type=checkbox]');
+    var i, checkboxes = document.querySelectorAll('input[type=checkbox]');
 
     for (i = 0; i < localStorage.length; i++) {
-      if(localStorage.key(i).substring(0,6) == 'crtitm') {
-          document.getElementById(localStorage.key(i)).checked = true;
-          var remove_anchor = "<a href=\"#\" onclick=removeCartItem("+"\""+localStorage.key(i)+"\"" + ");>Remove</a>";
-          var trow = "trow";
-          var markup = "<tr id=\"" +trow+ localStorage.key(i) + "\"><td><p>" + localStorage.key(i).substring(7) + "</p></td><td>" + remove_anchor + "</td></tr>";
+         var checkbox = localStorage.key(i);
+         var checkbox_value = localStorage.getItem(i);
+      if(checkbox.substring(0,6) == 'crtitm') {
+          if(document.getElementById(checkbox)) {
+              document.getElementById(checkbox).checked = true;
+          }
+          var remove_anchor = "<a href=\"#\" onclick=removeCartItem("+"\""+checkbox+"\""+");>Remove</a>";
+          var trow = "trow-";
+          var markup = "<tr id=\"" +trow+ checkbox + "\"><td><p>" + checkbox_value+ "</p></td><td>" + remove_anchor + "</td></tr>";
           $("table#researchCart tbody").append(markup);
           document.getElementById("researchCart").style.visibility = "visible";
 
@@ -137,21 +139,24 @@ button{
 
   $(':checkbox').change(function() {
     var checkbox_id = $(this).attr('id');
-
+    var checkbox_value = $(this).val();
     if($(this).is(':checked')){
 
-      localStorage.setItem(checkbox_id, true);
-      var remove_anchor = "<a href=\"#\" onclick=removeCartItem(checkbox_id);>Remove</a>";
-      var trow = "trow";
-      var markup = "<tr id=\""+trow+checkbox_id+"\"><td><p>"+checkbox_id.substring(7)+"</p></td><td>"+remove_anchor+"</td></tr>";
+      localStorage.setItem(checkbox_id, checkbox_value);
+      var remove_anchor = "<a href=\"#\" onclick=removeCartItem("+"\""+checkbox_id+"\""+");>Remove</a>";
+      var trow = "trow-";
+      var markup = "<tr id=\""+trow+checkbox_id+"\"><td><p>"+checkbox_value+"</p></td><td>"+remove_anchor+"</td></tr>";
       $("table#researchCart tbody").append(markup);
       document.getElementById("researchCart").style.visibility = "visible";
 
     }else if(!$(this).is(':checked')){
       localStorage.removeItem(checkbox_id);
-      var row = document.getElementById("trow"+checkbox_id);
+      var row = document.getElementById("trow-"+checkbox_id);
       row.parentNode.removeChild(row);
+        if($('#researchCart tbody tr').length <1){
+            document.getElementById("researchCart").style.visibility = "hidden";
 
+        }
     }
 
 
@@ -169,30 +174,72 @@ button{
 </head>
 <body>
 
-<!--nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>                        
-      </button>
-      <a class="navbar-brand" href="#"><img src='https://www.empireadc.org/sites/www.empireadc.org/files/ead_logo.gif' class="navbar-brand" style='height: 150px;'/></a>
-    </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Projects</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-      </ul>
-    </div>
-  </div>
-</nav-->
-
+<?php 
+	function seriesLevel($level, $obj){ //recursive function that creates placeholder for series and other sub levels
+		$flag = 0;
+	?>
+		<div class="<?php echo $level; ?> seriesRow">
+					<?php 
+						foreach ($obj->did->children() as $childObj){
+							if($childObj->getname() == 'unittitle'){
+            					if(count($childObj) > 0){?>
+            						<h4><?php echo $childObj->title; ?></h4>
+                					<h4><?php echo $childObj->title->emph; ?></h4>
+           						<?php }else{?>
+           							<h4><?php echo ucfirst($level) . " " . $obj->did->unitid . ": " . $childObj; ?></h4>
+           						<?php }
+          					}elseif($childObj->getname() == 'unitdate'){?>
+          						<p><?php echo ucfirst($childObj['type']).' Date: '.$childObj; ?></p><?php
+          					}elseif($childObj->getname() == 'container'){?>
+          						<p><?php echo ucfirst($childObj['type']).": ". $childObj; ?></p><?php
+          					}?>
+          			<?php } ?>
+          			<p style="line-height: 24px;"><?php echo isset($obj->scopecontent->p)?$obj->scopecontent->p : '' ;?></p>	
+          			
+          			<!-- Check if this series has children levels -->
+          			<?php
+          			foreach ($obj->children() as $grandchildObj){
+          					if($grandchildObj->getname() == 'c'){
+          						$cAttr1 = $grandchildObj->attributes();
+								$cLevel1 = $cAttr1["level"]; 
+									if($cLevel1 == 'otherlevel' || $cLevel1 == 'subseries'){
+										$flag = 1;	
+										seriesLevel($cLevel1, $grandchildObj);
+										
+									}
+								}	
+							}
+					if ($flag == 0){ // if no other level exists, display the files 
+					?>
+						<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#<?php echo $obj['id']; ?>" style="margin-bottom: 5px;">View the files.</button>
+						<div id="<?php echo $obj['id']; ?>" class="collapse" style="width: 75%; border-left: 1px solid #ccc; border-right: 1px solid #ccc; margin-left:auto; margin-right: auto;">
+								<?php 
+									foreach ($obj->c as $fileObj){?>
+										<div class="fileRow">
+											<?php	
+												foreach ($fileObj->did->children() as $file){
+													if($file->getname() == 'unittitle'){
+     													if(count($file) > 0){?>
+            												<h4><?php echo $file->title; ?></h4>
+                											<h4><?php echo $file->emph; ?><?php	echo $file; ?></h4>
+           												<?php }else{?>
+           													<h4><?php	echo $file; ?></h4>
+           												<?php }
+													}elseif($file->getname() == 'unitdate'){?>
+          												<p><?php echo ucfirst($file['type']).' Date: '.$file; ?></p><?php
+          											}elseif($file->getname() == 'container'){?>
+          												<p><?php echo ucfirst($file['type']).": ". $file; ?></p><?php
+          											}	
+												}?>
+										</div>
+								<?php } ?>	
+						</div>	
+					<?php
+					}
+					?>
+          </div>			
+<?php	} 
+?>
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -201,13 +248,13 @@ button{
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button>
-      <a class="navbar-brand" href="#"><img src='https://www.empireadc.org/sites/www.empireadc.org/files/ead_logo.gif' style='height:85px; width:165px;'/></a>
+      <!--a class="navbar-brand" href="#"><img src='https://www.empireadc.org/sites/www.empireadc.org/files/ead_logo.gif' /></a-->
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
         <!--li class="active"><a href="#">Home</a></li-->
        </ul>
-      <ul class="nav navbar-nav navbar-left">
+      <ul class="nav navbar-nav navbar-right">
         <!--li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li-->
         <li><a href="#">About</a></li>
         <li><a href="#">Contact</a></li>
@@ -219,11 +266,13 @@ button{
 <div class="container-fluid text-center">    
   <div class="row content">
     <div class="col-sm-2 sidenav">
+		<img src='https://www.empireadc.org/sites/www.empireadc.org/files/ead_logo.gif' style='width:220px; margin-top: -75px'/>
       <!--p><a href="#">Link</a></p>
       <p><a href="#">Link</a></p>
       <p><a href="#">Link</a></p-->
     </div>
     <div class="col-sm-8 text-left"> 
+    	
 <?php
   // $xml = simplexml_load_file('https://www.empireadc.org/ead/nalsu/id/ua950.015.xml');
    //$xml = simplexml_load_file('https://www.empireadc.org/ead/nalsu/id/apap134.xml');
@@ -374,121 +423,42 @@ button{
 <div>
 <h4>Components List <p style="float: right">Add to Cart</p></h4>
 </div>
+
 <div id="componentList">
 <?php if ($componentList == TRUE){
 	foreach ($xml->archdesc->dsc->c as $c){
 		$cAttr = $c->attributes();
 		$cLevel = $cAttr["level"];
-			if ($cLevel == 'series'){?>
-				<div class="seriesRow">
-					<?php 
-						foreach ($c->did->children() as $seriesObj){
-							if($seriesObj->getname() == 'unittitle'){
-            					if(count($seriesObj) > 0){?>
-            						<h4><?php echo $seriesObj->title; ?></h4>
-                					<h4><?php echo $seriesObj->title->emph; ?></h4>
-           						<?php }else{?>
-           							<h4><?php echo ucfirst($cLevel) . " " . $c->did->unitid . ": " . $seriesObj; ?></h4>
-           						<?php }
-          					}elseif($seriesObj->getname() == 'unitdate'){?>
-          						<p><?php echo ucfirst($seriesObj['type']).' Date: '.$seriesObj; ?></p><?php
-          					}elseif($seriesObj->getname() == 'container'){?>
-          						<p><?php echo ucfirst($seriesObj['type']).": ". $seriesObj; ?></p><?php
-          					}?>
-          					
-          			<?php } ?>
-          			<p style="line-height: 24px;"><?php echo isset($c->scopecontent->p)?$c->scopecontent->p : '' ;?></p>
-          			<?php /* when component list includes sub series (otherlevel) */	
-          				foreach ($c->children() as $seriesChild){
-          					if($seriesChild->getname() == 'c'){
-          						$cAttr1 = $seriesChild->attributes();
-								$cLevel1 = $cAttr1["level"]; 
-									if($cLevel1 == 'otherlevel'){?>
-										<div class="otherLevel">
-											<h4><?php echo $seriesChild->did->unitid . ": " . $seriesChild->did->unittitle ;?></h4>
-											<div id="<?php echo str_replace(".", "-", $seriesChild->did->unitid); ?>" class="collapse" style="width: 75%; border-left: 1px solid #ccc; border-right: 1px solid #ccc; margin-left:auto; margin-right: auto;">
-												<?php 
-													foreach ($seriesChild->c as $fileObj){?>
-														<div class="fileRow">
-															<?php	
-															foreach ($fileObj->did->children() as $file){
-																if($file->getname() == 'unittitle'){
-           															
-           															if(count($file) > 0){?>
-            															<h4><?php echo $file->title; ?></h4>
-                														<h4><?php echo $file->emph; ?><?php	echo $file; ?></h4>
-           															<?php }else{?>
-           																<h4><?php	echo $file; ?></h4>
-           															<?php }
-
-																}elseif($file->getname() == 'unitdate'){?>
-          															<p><?php echo ucfirst($file['type']).' Date: '.$file; ?></p><?php
-          														}elseif($file->getname() == 'container'){?>
-          															<p><?php echo ucfirst($file['type']).": ". $file; ?></p><?php
-          														}	
-															}?>
-														</div>
-													<?php } ?>	
-											</div>
-										</div> <!-- otherlevel -->
-									<?php }
-          					}
-          				}
-          			if($cLevel1 == 'file'){?>
-									<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#<?php echo $c->did->unitid; ?>" style="margin-bottom: 5px;">View the files.</button>
-									<div id="<?php echo $c->did->unitid;?>" class="collapse" style="width: 75%; border-left: 1px solid #ccc; border-right: 1px solid #ccc; margin-left:auto; margin-right: auto;">
-									<?php	
-										foreach ($c->c as $fileObj){?>
-											<div class="fileRow">
-												<?php	
-													foreach ($fileObj->did->children() as $file){
-													if($file->getname() == 'unittitle'){?>
-                                              <h4><?php echo $file; $component = $file;?></h4>
-        											<?php
-													}elseif($file->getname() == 'unitdate'){?>
-          												<p><?php echo ucfirst($file['type']).' Date: '.$file; ?></p><?php
-          											}elseif($file->getname() == 'container'){?>
-          												<p><?php echo ucfirst($file['type']).": ". $file; $arr = explode(' ',ucfirst($file['type'])."-".$file);$component = $component."-". $arr[0]; ?></p><?php
-          											}	
-												}?>
-                                              <input type="checkbox" class="big-checkbox" id="<?php echo  "crtitm-".$repository.substr(0,13)."..."."-".$collid."-".$component; ?>" value="<?php echo  $collId."-".$eadId."-".$component; ?>">
-
-                                            </div>
-										<?php } ?>	
-									</div> <!-- collapsable div listing files -->
-					<?php } ?> <!-- if level is file -->
-				</div> <!-- seriesRow -->	
-			<?php }else{?> <!-- when the component list only has files -->
+			if ($cLevel == 'file'){?> 
 				<div class="fileRow">
-					<?php
-						foreach ($c->did->children() as $child){ ?>
-
-	       					<?php if($child->getname() == 'unittitle'){
+					<?php	
+						foreach ($c->did->children() as $child){
+	       					if($child->getname() == 'unittitle'){
             					if(count($child) > 0){?>
-                                   <h4><?php $component = $child->title; echo $component; ?></h4>
-
-
-                                    <h4><?php echo $child->title->emph; ?></h4>
+            						<h4><?php $component = $child->title; echo $component; $component = str_replace(" ","", $component)?></h4>
+                					<h4><?php echo $child->title->emph; ?></h4>
            						<?php }else{?>
-                                <h4><?php $component = $child;	echo $component; ?></h4>
+           							<h4><?php $component =  $child; echo $component; $component = str_replace(" ","", $component) ?></h4>
            						<?php }
           					}elseif($child->getname() == 'unitdate'){?>
           						<p><?php echo ucfirst($child['type']).' Date: '.$child; ?></p><?php
           					}elseif($child->getname() == 'container'){?>
-          						<p id="container"><?php echo ucfirst($child['type']).": ". $child; $arr = explode(' ',ucfirst($child['type'])."-". $child);
-                                  $component = $component."-". $arr[0];  ?></p>
-
-                          <?php } ?>
-
-
-						<?php }?>
-
-
-                              <input type="checkbox" class="big-checkbox" id="<?php echo  "crtitm-".$repository.substr(0,13)."..."."-".$collid."-".$component; ?>" value="<?php echo  $repository.substr(0,13)."..."."-".$collid."-".$component; ?>">
+          						<p><?php echo ucfirst($child['type']).": ". $child;
+                                $arr = explode(' ',ucfirst($child['type'])."-". $child);
+                                $component = $component."-". $arr[0];  ?></p><?php
+          					}
+						}?>
+                    <input type="checkbox" class="big-checkbox" id="<?php echo  "crtitm"."-".$collId."-".$component; ?>" value="<?php echo  $repository.substr(0,13)."..."."-".$collId."-".$component; ?>">
 
                 </div>
-			<?php }
+			<?php } elseif ($cLevel == 'series'){
+					seriesLevel($cLevel, $c);
+			 }	
 	} /* for each */
+}else{
+	?>
+		<h4 style="font-style: italic">Not available</h4>
+	<?php	
 }?>
 				</div><!-- componentList -->
 
