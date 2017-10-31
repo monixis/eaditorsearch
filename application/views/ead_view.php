@@ -54,6 +54,7 @@
     border-top: 1px solid #ddd;
     padding-left: 20px;
 }
+    .big-checkbox {width: 20px; height: 20px; float: right}
 
 .seriesRow {
 	line-height:10pt;
@@ -69,8 +70,101 @@ button{
   margin-bottom: 5px;
 }
 
+    .show-when-loading {
+      display: none;
+    }
+
+    body.loading .show-when-loading {
+      display: inline-block;
+    }
+    .researchCart{
+      float: right;
+      margin-bottom: 20px;
+      border-collapse: collapse;
+    }
+    .researchCart, th, td{
+      border: 1px solid #cdcdcd;
+    }
+    .researchCart th{
+
+      padding: 10px;
+      text-align: left;
+      background-color:#cdcdcd ;
+
+    }
+
+    .researchCart td{
+      padding: 10px;
+      text-align: left;
+
+    }
 
 </style>
+<script>
+  function removeCartItem(a)
+  {
+    var row = document.getElementById("trow-"+a);
+
+    row.parentNode.removeChild(row);
+    document.getElementById(a).checked = false;
+    localStorage.removeItem(a);
+      if($('#researchCart tbody tr').length == 1) {
+
+          document.getElementById("researchCart").style.visibility = "hidden";
+      }
+
+  }
+
+  $(document).ready(function () {
+
+
+    var i, checkboxes = document.querySelectorAll('input[type=checkbox]');
+
+    for (i = 0; i < localStorage.length; i++) {
+         var checkbox = localStorage.key(i);
+         var checkbox_value = localStorage.getItem(i);
+      if(checkbox.substring(0,6) == 'crtitm') {
+          if(document.getElementById(checkbox)) {
+              document.getElementById(checkbox).checked = true;
+          }
+          var remove_anchor = "<a href=\"#\" onclick=removeCartItem("+"\""+checkbox+"\""+");>Remove</a>";
+          var trow = "trow-";
+          var markup = "<tr id=\"" +trow+ checkbox + "\"><td><p>" + checkbox_value+ "</p></td><td>" + remove_anchor + "</td></tr>";
+          $("table#researchCart tbody").append(markup);
+          document.getElementById("researchCart").style.visibility = "visible";
+
+      }
+
+    }
+
+  $(':checkbox').change(function() {
+    var checkbox_id = $(this).attr('id');
+    var checkbox_value = $(this).val();
+    if($(this).is(':checked')){
+
+      localStorage.setItem(checkbox_id, checkbox_value);
+      var remove_anchor = "<a href=\"#\" onclick=removeCartItem("+"\""+checkbox_id+"\""+");>Remove</a>";
+      var trow = "trow-";
+      var markup = "<tr id=\""+trow+checkbox_id+"\"><td><p>"+checkbox_value+"</p></td><td>"+remove_anchor+"</td></tr>";
+      $("table#researchCart tbody").append(markup);
+      document.getElementById("researchCart").style.visibility = "visible";
+
+    }else if(!$(this).is(':checked')){
+      localStorage.removeItem(checkbox_id);
+      var row = document.getElementById("trow-"+checkbox_id);
+      row.parentNode.removeChild(row);
+        if($('#researchCart tbody tr').length <1){
+            document.getElementById("researchCart").style.visibility = "hidden";
+
+        }
+    }
+
+
+  });
+
+  });
+
+</script>
 <!--script>
   	$(document).ready(function() {
 	    $(".fileRow:even").css("background-color","#f2f2f2"); 
@@ -239,6 +333,7 @@ button{
      
       <!--?php }} ?-->
 
+
 <div id="controlHeadings" class="modal fade" role="dialog">
   <div class="modal-dialog">
     <!-- Modal content-->
@@ -340,8 +435,10 @@ button{
     </div>
   </div>
 </div>
+<div>
+<h4>Components List <p style="float: right">Add to Cart</p></h4>
+</div>
 
-<h4>Components List:</h4>
 <div id="componentList">
 <?php if ($componentList == TRUE){
 	foreach ($xml->archdesc->dsc->c as $c){
@@ -353,19 +450,23 @@ button{
 						foreach ($c->did->children() as $child){
 	       					if($child->getname() == 'unittitle'){
             					if(count($child) > 0){?>
-            						<h4><?php echo $child->title; ?></h4>
+            						<h4><?php $component = $child->title; echo $component; $component = str_replace(" ","", $component)?></h4>
                 					<h4><?php echo $child->title->emph; ?></h4>
            						<?php }else{?>
-           							<h4><?php echo $child; ?></h4>
+           							<h4><?php $component =  $child; echo $component; $component = str_replace(" ","", $component) ?></h4>
            						<?php }
           					}elseif($child->getname() == 'unitdate'){?>
           						<p><?php echo ucfirst($child['type']).' Date: '.$child; ?></p><?php
           					}elseif($child->getname() == 'container'){?>
-          						<p><?php echo ucfirst($child['type']).": ". $child; ?></p><?php
+          						<p><?php echo ucfirst($child['type']).": ". $child;
+                                $arr = explode(' ',ucfirst($child['type'])."-". $child);
+                                $component = $component."-". $arr[0];  ?></p><?php
           					}
 						}?>
-				</div>
-			<?php }elseif ($cLevel == 'series'){ 
+                    <input type="checkbox" class="big-checkbox" id="<?php echo  "crtitm"."-".$collId."-".$component; ?>" value="<?php echo  $repository.substr(0,13)."..."."-".$collId."-".$component; ?>">
+
+                </div>
+			<?php } elseif ($cLevel == 'series'){
 					seriesLevel($cLevel, $c);
 			 }	
 	} /* for each */
@@ -375,11 +476,26 @@ button{
 	<?php	
 }?>
 				</div><!-- componentList -->
-			</div>
+
+    </div></br>
+    <div>
+    <table id="researchCart" class="researchCart" style="visibility:hidden;" >
+      <thead>
+      <tr>
+        <th>Item</th>
+        <th>Remove</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+      </tr>
+      </tbody>
+    </table></div>
 		</div>
 	</div>
 </div>
 
+</br>
 <footer class="container-fluid text-center">
   <p>Footer Text</p>
 </footer>
@@ -392,6 +508,7 @@ button{
     });
 </script>
 </html>
+
 
 
 
