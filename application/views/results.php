@@ -136,7 +136,6 @@
 		//var searchTerm = searchTerm.replace(/ /g,"%20");
 		// encoding string into UTF - 8 to carry all the required characters in the ajax request.
 		var searchTerm = encodeURIComponent(searchTerm);
-
 		var resultUrl = "<?php echo base_url("?c=eaditorSearch&m=searchKeyWords&key=")?>"+searchTerm;
         NProgress.start();
         NProgress.configure({ showSpinner: true });
@@ -156,7 +155,6 @@
 		//searchTerm = searchTerm.replace(/ /g,"%20");
 		// encoding string into UTF - 8 to carry all the required characters in the ajax request.
 		var searchTerm = encodeURIComponent(searchTerm);
-
         NProgress.start();
         NProgress.configure({ showSpinner: true });
         var resultUrl = "<?php echo base_url("?c=eaditorSearch&m=searchKeyWords&key=")?>"+searchTerm;

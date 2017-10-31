@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Bootstrap Example</title>
+  <title>EADitor EAD view</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"-->
@@ -172,7 +172,7 @@ button{
 <div class="container-fluid text-center">    
   <div class="row content">
     <div class="col-sm-2 sidenav">
-		<img src='https://www.empireadc.org/sites/www.empireadc.org/files/ead_logo.gif' style='width:220px; margin-top: -75px'/>
+		<a href='<?php echo base_url( ); ?>'><img src='https://www.empireadc.org/sites/www.empireadc.org/files/ead_logo.gif' style='width:220px; margin-top: -75px'/></a>
       <!--p><a href="#">Link</a></p>
       <p><a href="#">Link</a></p>
       <p><a href="#">Link</a></p-->
@@ -197,8 +197,23 @@ button{
    $copyright = $xml->archdesc->userestrict->p;
    $acqInfo = (isset($xml->archdesc->acqinfo->p)? $xml->archdesc->acqinfo->p : 'Unspecified');
    $prefCitation = $xml->archdesc->prefercite->p[1];
-   $histNote = $xml->archdesc->bioghist->p;
-   $scopeContent = $xml->archdesc->scopecontent->p;
+   $histNote = '';
+   if (isset($xml->archdesc->bioghist)){
+   	 foreach($xml->archdesc->bioghist->children() as $p){
+   		if($p->getname() == 'p'){
+   			$histNote = $histNote . $p . "<br />\n" ;
+   		}
+  	 }
+   }
+   $scopeContent = '';
+   if(isset($xml->archdesc->scopecontent)){
+   	foreach($xml->archdesc->scopecontent->children() as $p){
+   		if($p->getname() == 'p'){
+   			$scopeContent = $scopeContent  . $p . "<br />\n" ;
+   		}
+   	}
+  }
+   
    $arrangement = (isset($xml->archdesc->arrangement->p)? $xml->archdesc->arrangement->p : 'Unspecified');  
    $componentList = (isset($xml->archdesc->dsc->c)? TRUE : FALSE);
    $digitalObject = (isset($xml->archdesc->did->daogrp)? TRUE : FALSE);
@@ -263,7 +278,7 @@ button{
          <h5><?php echo $headValue; ?></h5>
           <?php  foreach($xml->archdesc->controlaccess->children() as $list) {
               if ($value == $list->getname()){ ?>
-                  <ul><li><?php echo $list; ?></li></ul>
+                  <ul><li><a href="#" class='controlledHeader'><?php echo $list; ?></a></li></ul>
           <?php }
            }
         }
@@ -368,8 +383,14 @@ button{
 <footer class="container-fluid text-center">
   <p>Footer Text</p>
 </footer>
-
 </body>
+<script>
+	$('a.controlledHeader').click(function(){
+      var selectedHeader = $(this).text();
+      resultUrl = "<?php echo base_url("?c=eaditorSearch&m=searchKeyWords&key=")?>" + selectedHeader;
+	  window.open(resultUrl);
+    });
+</script>
 </html>
 
 
