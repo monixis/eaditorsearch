@@ -77,6 +77,7 @@ button{
     body.loading .show-when-loading {
       display: inline-block;
     }
+
     .researchCart{
       float: right;
       margin-bottom: 20px;
@@ -87,17 +88,18 @@ button{
     }
     .researchCart th{
 
-      padding: 10px;
-      text-align: left;
+      text-align: center;
       background-color:#cdcdcd ;
 
     }
+      #reserve{
+          float: right;
+          margin-bottom: 30px;
+          border-collapse: collapse;
 
-    .researchCart td{
-      padding: 10px;
-      text-align: left;
+      }
 
-    }
+
 
 </style>
 <script>
@@ -117,21 +119,20 @@ button{
 
   $(document).ready(function () {
 
-
-    var i, checkboxes = document.querySelectorAll('input[type=checkbox]');
-
-    for (i = 0; i < localStorage.length; i++) {
+    for (var i = 0; i < localStorage.length; i++) {
          var checkbox = localStorage.key(i);
-         var checkbox_value = localStorage.getItem(i);
+         var checkbox_value = decodeURIComponent(localStorage.getItem(checkbox));
       if(checkbox.substring(0,6) == 'crtitm') {
           if(document.getElementById(checkbox)) {
               document.getElementById(checkbox).checked = true;
           }
           var remove_anchor = "<a href=\"#\" onclick=removeCartItem("+"\""+checkbox+"\""+");>Remove</a>";
           var trow = "trow-";
-          var markup = "<tr id=\"" +trow+ checkbox + "\"><td><p>" + checkbox_value+ "</p></td><td>" + remove_anchor + "</td></tr>";
+
+          var checkbox_disp_val = decodeURIComponent(checkbox_value);
+          var markup = "<tr id=\"" +trow+ checkbox + "\"><td><p>" + checkbox_disp_val+ "</p></td><td>" + remove_anchor + "</td></tr>";
           $("table#researchCart tbody").append(markup);
-          document.getElementById("researchCart").style.visibility = "visible";
+          document.getElementById("cart").style.visibility = "visible";
 
       }
 
@@ -139,22 +140,21 @@ button{
 
   $(':checkbox').change(function() {
     var checkbox_id = $(this).attr('id');
-    var checkbox_value = $(this).val();
+    var checkbox_value = encodeURIComponent($(this).val());
     if($(this).is(':checked')){
-
       localStorage.setItem(checkbox_id, checkbox_value);
       var remove_anchor = "<a href=\"#\" onclick=removeCartItem("+"\""+checkbox_id+"\""+");>Remove</a>";
       var trow = "trow-";
-      var markup = "<tr id=\""+trow+checkbox_id+"\"><td><p>"+checkbox_value+"</p></td><td>"+remove_anchor+"</td></tr>";
+      var markup = "<tr id=\""+trow+checkbox_id+"\"><td><p>"+decodeURIComponent(checkbox_value)+"</p></td><td>"+remove_anchor+"</td></tr>";
       $("table#researchCart tbody").append(markup);
-      document.getElementById("researchCart").style.visibility = "visible";
+      document.getElementById("cart").style.visibility = "visible";
 
     }else if(!$(this).is(':checked')){
       localStorage.removeItem(checkbox_id);
       var row = document.getElementById("trow-"+checkbox_id);
       row.parentNode.removeChild(row);
         if($('#researchCart tbody tr').length <1){
-            document.getElementById("researchCart").style.visibility = "hidden";
+            document.getElementById("cart").style.visibility = "hidden";
 
         }
     }
@@ -171,15 +171,56 @@ button{
     	$(".fileRow:odd").css("background-color","#ffffff"); 
 	});
 </script-->
+    <?php
+    // $xml = simplexml_load_file('https://www.empireadc.org/ead/nalsu/id/ua950.015.xml');
+    //$xml = simplexml_load_file('https://www.empireadc.org/ead/nalsu/id/apap134.xml');
+    $link = "https://www.empireadc.org/ead/". $collId ."/id/".$eadId.".xml";
+    $rdf = "https://www.empireadc.org/ead/". $collId ."/id/".$eadId.".rdf";
+    $xml = simplexml_load_file($link);
+    $title = $xml->archdesc->did->unittitle;
+    $repository = (isset($xml->archdesc->did->repository->corpname)? $xml->archdesc->did->repository->corpname : $xml->archdesc->did->repository);
+    $extent = $xml->archdesc->did->physdesc->extent;
+    $creator =  (isset($xml->archdesc->did->origination->corpname)? $xml->archdesc->did->origination->corpname : $xml->archdesc->did->origination->persname);
+    $location = (isset($xml->archdesc->did->physloc)? $xml->archdesc->did->physloc : 'Unspecified');
+    $language = (isset($xml->archdesc->did->langmaterial-> language)? $xml->archdesc->did->langmaterial-> language : $xml->archdesc->did->langmaterial);
+    $abstract = $xml->archdesc->did->abstract;
+    $processInfo = (isset($xml->archdesc->processinfo->p)? $xml->archdesc->processinfo->p : 'Unspecified');
+    $access = $xml->archdesc->accessrestrict->p;
+    $copyright = $xml->archdesc->userestrict->p;
+    $acqInfo = (isset($xml->archdesc->acqinfo->p)? $xml->archdesc->acqinfo->p : 'Unspecified');
+    $prefCitation = $xml->archdesc->prefercite->p[1];
+    $histNote = '';
+    if (isset($xml->archdesc->bioghist)){
+        foreach($xml->archdesc->bioghist->children() as $p){
+            if($p->getname() == 'p'){
+                $histNote = $histNote . $p . "<br />\n" ;
+            }
+        }
+    }
+    $scopeContent = '';
+    if(isset($xml->archdesc->scopecontent)){
+        foreach($xml->archdesc->scopecontent->children() as $p){
+            if($p->getname() == 'p'){
+                $scopeContent = $scopeContent  . $p . "<br />\n" ;
+            }
+        }
+    }
+
+    $arrangement = (isset($xml->archdesc->arrangement->p)? $xml->archdesc->arrangement->p : 'Unspecified');
+    $componentList = (isset($xml->archdesc->dsc->c)? TRUE : FALSE);
+    $digitalObject = (isset($xml->archdesc->did->daogrp)? TRUE : FALSE);
+    ?>
+
+
 </head>
 <body>
 
 <?php 
-	function seriesLevel($level, $obj){ //recursive function that creates placeholder for series and other sub levels
+	function seriesLevel($level, $obj, $collId , $repository){ //recursive function that creates placeholder for series and other sub levels
 		$flag = 0;
 	?>
 		<div class="<?php echo $level; ?> seriesRow">
-					<?php 
+					<?php
 						foreach ($obj->did->children() as $childObj){
 							if($childObj->getname() == 'unittitle'){
             					if(count($childObj) > 0){?>
@@ -204,7 +245,7 @@ button{
 								$cLevel1 = $cAttr1["level"]; 
 									if($cLevel1 == 'otherlevel' || $cLevel1 == 'subseries'){
 										$flag = 1;	
-										seriesLevel($cLevel1, $grandchildObj);
+										seriesLevel($cLevel1, $grandchildObj, $collId, $repository);
 										
 									}
 								}	
@@ -220,18 +261,21 @@ button{
 												foreach ($fileObj->did->children() as $file){
 													if($file->getname() == 'unittitle'){
      													if(count($file) > 0){?>
-            												<h4><?php echo $file->title; ?></h4>
+            												<h4><?php echo $file->title; $component = $file->title;?></h4>
                 											<h4><?php echo $file->emph; ?><?php	echo $file; ?></h4>
            												<?php }else{?>
-           													<h4><?php	echo $file; ?></h4>
+           													<h4><?php	echo $file; $component = $file;?></h4>
            												<?php }
 													}elseif($file->getname() == 'unitdate'){?>
           												<p><?php echo ucfirst($file['type']).' Date: '.$file; ?></p><?php
           											}elseif($file->getname() == 'container'){?>
-          												<p><?php echo ucfirst($file['type']).": ". $file; ?></p><?php
+          												<p><?php echo ucfirst($file['type']).": ". $file;     $arr = explode(' ',ucfirst($file['type'])."-". $file);
+                                                        $component = $component."-". $arr[0];  ?></p><?php
           											}	
 												}?>
-										</div>
+                                            <input type="checkbox" class="big-checkbox" id="<?php echo  "crtitm"."-".$collId."-".$component; ?>" value="<?php echo  $repository.substr(0,13)."..."."-".$collId."-".$component; ?>">
+
+                                        </div>
 								<?php } ?>	
 						</div>	
 					<?php
@@ -273,45 +317,7 @@ button{
     </div>
     <div class="col-sm-8 text-left"> 
     	
-<?php
-  // $xml = simplexml_load_file('https://www.empireadc.org/ead/nalsu/id/ua950.015.xml');
-   //$xml = simplexml_load_file('https://www.empireadc.org/ead/nalsu/id/apap134.xml');
-   $link = "https://www.empireadc.org/ead/". $collId ."/id/".$eadId.".xml"; 
-   $rdf = "https://www.empireadc.org/ead/". $collId ."/id/".$eadId.".rdf";
-   $xml = simplexml_load_file($link);
-   $title = $xml->archdesc->did->unittitle;
-   $repository = (isset($xml->archdesc->did->repository->corpname)? $xml->archdesc->did->repository->corpname : $xml->archdesc->did->repository);
-   $extent = $xml->archdesc->did->physdesc->extent;
-   $creator =  (isset($xml->archdesc->did->origination->corpname)? $xml->archdesc->did->origination->corpname : $xml->archdesc->did->origination->persname);
-   $location = (isset($xml->archdesc->did->physloc)? $xml->archdesc->did->physloc : 'Unspecified');
-   $language = (isset($xml->archdesc->did->langmaterial-> language)? $xml->archdesc->did->langmaterial-> language : $xml->archdesc->did->langmaterial);
-   $abstract = $xml->archdesc->did->abstract;
-   $processInfo = (isset($xml->archdesc->processinfo->p)? $xml->archdesc->processinfo->p : 'Unspecified');
-   $access = $xml->archdesc->accessrestrict->p;
-   $copyright = $xml->archdesc->userestrict->p;
-   $acqInfo = (isset($xml->archdesc->acqinfo->p)? $xml->archdesc->acqinfo->p : 'Unspecified');
-   $prefCitation = $xml->archdesc->prefercite->p[1];
-   $histNote = '';
-   if (isset($xml->archdesc->bioghist)){
-   	 foreach($xml->archdesc->bioghist->children() as $p){
-   		if($p->getname() == 'p'){
-   			$histNote = $histNote . $p . "<br />\n" ;
-   		}
-  	 }
-   }
-   $scopeContent = '';
-   if(isset($xml->archdesc->scopecontent)){
-   	foreach($xml->archdesc->scopecontent->children() as $p){
-   		if($p->getname() == 'p'){
-   			$scopeContent = $scopeContent  . $p . "<br />\n" ;
-   		}
-   	}
-  }
-   
-   $arrangement = (isset($xml->archdesc->arrangement->p)? $xml->archdesc->arrangement->p : 'Unspecified');  
-   $componentList = (isset($xml->archdesc->dsc->c)? TRUE : FALSE);
-   $digitalObject = (isset($xml->archdesc->did->daogrp)? TRUE : FALSE);
-?>
+
 <div id="eadInfo" style="margin-bottom: 30px;">
        <h1><?php echo $title; ?></h1> 
        <h4 style="font-style: italic"><?php echo $repository; ?></h4> 
@@ -467,7 +473,7 @@ button{
 
                 </div>
 			<?php } elseif ($cLevel == 'series'){
-					seriesLevel($cLevel, $c);
+					seriesLevel($cLevel, $c, $collId, $repository);
 			 }	
 	} /* for each */
 }else{
@@ -477,12 +483,20 @@ button{
 }?>
 				</div><!-- componentList -->
 
-    </div></br>
-    <div>
-    <table id="researchCart" class="researchCart" style="visibility:hidden;" >
+    </div></br></br>
+    <div id="cart" style="visibility:hidden;">
+          <div align="right">
+          </div>
+              <table id="researchCart" class="researchCart">
+
       <thead>
       <tr>
-        <th>Item</th>
+
+          <th> <button class="btn" id="reserve"><a href="<?php echo base_url("?c=eaditorSearch&m=help");?>">Help</a></button><h4>Your Research Cart</h4></th>
+          <th><button class="btn" id="reserve"><a href="<?php echo base_url("?c=eaditorSearch&m=reserve");?>">Reserve</a></button></th>
+      </tr>
+      <tr>
+          <th>Item</th>
         <th>Remove</th>
       </tr>
       </thead>
@@ -490,8 +504,11 @@ button{
       <tr>
       </tr>
       </tbody>
-    </table></div>
-		</div>
+
+    </table>
+
+    </div>
+
 	</div>
 </div>
 
