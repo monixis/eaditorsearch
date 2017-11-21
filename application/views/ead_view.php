@@ -174,7 +174,8 @@ button{
     <?php
     // $xml = simplexml_load_file('https://www.empireadc.org/ead/nalsu/id/ua950.015.xml');
     //$xml = simplexml_load_file('https://www.empireadc.org/ead/nalsu/id/apap134.xml');
-    $link = "https://www.empireadc.org/ead/". $collId ."/id/".$eadId.".xml";
+
+    $link = "https://www.empireadc.org/ead/". strtolower($collId) ."/id/".$eadId.".xml";
     $rdf = "https://www.empireadc.org/ead/". $collId ."/id/".$eadId.".rdf";
     $xml = simplexml_load_file($link);
     $title = $xml->archdesc->did->unittitle;
@@ -217,7 +218,9 @@ button{
 
 <?php 
 	function seriesLevel($level, $obj, $collId , $repository){ //recursive function that creates placeholder for series and other sub levels
-		$flag = 0;
+    $flag = 0;
+    $component = 0;
+    $fileLevel = 0;
 	?>
 		<div class="<?php echo $level; ?> seriesRow">
 					<?php
@@ -240,20 +243,23 @@ button{
           			<!-- Check if this series has children levels -->
           			<?php
           			foreach ($obj->children() as $grandchildObj){
-          					if($grandchildObj->getname() == 'c'){
-          						$cAttr1 = $grandchildObj->attributes();
-								$cLevel1 = $cAttr1["level"]; 
-									if($cLevel1 == 'otherlevel' || $cLevel1 == 'subseries'){
-										$flag = 1;	
-										seriesLevel($cLevel1, $grandchildObj, $collId, $repository);
-										
-									}
-								}	
-							}
+          				if($grandchildObj->getname() == 'c'){
+          					$cAttr1 = $grandchildObj->attributes();
+								     $cLevel1 = $cAttr1["level"]; 
+									     if($cLevel1 == 'otherlevel' || $cLevel1 == 'subseries'){
+									        $flag = 1;	
+                          seriesLevel($cLevel1, $grandchildObj, $collId, $repository);
+                        }elseif($cLevel1 == 'file'){
+                          $fileLevel = 1;
+                        }
+								  }
+							  }
 					if ($flag == 0){ // if no other level exists, display the files 
-					?>
-						<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#<?php echo $obj['id']; ?>" style="margin-bottom: 5px;">View the files.</button>
-						<div id="<?php echo $obj['id']; ?>" class="collapse" style="width: 75%; border-left: 1px solid #ccc; border-right: 1px solid #ccc; margin-left:auto; margin-right: auto;">
+         
+
+            if($fileLevel == 1){ ?>
+              	<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#<?php echo $obj['id']; ?>" style="margin-bottom: 5px;">View the files.</button>
+                <div id="<?php echo $obj['id']; ?>" class="collapse" style="width: 75%; border-left: 1px solid #ccc; border-right: 1px solid #ccc; margin-left:auto; margin-right: auto;">
 								<?php 
 									foreach ($obj->c as $fileObj){?>
 										<div class="fileRow">
@@ -270,14 +276,15 @@ button{
           												<p><?php echo ucfirst($file['type']).' Date: '.$file; ?></p><?php
           											}elseif($file->getname() == 'container'){?>
           												<p><?php echo ucfirst($file['type']).": ". $file;     $arr = explode(' ',ucfirst($file['type'])."-". $file);
-                                                        $component = $component."-". $arr[0];  ?></p><?php
+                                      $component = $component."-". $arr[0];  ?></p><?php
           											}	
 												}?>
                                             <input type="checkbox" class="big-checkbox" id="<?php echo  "crtitm"."-".$collId."-".$component; ?>" value="<?php echo  $repository.substr(0,13)."..."."-".$collId."-".$component; ?>">
 
                                         </div>
 								<?php } ?>	
-						</div>	
+						</div>
+                <?php } ?>
 					<?php
 					}
 					?>
@@ -350,39 +357,46 @@ button{
       </div>
       <div class="modal-body">
          <?php 
-      $controlHeading = array();
-        foreach($xml->archdesc->controlaccess->children() as $list) {
-          $included = FALSE;
-            foreach($controlHeading as $value){
-              if ($value == $list->getname()){
-                $included = TRUE;
-              }
-            } 
-            if($included == FALSE){
-              array_push($controlHeading, $list->getname());
-            } 
-        }
-    foreach($controlHeading as $value){
-        $headValue = $value;
-         if($value == 'subject'){
-           $headValue = 'Subject:';
-         } elseif($value == 'persname'){
-           $headValue = 'Person:';
-         } elseif($value == 'genreform'){
-           $headValue = 'Genre/Format:';
-         } elseif($value == 'corpname'){
-           $headValue = 'Corporation:';
-         } elseif($value == 'geogname'){
-           $headValue = 'Place:';
-         }
-         ?> 
-         <h5><?php echo $headValue; ?></h5>
-          <?php  foreach($xml->archdesc->controlaccess->children() as $list) {
-              if ($value == $list->getname()){ ?>
-                  <ul><li><a href="#" class='controlledHeader'><?php echo $list; ?></a></li></ul>
-          <?php }
+         $controlledAccess = (isset($xml->archdesc->controlaccess)? TRUE : FALSE);
+      
+         if($controlledAccess == TRUE){
+          $controlHeading = array();
+          foreach($xml->archdesc->controlaccess->children() as $list) {
+            $included = FALSE;
+              foreach($controlHeading as $value){
+                if ($value == $list->getname()){
+                  $included = TRUE;
+                }
+              } 
+              if($included == FALSE){
+                array_push($controlHeading, $list->getname());
+              } 
+          }
+      foreach($controlHeading as $value){
+          $headValue = $value;
+           if($value == 'subject'){
+             $headValue = 'Subject:';
+           } elseif($value == 'persname'){
+             $headValue = 'Person:';
+           } elseif($value == 'genreform'){
+             $headValue = 'Genre/Format:';
+           } elseif($value == 'corpname'){
+             $headValue = 'Corporation:';
+           } elseif($value == 'geogname'){
+             $headValue = 'Place:';
            }
-        }
+           ?> 
+           <h5><?php echo $headValue; ?></h5>
+            <?php  foreach($xml->archdesc->controlaccess->children() as $list) {
+                if ($value == $list->getname()){ ?>
+                    <ul><li><a href="#" class='controlledHeader'><?php echo $list; ?></a></li></ul>
+            <?php }
+             }
+          }
+         }else{ ?>
+            <h4 style="font-style: italic">Not available</h4>
+      <?php  }
+        
       ?>  
       </div>
       <div class="modal-footer">
@@ -472,7 +486,7 @@ button{
                     <input type="checkbox" class="big-checkbox" id="<?php echo  "crtitm"."-".$collId."-".$component; ?>" value="<?php echo  $repository.substr(0,13)."..."."-".$collId."-".$component; ?>">
 
                 </div>
-			<?php } elseif ($cLevel == 'series'){
+			<?php } elseif ($cLevel == 'series' || $cLevel == 'collection'){
 					seriesLevel($cLevel, $c, $collId, $repository);
 			 }	
 	} /* for each */

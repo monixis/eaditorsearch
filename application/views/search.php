@@ -95,6 +95,9 @@
 </body>
 <script type="text/javascript">
 		$('#initiateSearch').click(function(){
+			// Clear the selected facets of the previous search
+			$("#selectedFacet").empty();
+			$('input#queryTag').val('');
 			var searchTerm = $('input#searchBox').val();
 			var searchTerm = searchTerm.trim();
 			var searchTerm = searchTerm.replace(/ /g,"%20");
@@ -111,6 +114,9 @@
 		$('#searchBox').keypress(function(e){
 			var key = e.which;
 			if(key == 13){
+				// Clear the selected facets of the previous search
+				$("#selectedFacet").empty();
+				$('input#queryTag').val('');
 				var searchTerm = $('input#searchBox').val();
 				var searchTerm = searchTerm.trim();
 				var searchTerm = searchTerm.replace(/ /g,"%20");
