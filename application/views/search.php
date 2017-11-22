@@ -128,5 +128,26 @@
 				}else{
 					$("p#message").show().delay(3000).fadeOut();}}
 		});
+        $(document).ready(function () {
+
+              var searchTerm = "<?php echo $key; ?>";
+
+            if(searchTerm == "" || searchTerm == null){
+
+                $("p#message").show().delay(3000).fadeOut();
+
+            }else{
+                document.getElementById("searchBox").value = decodeURIComponent(searchTerm);
+                var searchTerm = searchTerm.trim();
+                var searchTerm = searchTerm.replace(/ /g,"%20");
+                var searchTerm = encodeURIComponent(searchTerm);
+                var resultUrl = "<?php echo base_url("?c=eaditorSearch&m=searchKeyWords&key=")?>" + searchTerm;
+
+                $('#searchResults').load(resultUrl);
+
+            }
+
+        });
+
 </script>
 </html>

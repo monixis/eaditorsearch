@@ -245,9 +245,9 @@ button{
           			foreach ($obj->children() as $grandchildObj){
           				if($grandchildObj->getname() == 'c'){
           					$cAttr1 = $grandchildObj->attributes();
-								     $cLevel1 = $cAttr1["level"]; 
+								     $cLevel1 = $cAttr1["level"];
 									     if($cLevel1 == 'otherlevel' || $cLevel1 == 'subseries'){
-									        $flag = 1;	
+									        $flag = 1;
                           seriesLevel($cLevel1, $grandchildObj, $collId, $repository);
                         }elseif($cLevel1 == 'file'){
                           $fileLevel = 1;
@@ -255,7 +255,7 @@ button{
 								  }
 							  }
 					if ($flag == 0){ // if no other level exists, display the files 
-         
+
 
             if($fileLevel == 1){ ?>
               	<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#<?php echo $obj['id']; ?>" style="margin-bottom: 5px;">View the files.</button>
@@ -358,7 +358,7 @@ button{
       <div class="modal-body">
          <?php 
          $controlledAccess = (isset($xml->archdesc->controlaccess)? TRUE : FALSE);
-      
+
          if($controlledAccess == TRUE){
           $controlHeading = array();
           foreach($xml->archdesc->controlaccess->children() as $list) {
@@ -367,10 +367,10 @@ button{
                 if ($value == $list->getname()){
                   $included = TRUE;
                 }
-              } 
+              }
               if($included == FALSE){
                 array_push($controlHeading, $list->getname());
-              } 
+              }
           }
       foreach($controlHeading as $value){
           $headValue = $value;
@@ -385,7 +385,7 @@ button{
            } elseif($value == 'geogname'){
              $headValue = 'Place:';
            }
-           ?> 
+           ?>
            <h5><?php echo $headValue; ?></h5>
             <?php  foreach($xml->archdesc->controlaccess->children() as $list) {
                 if ($value == $list->getname()){ ?>
@@ -396,7 +396,7 @@ button{
          }else{ ?>
             <h4 style="font-style: italic">Not available</h4>
       <?php  }
-        
+
       ?>  
       </div>
       <div class="modal-footer">
@@ -534,7 +534,10 @@ button{
 <script>
 	$('a.controlledHeader').click(function(){
       var selectedHeader = $(this).text();
-      resultUrl = "<?php echo base_url("?c=eaditorSearch&m=searchKeyWords&key=")?>" + selectedHeader;
+      var selectedHeader = selectedHeader.trim();
+      var selectedHeader = selectedHeader.replace(/ /g,"%20");
+      var selectedHeader = encodeURIComponent(selectedHeader);
+      resultUrl = "<?php echo base_url("?key=")?>" + selectedHeader;
 	  window.open(resultUrl);
     });
 </script>

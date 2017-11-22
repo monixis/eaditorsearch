@@ -15,7 +15,12 @@ class eaditorSearch extends CI_Controller
        // $this->load->model('repository_model');
         //$data['keywords'] = $this->repository_model->getKeywords();
         //$data["searchString"] = "";
-        $this->load->view('search');
+        if($this -> input -> get('key'))
+            $data["key"] = $this -> input -> get('key');
+        else
+            $data["key"] = "";
+
+        $this->load->view('search', $data);
     }
        
   public function searchKeyWords()
