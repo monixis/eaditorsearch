@@ -43,7 +43,35 @@
 				foreach ($facets as $key => $value){
 					if(sizeof($value)>0){
 			?>
-					<button class="accordion" id="<?php echo $key ; ?>"><?php echo ucfirst(str_replace('_facet','',$key)); ?></button>
+					<button class="accordion" id="<?php echo $key ; ?>"><?php
+						if($key == "subject_facet"){
+							echo "Subject";
+					     }
+					     else if($key == "agency_facet"){
+							 echo "Agency";
+
+						}else if($key == "corpname_facet"){
+							 echo "Organization";
+
+						 }else if($key == "genreform_facet"){
+							 echo "Genre/Format";
+
+						 }else if($key == "language_facet"){
+							 echo "Language";
+
+						 }else if($key == "persname_facet"){
+							 echo "Person";
+
+						 }else if($key == "century_num"){
+							 echo "Date";
+
+						 }else if($key == "famname_facet"){
+							 echo "Family";
+
+						 }else if($key == "geogname_facet"){
+							 echo "Place";
+						 }
+						?></button>
 					<div class="panel" id="<?php echo $key ; ?>">
 							<form class="form-horizontal">
 								<div class="form-group has-feedback">
