@@ -184,30 +184,36 @@ button{
     $creator =  (isset($xml->archdesc->did->origination->corpname)? $xml->archdesc->did->origination->corpname : $xml->archdesc->did->origination->persname);
     $location = (isset($xml->archdesc->did->physloc)? $xml->archdesc->did->physloc : 'Unspecified');
     $language = (isset($xml->archdesc->did->langmaterial-> language)? $xml->archdesc->did->langmaterial-> language : $xml->archdesc->did->langmaterial);
-    $abstract = $xml->archdesc->did->abstract;
+    $abstract = (isset($xml->archdesc->did->abstract)? $xml->archdesc->did->abstract : 'Unspecified');
     $processInfo = (isset($xml->archdesc->processinfo->p)? $xml->archdesc->processinfo->p : 'Unspecified');
-    $access = $xml->archdesc->accessrestrict->p;
-    $copyright = $xml->archdesc->userestrict->p;
+    $access = (isset($xml->archdesc->accessrestrict->p)? $xml->archdesc->accessrestrict->p : 'Unspecified');
+    $copyright = (isset($xml->archdesc->userestrict->p)? $xml->archdesc->userestrict->p : 'Unspecified');
     $acqInfo = (isset($xml->archdesc->acqinfo->p)? $xml->archdesc->acqinfo->p : 'Unspecified');
-    $prefCitation = $xml->archdesc->prefercite->p[1];
-    $histNote = '';
+    $prefCitation = (isset($xml->archdesc->prefercite->p[1])? $xml->archdesc->prefercite->p[1] : 'Unspecified');
+    $histNote = 'Unspecified';
     if (isset($xml->archdesc->bioghist)){
         foreach($xml->archdesc->bioghist->children() as $p){
             if($p->getname() == 'p'){
-                $histNote = $histNote . $p . "<br />\n" ;
+                $histNote = $histNote . $p . "<br /><br />\n" ;
             }
         }
     }
-    $scopeContent = '';
+    $scopeContent = 'Unspecified';
     if(isset($xml->archdesc->scopecontent)){
         foreach($xml->archdesc->scopecontent->children() as $p){
             if($p->getname() == 'p'){
-                $scopeContent = $scopeContent  . $p . "<br />\n" ;
+                $scopeContent = $scopeContent  . $p . "<br /><br />\n" ;
             }
         }
     }
-
-    $arrangement = (isset($xml->archdesc->arrangement->p)? $xml->archdesc->arrangement->p : 'Unspecified');
+    $arrangement = '';
+    if(isset($xml->archdesc->arrangement)){
+        foreach($xml->archdesc->arrangement->children() as $p){
+            if($p->getname() == 'p'){
+                $arrangement = $arrangement . $p . "<br />\n" ;
+            }
+        }
+    }
     $componentList = (isset($xml->archdesc->dsc->c)? TRUE : FALSE);
     $digitalObject = (isset($xml->archdesc->did->daogrp)? TRUE : FALSE);
     ?>
@@ -227,8 +233,9 @@ button{
 						foreach ($obj->did->children() as $childObj){
 							if($childObj->getname() == 'unittitle'){
             					if(count($childObj) > 0){?>
-            						<h4><?php echo $childObj->title; ?></h4>
-                					<h4><?php echo $childObj->title->emph; ?></h4>
+            						<!--h4><?php echo $childObj->title; ?></h4>
+                				<h4><?php echo $childObj->title->emph; ?></h4-->
+                				<h4><?php echo ucfirst($level) . " " . $obj->did->unitid . ": " . $childObj->title . $childObj->title->emph . $childObj->emph; ?></h4>                        
            						<?php }else{?>
            							<h4><?php echo ucfirst($level) . " " . $obj->did->unitid . ": " . $childObj; ?></h4>
            						<?php }
@@ -245,18 +252,20 @@ button{
           			foreach ($obj->children() as $grandchildObj){
           				if($grandchildObj->getname() == 'c'){
           					$cAttr1 = $grandchildObj->attributes();
+                    
 								     $cLevel1 = $cAttr1["level"];
+
 									     if($cLevel1 == 'otherlevel' || $cLevel1 == 'subseries'){
 									        $flag = 1;
                           seriesLevel($cLevel1, $grandchildObj, $collId, $repository);
                         }elseif($cLevel1 == 'file'){
                           $fileLevel = 1;
+                        }else{
+                          $fileLevel = 1 ;
                         }
 								  }
 							  }
 					if ($flag == 0){ // if no other level exists, display the files 
-
-
             if($fileLevel == 1){ ?>
               	<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#<?php echo $obj['id']; ?>" style="margin-bottom: 5px;">View the files.</button>
                 <div id="<?php echo $obj['id']; ?>" class="collapse" style="width: 75%; border-left: 1px solid #ccc; border-right: 1px solid #ccc; margin-left:auto; margin-right: auto;">
@@ -268,7 +277,7 @@ button{
 													if($file->getname() == 'unittitle'){
      													if(count($file) > 0){?>
             												<h4><?php echo $file->title; $component = $file->title;?></h4>
-                											<h4><?php echo $file->emph; ?><?php	echo $file; ?></h4>
+                										<h4><?php echo $file->emph; ?><?php	echo $file; ?></h4>
            												<?php }else{?>
            													<h4><?php	echo $file; $component = $file;?></h4>
            												<?php }
@@ -279,8 +288,8 @@ button{
                                       $component = $component."-". $arr[0];  ?></p><?php
           											}	
 												}?>
-                                            <input type="checkbox" class="big-checkbox" id="<?php echo  "crtitm"."-".$collId."-".$component; ?>" value="<?php echo  $repository.substr(0,13)."..."."-".$collId."-".$component; ?>">
-
+                                         <!--   <input type="checkbox" class="big-checkbox" id="<?php echo  "crtitm"."-".$collId."-".$component; ?>" value="<?php echo  $repository.substr(0,13)."..."."-".$collId."-".$component; ?>">
+                                          -->
                                         </div>
 								<?php } ?>	
 						</div>
@@ -456,7 +465,7 @@ button{
   </div>
 </div>
 <div>
-<h4>Components List <p style="float: right">Add to Cart</p></h4>
+<!--h4>Components List <p style="float: right">Add to Cart</p></h4-->
 </div>
 
 <div id="componentList">
@@ -483,8 +492,8 @@ button{
                                 $component = $component."-". $arr[0];  ?></p><?php
           					}
 						}?>
-                    <input type="checkbox" class="big-checkbox" id="<?php echo  "crtitm"."-".$collId."-".$component; ?>" value="<?php echo  $repository.substr(0,13)."..."."-".$collId."-".$component; ?>">
-
+                <!--    <input type="checkbox" class="big-checkbox" id="<?php echo  "crtitm"."-".$collId."-".$component; ?>" value="<?php echo  $repository.substr(0,13)."..."."-".$collId."-".$component; ?>">
+                -->
                 </div>
 			<?php } elseif ($cLevel == 'series' || $cLevel == 'collection'){
 					seriesLevel($cLevel, $c, $collId, $repository);
@@ -498,7 +507,7 @@ button{
 				</div><!-- componentList -->
 
     </div></br></br>
-    <div id="cart" style="visibility:hidden;">
+    <!--div id="cart" style="visibility:hidden;">
           <div align="right">
           </div>
               <table id="researchCart" class="researchCart">
@@ -521,7 +530,7 @@ button{
 
     </table>
 
-    </div>
+    </div-->
 
 	</div>
 </div>
