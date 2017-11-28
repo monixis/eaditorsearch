@@ -316,8 +316,9 @@ button{
        </ul>
       <ul class="nav navbar-nav navbar-right">
         <!--li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li-->
-        <li><a href="#">About</a></li>
-        <li><a href="#">Contact</a></li>
+        <!--li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li-->
+        <li><a href='https://drive.google.com/open?id=1hsFy_xJ9uIP_wkRZjityXVdWVHSQF3X9eVALv2sMEo4' target='_blank'>Feedback/Issue</a></li>
       </ul>
     </div>
   </div>

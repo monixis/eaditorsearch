@@ -68,7 +68,8 @@
 											<img src="./icons/search.png"  style="height: 25px;"/>
 										</button> </span>
 								</div>
-									<p id="message" style="display: none;color: #B31B1B"> Please enter any text or word to search</p>
+									<!--p id="message" style="display: none;color: #B31B1B"> Please enter any text or word to search</p-->
+									<a href='https://drive.google.com/open?id=1hsFy_xJ9uIP_wkRZjityXVdWVHSQF3X9eVALv2sMEo4' target='_blank'>Feedback/Issue</a>
 							</div>
 							<div id="selectedFacet" >
 							
@@ -76,10 +77,11 @@
 							<div id="searchResults" style="position: relative;display: inline-block">
 
 							</div>
-
+								
 						</div>
 					</div><!-- row -->
 				</div><!-- container -->
+				
 			</div>
 			<!-- jumbotron -->
 
@@ -89,6 +91,7 @@
 		<!-- main-container -->
 		<div class="container">
 			<p  class = "foot">
+			
 			</p>
 
 		</div>
