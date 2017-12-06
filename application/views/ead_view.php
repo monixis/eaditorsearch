@@ -502,7 +502,7 @@ button{
 	} /* for each */
 }else{
 	?>
-		<h4 style="font-style: italic">Not available</h4>
+		<h4 style="font-style: italic">Container List Not Available</h4>
 	<?php	
 }?>
 				</div><!-- componentList -->
