@@ -38,7 +38,7 @@
 |
 */
 
-$route['default_controller'] = "eaditorSearch";
+$route['default_controller'] = "eaditorsearch";
 $route['404_override'] = '';
 
 

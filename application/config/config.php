@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost:8888/eaditorSearch/';
+$config['base_url']	= 'http://localhost/eaditorsearch/';
 
 
 /*
@@ -27,7 +27,7 @@ $config['base_url']	= 'http://localhost:8888/eaditorSearch/';
 | variable so that it is blank.
 |
 */
-$config['index_page'] = 'index.php';
+$config['index_page'] = '';
 
 /*
 |--------------------------------------------------------------------------

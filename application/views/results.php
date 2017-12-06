@@ -119,7 +119,7 @@
 					$collId = (isset($row -> agencycode_facet[0] ) ? str_replace('US-','',$row -> agencycode_facet[0]) : FALSE);
 					$fileId = $row -> id ;
 					//$link = "https://www.empireadc.org/ead/". $collection ."/id/".$row -> id.".xml"; 
-					$link = base_url('?c=eaditorSearch&m=viewEAD&collId='.$collId.'&eadId='.$row -> id);
+					$link = base_url('?c=eaditorsearch&m=viewEAD&collId='.$collId.'&eadId='.$row -> id);
 			?>
 				<li class="results" style="height: auto; padding: 10px;">
 						<a href=<?php echo $link ?> target="_blank"><?php echo $title ?></a></br>
@@ -164,7 +164,7 @@
 		//var searchTerm = searchTerm.replace(/ /g,"%20");
 		// encoding string into UTF - 8 to carry all the required characters in the ajax request.
 		var searchTerm = encodeURIComponent(searchTerm);
-		var resultUrl = "<?php echo base_url("?c=eaditorSearch&m=searchKeyWords&key=")?>"+searchTerm;
+		var resultUrl = "<?php echo base_url("?c=eaditorsearch&m=searchKeyWords&key=")?>"+searchTerm;
         NProgress.start();
         NProgress.configure({ showSpinner: true });
         $('#searchResults').load(resultUrl);
@@ -185,7 +185,7 @@
 		var searchTerm = encodeURIComponent(searchTerm);
         NProgress.start();
         NProgress.configure({ showSpinner: true });
-        var resultUrl = "<?php echo base_url("?c=eaditorSearch&m=searchKeyWords&key=")?>"+searchTerm;
+        var resultUrl = "<?php echo base_url("?c=eaditorsearch&m=searchKeyWords&key=")?>"+searchTerm;
         $('#searchResults').load(resultUrl);
         NProgress.done();
     });

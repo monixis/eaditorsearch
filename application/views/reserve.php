@@ -151,7 +151,7 @@
             }
 
             //
-            $.post("<?php echo base_url("?c=eaditorSearch&m=sendEmail")?>", {
+            $.post("<?php echo base_url("?c=eaditorsearch&m=sendEmail")?>", {
 
                 final_cart: JSON.stringify(finalized_cart),
                 firstName: $('input#firstName').val(),
@@ -308,7 +308,7 @@
 <script>
     $('a.controlledHeader').click(function(){
         var selectedHeader = $(this).text();
-        resultUrl = "<?php echo base_url("?c=eaditorSearch&m=searchKeyWords&key=")?>" + selectedHeader;
+        resultUrl = "<?php echo base_url("?c=eaditorsearch&m=searchKeyWords&key=")?>" + selectedHeader;
         window.open(resultUrl);
     });
 </script>

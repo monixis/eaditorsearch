@@ -516,8 +516,8 @@ button{
       <thead>
       <tr>
 
-          <th> <button class="btn" id="reserve"><a href="<?php echo base_url("?c=eaditorSearch&m=help");?>">Help</a></button><h4>Your Research Cart</h4></th>
-          <th><button class="btn" id="reserve"><a href="<?php echo base_url("?c=eaditorSearch&m=reserve");?>">Reserve</a></button></th>
+          <th> <button class="btn" id="reserve"><a href="<?php echo base_url("?c=eaditorsearch&m=help");?>">Help</a></button><h4>Your Research Cart</h4></th>
+          <th><button class="btn" id="reserve"><a href="<?php echo base_url("?c=eaditorsearch&m=reserve");?>">Reserve</a></button></th>
       </tr>
       <tr>
           <th>Item</th>
