@@ -57,7 +57,7 @@
 					<!-- Example row of columns -->
 					<div class="row">
 						<div class="col-md-12">
-							<div id="logo" style="width: 300px; margin-left: auto; margin-right: auto;"><img src='https://www.empireadc.org/sites/www.empireadc.org/files/ead_logo.gif' style='width:300px;'/></div>
+							<div id="logo" style="width: 300px; margin-left: auto; margin-right: auto;"><a href='/'><img src='https://www.empireadc.org/sites/www.empireadc.org/files/ead_logo.gif' style='width:300px;'/></div></a>
 							<!--input type="text" id="searchBox" placeholder="Search Honor's Thesis Repository" /-->
 							<div id="custom-search-input">
 								<div class="input-group col-md-12">
