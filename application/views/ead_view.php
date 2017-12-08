@@ -344,8 +344,8 @@ button{
          <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#controlHeadings" style="font-size: 14px;">Controlled Access Headings</button>
        </div>
 		<h4>Output formats:</h4>
-		  <button type="button" class="btn btn-info" ><a href='<?php echo $link; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'>XML</a></button>
-      <button type="button" class="btn btn-info" ><a href='<?php echo $rdf; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'>RDF/XML</a></button>       
+		 <a href='<?php echo $link; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-info" >XML></button></a>
+         <a href='<?php echo $rdf; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-info" >RDF/XML</button> </a>      
   
       <!--?php if($digitalObject == TRUE) { ?>
           <h5> Digital Images: </h5>
