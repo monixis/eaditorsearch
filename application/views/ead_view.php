@@ -181,7 +181,10 @@ button{
     $title = $xml->archdesc->did->unittitle;
     $repository = (isset($xml->archdesc->did->repository->corpname)? $xml->archdesc->did->repository->corpname : $xml->archdesc->did->repository);
     $extent = $xml->archdesc->did->physdesc->extent;
-    $creator =  (isset($xml->archdesc->did->origination->corpname)? $xml->archdesc->did->origination->corpname : $xml->archdesc->did->origination->persname);
+    $creator =  (isset($xml->archdesc->did->origination->corpname)? $xml->archdesc->did->origination->corpname : FALSE);
+    if ($creator == FALSE){
+      $creator =  (isset($xml->archdesc->did->origination->persname)? $xml->archdesc->did->origination->persname : $xml->archdesc->did->origination->famname);
+    }
     $location = (isset($xml->archdesc->did->physloc)? $xml->archdesc->did->physloc : 'Unspecified');
     $language = (isset($xml->archdesc->did->langmaterial-> language)? $xml->archdesc->did->langmaterial-> language : $xml->archdesc->did->langmaterial);
     $abstract = (isset($xml->archdesc->did->abstract)? $xml->archdesc->did->abstract : 'Unspecified');
@@ -216,9 +219,17 @@ button{
     }
     $componentList = (isset($xml->archdesc->dsc->c)? TRUE : FALSE);
     $digitalObject = (isset($xml->archdesc->did->daogrp)? TRUE : FALSE);
+    $otherfindaids = (isset($xml->archdesc->otherfindaid->bibref->extptr)? $xml->archdesc->otherfindaid->bibref->extptr : FALSE);
+    if ($otherfindaids != FALSE){
+      $otherfindaidsAttr = $otherfindaids -> attributes('http://www.w3.org/1999/xlink');
+      $downloadLink = "https://www.empireadc.org/ead/uploads/". $collId ."/".$otherfindaidsAttr['href'];
+    }
+    $dateRange = array();
+    foreach($xml->archdesc->did->unitdate as $x){
+      $dateValue = ucfirst($x['type']). ' Date: '.$x ;
+      array_push($dateRange, $dateValue);
+    }
     ?>
-
-
 </head>
 <body>
 
@@ -336,7 +347,7 @@ button{
     	
 
 <div id="eadInfo" style="margin-bottom: 30px;">
-       <h1><?php echo $title; ?></h1> 
+       <h1><?php echo $title; ?></h1>
        <h4 style="font-style: italic"><?php echo $repository; ?></h4> 
        <div>
          <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#descId" style="font-size: 14px;">Descriptive Identification</button>
@@ -344,10 +355,9 @@ button{
          <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#controlHeadings" style="font-size: 14px;">Controlled Access Headings</button>
        </div>
 		<h4>Output formats:</h4>
-		 <a href='<?php echo $link; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-info" >XML></button></a>
-         <a href='<?php echo $rdf; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-info" >RDF/XML</button> </a>      
-  
-      <!--?php if($digitalObject == TRUE) { ?>
+		 <a href='<?php echo $link; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-info" >XML</button></a>
+     <a href='<?php echo $rdf; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-info" >RDF/XML</button> </a>      
+       <!--?php if($digitalObject == TRUE) { ?>
           <h5> Digital Images: </h5>
           <!--?php foreach ($xml->archdesc->did->daogrp->daoloc as $file){ ?>
               
@@ -428,6 +438,10 @@ button{
       </div>
       <div class="modal-body">
         <label>Repository: </label><p><?php echo $repository; ?></p>
+        <label>Date: </label>
+        <?php foreach ($dateRange as $y){ ?>
+          <p><?php echo $y; ?></p>
+        <?php } ?>
         <label>Extent: </label><p><?php echo $extent; ?></p>
         <label>Creator: </label><p><?php echo $creator; ?></p>
         <label>Location: </label><p><?php echo $location; ?></p>
@@ -500,11 +514,15 @@ button{
 					seriesLevel($cLevel, $c, $collId, $repository);
 			 }	
 	} /* for each */
-}else{
-	?>
+}else if ($otherfindaids != FALSE){ ?>
+  <h4>Download Container List:</h4>
+  <a href='<?php echo $downloadLink; ?>' itemprop="url"><img src="https://www.empireadc.org/ead/ui/images/word.png" alt="Microsoft Word" class="doc-icon"></a> 
+<?php }
+else{?>
 		<h4 style="font-style: italic">Container List Not Available</h4>
 	<?php	
-}?>
+}
+?>
 				</div><!-- componentList -->
 
     </div></br></br>
