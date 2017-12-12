@@ -157,7 +157,7 @@
         var searchTerm = $('input#searchBox').val();
         var selectedTag = ($(this).parents().attr('id')) + ':"' + ($(this).text().substr(0, $(this).text().indexOf('['))) + '"';
         var selectedTagId = selectedTag.replace(/"/g, '');
-        $('#selectedFacet').append('<button class="taglist" id="'+ selectedTagId +'" style="border: 1px solid #cccccc; background: #eeeeee; padding: 5px; margin-right: 10px; margin-top: 5px;"><a href="#" class="remove" style="margin-left:10px;">'+ selectedTag +' X</a></button>');
+        $('#selectedFacet').append('<a href="#" class="remove" style="margin-left:10px;"><button class="taglist" id="'+ selectedTagId +'" style="border: 1px solid #cccccc; background: #eeeeee; padding: 5px; margin-right: 10px; margin-top: 5px;">'+ selectedTag +' </button></a>');
         $('input#queryTag').val($('input#queryTag').val() + "fq=" + selectedTag);
         var queryTag = $('input#queryTag').val();
         searchTerm = searchTerm + queryTag;
