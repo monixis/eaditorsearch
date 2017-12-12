@@ -485,6 +485,7 @@ button{
 
 <div id="componentList">
 <?php if ($componentList == TRUE){
+  $component = 0;
 	foreach ($xml->archdesc->dsc->c as $c){
 		$cAttr = $c->attributes();
 		$cLevel = $cAttr["level"];
