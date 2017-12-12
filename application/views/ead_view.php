@@ -493,11 +493,14 @@ button{
 					<?php	
 						foreach ($c->did->children() as $child){
 	       					if($child->getname() == 'unittitle'){
-            					if(count($child) > 0){?>
-            						<h4><?php $component = $child->title; echo $component; $component = str_replace(" ","", $component)?></h4>
-                					<h4><?php echo $child->title->emph; ?></h4>
-           						<?php }else{?>
-           							<h4><?php $component =  $child; echo $component; $component = str_replace(" ","", $component) ?></h4>
+            					if(count($child) > 0){
+                              if(isset($child->title->emph)){?>
+                                 <h4><?php echo ucfirst($cLevel).": "; $component = $child->title->emph; echo $component; $component = str_replace(" ","", $component) ?></h4> 
+                              <?php } else { ?>
+                                 <h4><?php echo ucfirst($cLevel).": "; $component = $child->title; echo $component; $component = str_replace(" ","", $component)?></h4>
+                              <?php }                                   				
+           						}else{?>
+           							<h4><?php echo ucfirst($cLevel).": "; $component =  $child; echo $component; $component = str_replace(" ","", $component) ?></h4>
            						<?php }
           					}elseif($child->getname() == 'unitdate'){?>
           						<p><?php echo ucfirst($child['type']).' Date: '.$child; ?></p><?php
