@@ -222,6 +222,16 @@ button{
     $otherfindaids = (isset($xml->archdesc->otherfindaid->bibref->extptr)? $xml->archdesc->otherfindaid->bibref->extptr : FALSE);
     if ($otherfindaids != FALSE){
       $otherfindaidsAttr = $otherfindaids -> attributes('http://www.w3.org/1999/xlink');
+      $filename = $otherfindaidsAttr['href'];
+      $ext = pathinfo($filename, PATHINFO_EXTENSION);
+      $iconLink = 'https://www.empireadc.org/ead/ui/images/';
+      if ($ext == 'docx'){
+          $iconLink = $iconLink . 'word.png';
+      }else if ($ext == 'pdf'){
+        $iconLink = $iconLink . 'adobe.png';
+      }else if ($ext == 'xlsx'){
+        $iconLink = $iconLink . 'excel.png';
+      }
       $downloadLink = "https://www.empireadc.org/ead/uploads/". $collId ."/".$otherfindaidsAttr['href'];
     }
     $dateRange = array();
@@ -485,6 +495,11 @@ button{
 
 <div id="componentList">
 <?php if ($componentList == TRUE){
+  /* For cases where high level series list exists but a more detailed container list is available for download*/
+   if ($otherfindaids != FALSE){ ?>
+    <h4>Download Container List:</h4>
+    <a href='<?php echo $downloadLink; ?>' itemprop="url"><img src='<?php echo $iconLink;?>' class="doc-icon"></a></br></br> 
+  <?php }
   $component = 0;
 	foreach ($xml->archdesc->dsc->c as $c){
 		$cAttr = $c->attributes();
@@ -517,10 +532,10 @@ button{
 			<?php } elseif ($cLevel == 'series' || $cLevel == 'collection'){
 					seriesLevel($cLevel, $c, $collId, $repository);
 			 }	
-	} /* for each */
+  } /* for each */
 }else if ($otherfindaids != FALSE){ ?>
   <h4>Download Container List:</h4>
-  <a href='<?php echo $downloadLink; ?>' itemprop="url"><img src="https://www.empireadc.org/ead/ui/images/word.png" alt="Microsoft Word" class="doc-icon"></a> 
+  <a href='<?php echo $downloadLink; ?>' itemprop="url"><img src='<?php echo $iconLink;?>' class="doc-icon"></a> 
 <?php }
 else{?>
 		<h4 style="font-style: italic">Container List Not Available</h4>
