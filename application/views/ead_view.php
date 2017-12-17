@@ -180,6 +180,14 @@ button{
     $xml = simplexml_load_file($link);
     $title = $xml->archdesc->did->unittitle;
     $repository = (isset($xml->archdesc->did->repository->corpname)? $xml->archdesc->did->repository->corpname : $xml->archdesc->did->repository);
+    
+    $addressline = array();
+    $address = (isset($xml->archdesc->did->repository->address)? TRUE : FALSE);
+    if($address == TRUE){
+      foreach($xml->archdesc->did->repository->address->addressline as $a){
+        array_push($addressline, $a);
+      }
+    }
     $extent = $xml->archdesc->did->physdesc->extent;
     
     $creatorList = array();
@@ -385,6 +393,10 @@ button{
 <div id="eadInfo" style="margin-bottom: 30px;">
        <h1><?php echo $title; ?></h1>
        <h4 style="font-style: italic"><?php echo $repository; ?></h4> 
+       <?php if($address == TRUE){
+         foreach($addressline as $a){ ?>
+            <h5 style="font-style: italic"><?php echo $a; ?></h5>
+       <?php }}?>
        <div>
          <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#descId" style="font-size: 14px;">Descriptive Identification</button>
          <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#adminInfo" style="font-size: 14px;">Administrative Information</button>
@@ -474,6 +486,12 @@ button{
       </div>
       <div class="modal-body">
         <label>Repository: </label><p><?php echo $repository; ?></p>
+
+        <?php if($address == TRUE){ ?>
+          <label>Address: </label>
+         <?php foreach($addressline as $a){ ?>
+            <h5 style="font-style: italic"><?php echo $a; ?></h5>
+       <?php }}?>
         <label>Date: </label>
         <?php foreach ($dateRange as $y){ ?>
           <p><?php echo $y; ?></p>
