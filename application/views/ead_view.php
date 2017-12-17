@@ -181,12 +181,38 @@ button{
     $title = $xml->archdesc->did->unittitle;
     $repository = (isset($xml->archdesc->did->repository->corpname)? $xml->archdesc->did->repository->corpname : $xml->archdesc->did->repository);
     $extent = $xml->archdesc->did->physdesc->extent;
+    
+    $creatorList = array();
     $creator =  (isset($xml->archdesc->did->origination->corpname)? $xml->archdesc->did->origination->corpname : FALSE);
-    if ($creator == FALSE){
-      $creator =  (isset($xml->archdesc->did->origination->persname)? $xml->archdesc->did->origination->persname : $xml->archdesc->did->origination->famname);
+    if ($creator != FALSE){
+      foreach($xml->archdesc->did->origination->corpname as $c){
+        array_push($creatorList, $c);
+      }
+    }else if ($creator == FALSE){
+      $creator =  (isset($xml->archdesc->did->origination->persname)? $xml->archdesc->did->origination->persname : FALSE);
+      if ($creator != FALSE){
+        foreach($xml->archdesc->did->origination->persname as $c){
+          array_push($creatorList, $c);
+        }
+      }else if ($creator == FALSE){
+          foreach($xml->archdesc->did->origination->famname as $c){
+            array_push($creatorList, $c);
+          }
+      }
     }
+
     $location = (isset($xml->archdesc->did->physloc)? $xml->archdesc->did->physloc : 'Unspecified');
-    $language = (isset($xml->archdesc->did->langmaterial-> language)? $xml->archdesc->did->langmaterial-> language : $xml->archdesc->did->langmaterial);
+   
+    $languageList = array();
+    $multiLanguage = (isset($xml->archdesc->did->langmaterial-> language)? $xml->archdesc->did->langmaterial-> language : FALSE);
+    if ($multiLanguage == FALSE){
+        array_push($languageList, $xml->archdesc->did->langmaterial);
+    }else if ($multiLanguage != FALSE){
+      foreach($xml->archdesc->did->langmaterial->language as $lang){
+        array_push($languageList, $lang);
+      }
+    }
+   
     $abstract = (isset($xml->archdesc->did->abstract)? $xml->archdesc->did->abstract : 'Unspecified');
     $processInfo = (isset($xml->archdesc->processinfo->p)? $xml->archdesc->processinfo->p : 'Unspecified');
     $access = (isset($xml->archdesc->accessrestrict->p)? $xml->archdesc->accessrestrict->p : 'Unspecified');
@@ -453,9 +479,15 @@ button{
           <p><?php echo $y; ?></p>
         <?php } ?>
         <label>Extent: </label><p><?php echo $extent; ?></p>
-        <label>Creator: </label><p><?php echo $creator; ?></p>
+        <label>Creator: </label>
+        <?php foreach ($creatorList as $c){ ?>
+          <p><?php echo $c; ?></p>
+        <?php } ?>
         <label>Location: </label><p><?php echo $location; ?></p>
-        <label>Language: </label><p><?php echo $language; ?></p>
+        <label>Language: </label>
+        <?php foreach ($languageList as $l){ ?>
+          <p><?php echo $l; ?></p>
+        <?php } ?>
         <label>Abstract: </label><p><?php echo $abstract; ?></p>
       </div>
       <div class="modal-footer">
