@@ -553,12 +553,20 @@ button{
         <h4 class="modal-title" style="text-align:center;">Chronology</h4>
       </div>
       <div class="modal-body">
-      <?php if(isset($xml->archdesc->bioghist)) {
+      <?php if(isset($xml->archdesc->bioghist)) { $chronolist = 0;
          foreach ($xml->archdesc->bioghist->children() as $chron){
            if($chron ->getname() == 'chronlist'){
+             if($chronolist == 0){
            ?>
-             <button class="accordion" id='<?php echo $chron ->head; ?>'><?php echo $chron ->head; ?></button>
-           <div class="panel" id="<?php echo $chron ->head ; ?>">
+             <button class="accordion active" id='<?php echo $chron ->head; ?>'><?php echo $chron ->head; ?></button>
+               <div class="panel" style="display: block" id="<?php echo $chron ->head ; ?>">
+
+             <?php }  else { ?>
+               <button class="accordion" id='<?php echo $chron ->head; ?>'><?php echo $chron ->head; ?></button>
+                 <div class="panel" id="<?php echo $chron ->head ; ?>">
+
+              <?php }?>
+
              <ul class="tl" id="<?php echo $chron ->head ; ?>">
            <?php $i= 0; foreach($xml->archdesc->bioghist->chronlist -> children() as $chronChild) {   if($chronChild -> getname() =='chronitem') { if($i % 2 == 0){ ?>
               <li class='tl-inverted' id="<?php echo $chron ->head ; ?>"><div class="tl-badge info">
@@ -580,7 +588,7 @@ button{
              </ul>
            </div>
 
-            <?php  }
+            <?php  $chronolist++ ;}
          } }?>
 
       </div>
