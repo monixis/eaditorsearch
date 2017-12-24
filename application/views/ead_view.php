@@ -206,13 +206,47 @@ button{
     $xml = simplexml_load_file($link);
     $title = $xml->archdesc->did->unittitle;
     $repository = (isset($xml->archdesc->did->repository->corpname)? $xml->archdesc->did->repository->corpname : $xml->archdesc->did->repository);
-    $extent = $xml->archdesc->did->physdesc->extent;
-    $creator =  (isset($xml->archdesc->did->origination->corpname)? $xml->archdesc->did->origination->corpname : FALSE);
-    if ($creator == FALSE){
-      $creator =  (isset($xml->archdesc->did->origination->persname)? $xml->archdesc->did->origination->persname : $xml->archdesc->did->origination->famname);
+    
+    $addressline = array();
+    $address = (isset($xml->archdesc->did->repository->address)? TRUE : FALSE);
+    if($address == TRUE){
+      foreach($xml->archdesc->did->repository->address->addressline as $a){
+        array_push($addressline, $a);
+      }
     }
+    $extent = $xml->archdesc->did->physdesc->extent;
+    
+    $creatorList = array();
+    $creator =  (isset($xml->archdesc->did->origination->corpname)? $xml->archdesc->did->origination->corpname : FALSE);
+    if ($creator != FALSE){
+      foreach($xml->archdesc->did->origination->corpname as $c){
+        array_push($creatorList, $c);
+      }
+    }else if ($creator == FALSE){
+      $creator =  (isset($xml->archdesc->did->origination->persname)? $xml->archdesc->did->origination->persname : FALSE);
+      if ($creator != FALSE){
+        foreach($xml->archdesc->did->origination->persname as $c){
+          array_push($creatorList, $c);
+        }
+      }else if ($creator == FALSE){
+          foreach($xml->archdesc->did->origination->famname as $c){
+            array_push($creatorList, $c);
+          }
+      }
+    }
+
     $location = (isset($xml->archdesc->did->physloc)? $xml->archdesc->did->physloc : 'Unspecified');
-    $language = (isset($xml->archdesc->did->langmaterial-> language)? $xml->archdesc->did->langmaterial-> language : $xml->archdesc->did->langmaterial);
+   
+    $languageList = array();
+    $multiLanguage = (isset($xml->archdesc->did->langmaterial-> language)? $xml->archdesc->did->langmaterial-> language : FALSE);
+    if ($multiLanguage == FALSE){
+        array_push($languageList, $xml->archdesc->did->langmaterial);
+    }else if ($multiLanguage != FALSE){
+      foreach($xml->archdesc->did->langmaterial->language as $lang){
+        array_push($languageList, $lang);
+      }
+    }
+   
     $abstract = (isset($xml->archdesc->did->abstract)? $xml->archdesc->did->abstract : 'Unspecified');
     $processInfo = (isset($xml->archdesc->processinfo->p)? $xml->archdesc->processinfo->p : 'Unspecified');
     $access = (isset($xml->archdesc->accessrestrict->p)? $xml->archdesc->accessrestrict->p : 'Unspecified');
@@ -251,6 +285,16 @@ button{
     $otherfindaids = (isset($xml->archdesc->otherfindaid->bibref->extptr)? $xml->archdesc->otherfindaid->bibref->extptr : FALSE);
     if ($otherfindaids != FALSE){
       $otherfindaidsAttr = $otherfindaids -> attributes('http://www.w3.org/1999/xlink');
+      $filename = $otherfindaidsAttr['href'];
+      $ext = pathinfo($filename, PATHINFO_EXTENSION);
+      $iconLink = 'https://www.empireadc.org/ead/ui/images/';
+      if ($ext == 'docx'){
+          $iconLink = $iconLink . 'word.png';
+      }else if ($ext == 'pdf'){
+        $iconLink = $iconLink . 'adobe.png';
+      }else if ($ext == 'xlsx'){
+        $iconLink = $iconLink . 'excel.png';
+      }
       $downloadLink = "https://www.empireadc.org/ead/uploads/". $collId ."/".$otherfindaidsAttr['href'];
     }
     $dateRange = array();
@@ -378,6 +422,10 @@ button{
 <div id="eadInfo" style="margin-bottom: 30px;">
        <h1><?php echo $title; ?></h1>
        <h4 style="font-style: italic"><?php echo $repository; ?></h4> 
+       <?php if($address == TRUE){
+         foreach($addressline as $a){ ?>
+            <h5 style="font-style: italic"><?php echo $a; ?></h5>
+       <?php }}?>
        <div>
          <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#descId" style="font-size: 14px;">Descriptive Identification</button>
          <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#adminInfo" style="font-size: 14px;">Administrative Information</button>
@@ -469,14 +517,26 @@ button{
       </div>
       <div class="modal-body">
         <label>Repository: </label><p><?php echo $repository; ?></p>
+
+        <?php if($address == TRUE){ ?>
+          <label>Address: </label>
+         <?php foreach($addressline as $a){ ?>
+            <h5 style="font-style: italic"><?php echo $a; ?></h5>
+       <?php }}?>
         <label>Date: </label>
         <?php foreach ($dateRange as $y){ ?>
           <p><?php echo $y; ?></p>
         <?php } ?>
         <label>Extent: </label><p><?php echo $extent; ?></p>
-        <label>Creator: </label><p><?php echo $creator; ?></p>
+        <label>Creator: </label>
+        <?php foreach ($creatorList as $c){ ?>
+          <p><?php echo $c; ?></p>
+        <?php } ?>
         <label>Location: </label><p><?php echo $location; ?></p>
-        <label>Language: </label><p><?php echo $language; ?></p>
+        <label>Language: </label>
+        <?php foreach ($languageList as $l){ ?>
+          <p><?php echo $l; ?></p>
+        <?php } ?>
         <label>Abstract: </label><p><?php echo $abstract; ?></p>
       </div>
       <div class="modal-footer">
@@ -561,6 +621,11 @@ button{
 
 <div id="componentList">
 <?php if ($componentList == TRUE){
+  /* For cases where high level series list exists but a more detailed container list is available for download*/
+   if ($otherfindaids != FALSE){ ?>
+    <h4>Download Container List:</h4>
+    <a href='<?php echo $downloadLink; ?>' itemprop="url"><img src='<?php echo $iconLink;?>' class="doc-icon"></a></br></br> 
+  <?php }
   $component = 0;
 	foreach ($xml->archdesc->dsc->c as $c){
 		$cAttr = $c->attributes();
@@ -594,10 +659,10 @@ button{
 			<?php } elseif ($cLevel == 'series' || $cLevel == 'collection'){
 					seriesLevel($cLevel, $c, $collId, $repository);
 			 }	
-	} /* for each */
+  } /* for each */
 }else if ($otherfindaids != FALSE){ ?>
   <h4>Download Container List:</h4>
-  <a href='<?php echo $downloadLink; ?>' itemprop="url"><img src="https://www.empireadc.org/ead/ui/images/word.png" alt="Microsoft Word" class="doc-icon"></a> 
+  <a href='<?php echo $downloadLink; ?>' itemprop="url"><img src='<?php echo $iconLink;?>' class="doc-icon"></a> 
 <?php }
 else{?>
 		<h4 style="font-style: italic">Container List Not Available</h4>
