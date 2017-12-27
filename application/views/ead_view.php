@@ -188,7 +188,7 @@ button{
         array_push($addressline, $a);
       }
     }
-    $extent = $xml->archdesc->did->physdesc->extent;
+    $extent = (isset($xml->archdesc->did->physdesc->extent)? $xml->archdesc->did->physdesc->extent : 'Unspecified');
     
     $creatorList = array();
     $creator =  (isset($xml->archdesc->did->origination->corpname)? $xml->archdesc->did->origination->corpname : FALSE);
@@ -223,28 +223,49 @@ button{
    
     $abstract = (isset($xml->archdesc->did->abstract)? $xml->archdesc->did->abstract : 'Unspecified');
     $processInfo = (isset($xml->archdesc->processinfo->p)? $xml->archdesc->processinfo->p : 'Unspecified');
-    $access = (isset($xml->archdesc->accessrestrict->p)? $xml->archdesc->accessrestrict->p : 'Unspecified');
+
+    $access = (isset($xml->archdesc->accessrestrict)? $xml->archdesc->accessrestrict : 'Unspecified');
+    if ($access != 'Unspecified'){
+        foreach($xml->archdesc->accessrestrict->children() as $p){
+            if($p->getname() == 'p'){
+                $access = $access . $p . "<br />\n" ;
+            }
+        }
+    }
+
     $copyright = (isset($xml->archdesc->userestrict->p)? $xml->archdesc->userestrict->p : 'Unspecified');
-    $acqInfo = (isset($xml->archdesc->acqinfo->p)? $xml->archdesc->acqinfo->p : 'Unspecified');
+    
+    $acqInfo = (isset($xml->archdesc->acqinfo)? $xml->archdesc->acqinfo : 'Unspecified');
+    if ($acqInfo != 'Unspecified'){
+        foreach($xml->archdesc->acqinfo->children() as $p){
+            if($p->getname() == 'p'){
+                $acqInfo = $acqInfo . $p . "<br />\n" ;
+            }
+        }
+    }
+
     $prefCitation = (isset($xml->archdesc->prefercite->p[1])? $xml->archdesc->prefercite->p[1] : 'Unspecified');
-    $histNote = 'Unspecified';
-    if (isset($xml->archdesc->bioghist)){
+    
+    $histNote = (isset($xml->archdesc->bioghist)? $xml->archdesc->bioghist : 'Unspecified');
+    if ($histNote != 'Unspecified'){
         foreach($xml->archdesc->bioghist->children() as $p){
             if($p->getname() == 'p'){
                 $histNote = $histNote . $p . "<br /><br />\n" ;
             }
         }
     }
-    $scopeContent = 'Unspecified';
-    if(isset($xml->archdesc->scopecontent)){
+
+    $scopeContent = (isset($xml->archdesc->scopecontent)? $xml->archdesc->scopecontent : 'Unspecified');
+    if($scopeContent != 'Unspecified'){
         foreach($xml->archdesc->scopecontent->children() as $p){
             if($p->getname() == 'p'){
                 $scopeContent = $scopeContent  . $p . "<br /><br />\n" ;
             }
         }
     }
-    $arrangement = '';
-    if(isset($xml->archdesc->arrangement)){
+
+    $arrangement = (isset($xml->archdesc->arrangement)? $xml->archdesc->arrangement : 'Unspecified');
+    if($arrangement != 'Unspecified'){
         foreach($xml->archdesc->arrangement->children() as $p){
             if($p->getname() == 'p'){
                 $arrangement = $arrangement . $p . "<br />\n" ;
