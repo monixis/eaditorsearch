@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="styles/bootstrap.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="./styles/main.css" />
+  <link rel="stylesheet" type="text/css" href="./styles/chronlogy.css" />
+
   <style>
     /* Remove the navbar's default margin-bottom and rounded borders */ 
     .navbar {
@@ -53,7 +56,30 @@
     padding: 5px;
     border-top: 1px solid #ddd;
     padding-left: 20px;
+    display: -webkit-box;
+    display: -moz-box;
+
+  -webkit-box-orient: vertical;
+  box-orient: vertical;
 }
+.fileTitle{
+
+  -webkit-box-ordinal-group: 1;
+  -moz-box-ordinal-group: 1;
+
+}
+.fileContainer{
+
+  -webkit-box-ordinal-group: 2;
+  -moz-box-ordinal-group: 2;
+}
+.fileDate{
+  -webkit-box-ordinal-group: 3;
+  -moz-box-ordinal-group: 3;
+
+}
+
+
     .big-checkbox {width: 20px; height: 20px; float: right}
 
 .seriesRow {
@@ -132,8 +158,9 @@ button{
           var checkbox_disp_val = decodeURIComponent(checkbox_value);
           var markup = "<tr id=\"" +trow+ checkbox + "\"><td><p>" + checkbox_disp_val+ "</p></td><td>" + remove_anchor + "</td></tr>";
           $("table#researchCart tbody").append(markup);
+        if( document.getElementById("cart")) {
           document.getElementById("cart").style.visibility = "visible";
-
+        }
       }
 
     }
@@ -174,7 +201,6 @@ button{
     <?php
     // $xml = simplexml_load_file('https://www.empireadc.org/ead/nalsu/id/ua950.015.xml');
     //$xml = simplexml_load_file('https://www.empireadc.org/ead/nalsu/id/apap134.xml');
-
     $link = "https://www.empireadc.org/ead/". strtolower($collId) ."/id/".$eadId.".xml";
     $rdf = "https://www.empireadc.org/ead/". $collId ."/id/".$eadId.".rdf";
     $xml = simplexml_load_file($link);
@@ -248,10 +274,12 @@ button{
     
     $histNote = (isset($xml->archdesc->bioghist)? $xml->archdesc->bioghist : 'Unspecified');
     if ($histNote != 'Unspecified'){
+      $chronList = array();
         foreach($xml->archdesc->bioghist->children() as $p){
             if($p->getname() == 'p'){
                 $histNote = $histNote . $p . "<br /><br />\n" ;
             }
+
         }
     }
 
@@ -422,6 +450,8 @@ button{
          <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#descId" style="font-size: 14px;">Descriptive Identification</button>
          <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#adminInfo" style="font-size: 14px;">Administrative Information</button>
          <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#controlHeadings" style="font-size: 14px;">Controlled Access Headings</button>
+         <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#chronology" style="font-size: 14px;">Chronology</button>
+
        </div>
 		<h4>Output formats:</h4>
 		 <a href='<?php echo $link; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-info" >XML</button></a>
@@ -535,7 +565,60 @@ button{
     </div>
   </div>
 </div>
+<div id="chronology" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" style="text-align:center;">Chronology</h4>
+      </div>
+      <div class="modal-body">
+      <?php if(isset($xml->archdesc->bioghist)) { $chronolist = 0;
+         foreach ($xml->archdesc->bioghist->children() as $chron){
+           if($chron ->getname() == 'chronlist'){
+             if($chronolist == 0){
+           ?>
+             <button class="accordion active" id='<?php echo $chron ->head; ?>'><?php echo $chron ->head; ?></button>
+               <div class="panel" style="display: block" id="<?php echo $chron ->head ; ?>">
 
+             <?php }  else { ?>
+               <button class="accordion" id='<?php echo $chron ->head; ?>'><?php echo $chron ->head; ?></button>
+                 <div class="panel" id="<?php echo $chron ->head ; ?>">
+
+              <?php }?>
+
+             <ul class="tl" id="<?php echo $chron ->head ; ?>">
+           <?php $i= 0; foreach($xml->archdesc->bioghist->chronlist -> children() as $chronChild) {   if($chronChild -> getname() =='chronitem') { if($i % 2 == 0){ ?>
+              <li class='tl-inverted' id="<?php echo $chron ->head ; ?>"><div class="tl-badge info">
+                <?php echo $chronChild -> date  ;?></div><div class="tl-panel">
+                  <div class="tl-body"><p>
+                  <?php echo $chronChild -> event ;?></p></div></div>
+              </li>
+
+
+           <?php } else {  ?>
+             <li class='tl' id="<?php echo $chron ->head ; ?>"><div class="tl-badge info">
+                 <?php echo $chronChild -> date  ;?></div><div class="tl-panel">
+                 <div class="tl-body"><p>
+                     <?php echo $chronChild -> event ;?></p></div></div>
+             </li>
+
+
+           <?php } $i++;}}?>
+             </ul>
+           </div>
+
+            <?php  $chronolist++ ;}
+         } }?>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+
+  </div>
+    </div>
+  </div>
 <div id="adminInfo" class="modal fade" role="dialog">
   <div class="modal-dialog">
     <!-- Modal content-->
@@ -577,26 +660,27 @@ button{
 		$cLevel = $cAttr["level"];
 			if ($cLevel == 'file'){?> 
 				<div class="fileRow">
-					<?php	
-						foreach ($c->did->children() as $child){
-	       					if($child->getname() == 'unittitle'){
-            					if(count($child) > 0){
-                              if(isset($child->title->emph)){?>
-                                 <h4><?php echo ucfirst($cLevel).": "; $component = $child->title->emph; echo $component; $component = str_replace(" ","", $component) ?></h4> 
+					<?php foreach ($c->did->children() as $child){  ?>
+
+	       					<?php if($child->getname() == 'unittitle'){  ?>
+            					<?php if(count($child) > 0){ ?>
+                              <?php if(isset($child->title->emph)) { ?>
+
+                                 <div class="fileTitle"><h4><?php echo ucfirst($cLevel).": "; $component = $child->title->emph; echo $component; $component = str_replace(" ","", $component) ?></h4> </div>
                               <?php } else { ?>
-                                 <h4><?php echo ucfirst($cLevel).": "; $component = $child->title; echo $component; $component = str_replace(" ","", $component)?></h4>
-                              <?php }                                   				
+                                 <div class="fileTitle"><h4><?php echo ucfirst($cLevel).": "; $component = $child->title; echo $component; $component = str_replace(" ","", $component)?></h4></div>
+                              <?php }
+
            						}else{?>
-           							<h4><?php echo ucfirst($cLevel).": "; $component =  $child; echo $component; $component = str_replace(" ","", $component) ?></h4>
+           							<div class="fileTitle"><h4><?php echo ucfirst($cLevel).": "; $component =  $child; echo $component; $component = str_replace(" ","", $component) ?></h4></div>
            						<?php }
           					}elseif($child->getname() == 'unitdate'){?>
-          						<p><?php echo ucfirst($child['type']).' Date: '.$child; ?></p><?php
-          					}elseif($child->getname() == 'container'){?>
-          						<p><?php echo ucfirst($child['type']).": ". $child;
+          						<div class="fileDate"><p><?php echo ucfirst($child['type']).' Date: '.$child; ?></p></div>
+                              <?php } elseif($child->getname() == 'container'){?>
+          						<div class="fileContainer"><p><?php echo ucfirst($child['type']).": ". $child;
                                 $arr = explode(' ',ucfirst($child['type'])."-". $child);
-                                $component = $component."-". $arr[0];  ?></p><?php
-          					}
-						}?>
+                                $component = $component."-". $arr[0];  ?></p></div>
+                              <?php } }?>
                 <!--    <input type="checkbox" class="big-checkbox" id="<?php echo  "crtitm"."-".$collId."-".$component; ?>" value="<?php echo  $repository.substr(0,13)."..."."-".$collId."-".$component; ?>">
                 -->
                 </div>
@@ -637,7 +721,7 @@ else{?>
       </tr>
       </tbody>
 
-    </table>
+    </table>x
 
     </div-->
 
@@ -658,6 +742,24 @@ else{?>
       resultUrl = "<?php echo base_url("?key=")?>" + selectedHeader;
 	  window.open(resultUrl);
     });
+
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+
+    for (i = 0; i < acc.length; i++)
+    {
+      acc[i].onclick = function()
+      {
+        this.classList.toggle("active");
+        var panel = this.nextElementSibling;
+        if (panel.style.display === "block") {
+          panel.style.display = "none";
+
+        } else {
+          panel.style.display = "block";
+        }
+      }
+    }
 </script>
 </html>
 
