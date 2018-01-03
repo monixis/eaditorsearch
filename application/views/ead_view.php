@@ -203,6 +203,7 @@ button{
     //$xml = simplexml_load_file('https://www.empireadc.org/ead/nalsu/id/apap134.xml');
     $link = "https://www.empireadc.org/ead/". strtolower($collId) ."/id/".$eadId.".xml";
     $rdf = "https://www.empireadc.org/ead/". $collId ."/id/".$eadId.".rdf";
+    $is_chron_available = false;
     $xml = simplexml_load_file($link);
     $title = $xml->archdesc->did->unittitle;
     $repository = (isset($xml->archdesc->did->repository->corpname)? $xml->archdesc->did->repository->corpname : $xml->archdesc->did->repository);
@@ -260,6 +261,9 @@ button{
         foreach($xml->archdesc->bioghist->children() as $p){
             if($p->getname() == 'p'){
                 $histNote = $histNote . $p . "<br /><br />\n" ;
+            }else if($p ->getname() == 'chronlist'){
+              $is_chron_available = true;
+
             }
 
         }
@@ -273,6 +277,7 @@ button{
         }
     }
     $arrangement = '';
+
     if(isset($xml->archdesc->arrangement)){
         foreach($xml->archdesc->arrangement->children() as $p){
             if($p->getname() == 'p'){
@@ -416,8 +421,8 @@ button{
       <p><a href="#">Link</a></p>
       <p><a href="#">Link</a></p-->
     </div>
-    <div class="col-sm-8 text-left"> 
-    	
+    <div class="col-sm-8 text-left">
+
 
 <div id="eadInfo" style="margin-bottom: 30px;">
        <h1><?php echo $title; ?></h1>
@@ -430,8 +435,9 @@ button{
          <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#descId" style="font-size: 14px;">Descriptive Identification</button>
          <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#adminInfo" style="font-size: 14px;">Administrative Information</button>
          <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#controlHeadings" style="font-size: 14px;">Controlled Access Headings</button>
+         <?php if($is_chron_available) { ?>
          <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#chronology" style="font-size: 14px;">Chronology</button>
-
+         <?php } ?>
        </div>
 		<h4>Output formats:</h4>
 		 <a href='<?php echo $link; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-info" >XML</button></a>
