@@ -444,7 +444,7 @@ button{
 
 
 <div id="eadInfo" style="margin-bottom: 30px;">
-       <h1><?php echo $title; ?></h1>
+       <h1><span property="dcterms:title"><?php echo $title; ?></span</h1>
        <h4 style="font-style: italic"><?php echo $repository; ?></h4> 
        <?php if($address == TRUE){
          foreach($addressline as $a){ ?>
@@ -562,6 +562,10 @@ button{
         <?php foreach ($languageList as $l){ ?>
           <p><?php echo $l; ?></p>
         <?php } ?>
+        <?php if($eadId == TRUE){ ?>
+          <label>EmpireADC ID: </label>
+            <p><span property="dcterms:identifier"><?php echo $eadId; ?></span></p>
+       <?php } ?>
         <label>Abstract: </label><p><?php echo $abstract; ?></p>
       </div>
       <div class="modal-footer">
