@@ -304,6 +304,23 @@ button{
             }
         }
     }
+
+   // $relatedMaterialList = array();
+    $relatedMaterialLink = array();
+    $relatedMaterial = (isset($xml->archdesc->relatedmaterial)? TRUE : FALSE);
+    if($relatedMaterial == TRUE){
+    $i = 0;   
+      foreach($xml->archdesc->relatedmaterial->p->extref as $rm){
+        $rmLinkAttr = $rm -> attributes('http://www.w3.org/1999/xlink');
+        $rmLink = $rmLinkAttr['href'];   
+       // array_push($relatedMaterialLink, $rmLink);
+       // array_push($relatedMaterialList, $rm);
+        $relatedMaterialLink[$i][0] = $rm;
+        $relatedMaterialLink[$i][1] = $rmLink;
+        $i = $i + 1; 
+      }
+    }
+    
     $componentList = (isset($xml->archdesc->dsc->c)? TRUE : FALSE);
     $digitalObject = (isset($xml->archdesc->did->daogrp)? TRUE : FALSE);
     $otherfindaids = (isset($xml->archdesc->otherfindaid->bibref->extptr)? $xml->archdesc->otherfindaid->bibref->extptr : FALSE);
@@ -513,7 +530,7 @@ button{
            <h5><?php echo $headValue; ?></h5>
             <?php  foreach($xml->archdesc->controlaccess->children() as $list) {
                 if ($value == $list->getname()){ ?>
-                    <ul><li><a href="#" class='controlledHeader'><?php echo $list; ?></a></li></ul>
+                    <ul style='font-size:15px;'><li><a href="#" class='controlledHeader'><?php echo $list; ?></a></li></ul>
             <?php }
              }
           }
@@ -645,6 +662,11 @@ button{
         <label>Historical Note: </label><p><?php echo $histNote; ?></p>
         <label>Scope and Content: </label><p><?php echo $scopeContent; ?></p>
         <label>Arrangement: </label><p><?php echo $arrangement; ?></p>
+        <?php if($relatedMaterial == TRUE){ ?>
+          <label>Related Materials: </label><br/>
+          <?php for($i=0 ; $i < sizeof($relatedMaterialLink) ; $i ++){ ?>
+          <a href='<?php echo $relatedMaterialLink[$i][1] ; ?>' target="_blank"><?php echo $relatedMaterialLink[$i][0]; ?></a></br> 
+        <?php }}?>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
