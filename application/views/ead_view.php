@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head prefix="dcterms: http://purl.org/dc/terms/">
+<head>
   <title>EADitor EAD view</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -57,7 +57,8 @@
     border-top: 1px solid #ddd;
     padding-left: 20px;
     display: -webkit-box;
-   -moz-box-orient: vertical; /* Mozilla */
+#    display: -moz-box;
+
   -webkit-box-orient: vertical;
   box-orient: vertical;
 }
@@ -203,9 +204,6 @@ button{
     $link = "https://www.empireadc.org/ead/". strtolower($collId) ."/id/".$eadId.".xml";
     $rdf = "https://www.empireadc.org/ead/". $collId ."/id/".$eadId.".rdf";
     $is_chron_available = false;
-
-
-
     $xml = simplexml_load_file($link);
     $title = $xml->archdesc->did->unittitle;
     $repository = (isset($xml->archdesc->did->repository->corpname)? $xml->archdesc->did->repository->corpname : $xml->archdesc->did->repository);
@@ -306,6 +304,23 @@ button{
             }
         }
     }
+
+   // $relatedMaterialList = array();
+    $relatedMaterialLink = array();
+    $relatedMaterial = (isset($xml->archdesc->relatedmaterial)? TRUE : FALSE);
+    if($relatedMaterial == TRUE){
+    $i = 0;   
+      foreach($xml->archdesc->relatedmaterial->p->extref as $rm){
+        $rmLinkAttr = $rm -> attributes('http://www.w3.org/1999/xlink');
+        $rmLink = $rmLinkAttr['href'];   
+       // array_push($relatedMaterialLink, $rmLink);
+       // array_push($relatedMaterialList, $rm);
+        $relatedMaterialLink[$i][0] = $rm;
+        $relatedMaterialLink[$i][1] = $rmLink;
+        $i = $i + 1; 
+      }
+    }
+    
     $componentList = (isset($xml->archdesc->dsc->c)? TRUE : FALSE);
     $digitalObject = (isset($xml->archdesc->did->daogrp)? TRUE : FALSE);
     $otherfindaids = (isset($xml->archdesc->otherfindaid->bibref->extptr)? $xml->archdesc->otherfindaid->bibref->extptr : FALSE);
@@ -446,7 +461,7 @@ button{
 
 
 <div id="eadInfo" style="margin-bottom: 30px;">
-       <h1><span property="dcterms:title"><?php echo $title; ?></span></h1>
+       <h1><span property="dcterms:title"><?php echo $title; ?></span</h1>
        <h4 style="font-style: italic"><?php echo $repository; ?></h4> 
        <?php if($address == TRUE){
          foreach($addressline as $a){ ?>
@@ -511,26 +526,14 @@ button{
            } elseif($value == 'geogname'){
              $headValue = 'Place:';
            }
-           
            ?>
-           <?php
-	    if($value == 'geogname'){  #Get the list of locations so we can add a coverage filed ?>   
-	     <h5><?php echo $headValue; ?></h5>
-            <?php  foreach($xml->archdesc->controlaccess->children() as $list) {
-                if ($value == $list->getname()){ ?>
-                    <ul><li><a href="#" class='controlledHeader' ><span property="dcterms:coverage"><?php echo $list; ?></span></a></li></ul>
-            <?php } #End if statement
-	      }  #End Foreach loop
- 	    }else{ #Output rest of control Headings
-            ?>
            <h5><?php echo $headValue; ?></h5>
             <?php  foreach($xml->archdesc->controlaccess->children() as $list) {
                 if ($value == $list->getname()){ ?>
-                    <ul><li><a href="#" class='controlledHeader' <span property="dcterms:subject"><?php echo $list; ?></span></a></li></ul>
-            <?php }#End of statment
-             } #End foreach loop
-           }# End the if statement looking for geogname
-          }# End the foreach loop of controlheadings
+                    <ul style='font-size:15px;'><li><a href="#" class='controlledHeader'><?php echo $list; ?></a></li></ul>
+            <?php }
+             }
+          }
          }else{ ?>
             <h4 style="font-style: italic">Not available</h4>
       <?php  }
@@ -566,10 +569,10 @@ button{
         <?php foreach ($dateRange as $y){ ?>
           <p><?php echo $y; ?></p>
         <?php } ?>
-        <label>Extent: </label><p><span property="dcterms:extent"><?php echo $extent; ?></span></p>
+        <label>Extent: </label><p><?php echo $extent; ?></p>
         <label>Creator: </label>
         <?php foreach ($creatorList as $c){ ?>
-          <p><span property="dcterms:creator"><?php echo $c; ?></span></p>
+          <p><?php echo $c; ?></p>
         <?php } ?>
         <label>Location: </label><p><?php echo $location; ?></p>
         <label>Language: </label>
@@ -580,7 +583,7 @@ button{
           <label>EmpireADC ID: </label>
             <p><span property="dcterms:identifier"><?php echo $eadId; ?></span></p>
        <?php } ?>
-        <label>Abstract: </label><p><span property="dcterms:abstract"><?php echo $abstract; ?></span></p>
+        <label>Abstract: </label><p><?php echo $abstract; ?></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -659,6 +662,11 @@ button{
         <label>Historical Note: </label><p><?php echo $histNote; ?></p>
         <label>Scope and Content: </label><p><?php echo $scopeContent; ?></p>
         <label>Arrangement: </label><p><?php echo $arrangement; ?></p>
+        <?php if($relatedMaterial == TRUE){ ?>
+          <label>Related Materials: </label><br/>
+          <?php for($i=0 ; $i < sizeof($relatedMaterialLink) ; $i ++){ ?>
+          <a href='<?php echo $relatedMaterialLink[$i][1] ; ?>' target="_blank"><?php echo $relatedMaterialLink[$i][0]; ?></a></br> 
+        <?php }}?>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
