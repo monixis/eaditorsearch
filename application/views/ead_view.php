@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head prefix="dcterms: http://purl.org/dc/terms/">
   <title>EADitor EAD view</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -57,8 +57,7 @@
     border-top: 1px solid #ddd;
     padding-left: 20px;
     display: -webkit-box;
-    display: -moz-box;
-
+   -moz-box-orient: vertical; /* Mozilla */
   -webkit-box-orient: vertical;
   box-orient: vertical;
 }
@@ -204,6 +203,9 @@ button{
     $link = "https://www.empireadc.org/ead/". strtolower($collId) ."/id/".$eadId.".xml";
     $rdf = "https://www.empireadc.org/ead/". $collId ."/id/".$eadId.".rdf";
     $is_chron_available = false;
+
+
+
     $xml = simplexml_load_file($link);
     $title = $xml->archdesc->did->unittitle;
     $repository = (isset($xml->archdesc->did->repository->corpname)? $xml->archdesc->did->repository->corpname : $xml->archdesc->did->repository);
@@ -444,7 +446,7 @@ button{
 
 
 <div id="eadInfo" style="margin-bottom: 30px;">
-       <h1><span property="dcterms:title"><?php echo $title; ?></span</h1>
+       <h1><span property="dcterms:title"><?php echo $title; ?></span></h1>
        <h4 style="font-style: italic"><?php echo $repository; ?></h4> 
        <?php if($address == TRUE){
          foreach($addressline as $a){ ?>
@@ -509,14 +511,26 @@ button{
            } elseif($value == 'geogname'){
              $headValue = 'Place:';
            }
+           
            ?>
+           <?php
+	    if($value == 'geogname'){  #Get the list of locations so we can add a coverage filed ?>   
+	     <h5><?php echo $headValue; ?></h5>
+            <?php  foreach($xml->archdesc->controlaccess->children() as $list) {
+                if ($value == $list->getname()){ ?>
+                    <ul><li><a href="#" class='controlledHeader' ><span property="dcterms:coverage"><?php echo $list; ?></span></a></li></ul>
+            <?php } #End if statement
+	      }  #End Foreach loop
+ 	    }else{ #Output rest of control Headings
+            ?>
            <h5><?php echo $headValue; ?></h5>
             <?php  foreach($xml->archdesc->controlaccess->children() as $list) {
                 if ($value == $list->getname()){ ?>
-                    <ul><li><a href="#" class='controlledHeader'><?php echo $list; ?></a></li></ul>
-            <?php }
-             }
-          }
+                    <ul><li><a href="#" class='controlledHeader' <span property="dcterms:subject"><?php echo $list; ?></span></a></li></ul>
+            <?php }#End of statment
+             } #End foreach loop
+           }# End the if statement looking for geogname
+          }# End the foreach loop of controlheadings
          }else{ ?>
             <h4 style="font-style: italic">Not available</h4>
       <?php  }
@@ -552,10 +566,10 @@ button{
         <?php foreach ($dateRange as $y){ ?>
           <p><?php echo $y; ?></p>
         <?php } ?>
-        <label>Extent: </label><p><?php echo $extent; ?></p>
+        <label>Extent: </label><p><span property="dcterms:extent"><?php echo $extent; ?></span></p>
         <label>Creator: </label>
         <?php foreach ($creatorList as $c){ ?>
-          <p><?php echo $c; ?></p>
+          <p><span property="dcterms:creator"><?php echo $c; ?></span></p>
         <?php } ?>
         <label>Location: </label><p><?php echo $location; ?></p>
         <label>Language: </label>
@@ -566,7 +580,7 @@ button{
           <label>EmpireADC ID: </label>
             <p><span property="dcterms:identifier"><?php echo $eadId; ?></span></p>
        <?php } ?>
-        <label>Abstract: </label><p><?php echo $abstract; ?></p>
+        <label>Abstract: </label><p><span property="dcterms:abstract"><?php echo $abstract; ?></span></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
