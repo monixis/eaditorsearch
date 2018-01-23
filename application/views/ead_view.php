@@ -700,7 +700,7 @@ button{
 	foreach ($xml->archdesc->dsc->c as $c){
 		$cAttr = $c->attributes();
 		$cLevel = $cAttr["level"];
-			if ($cLevel == 'file'){?> 
+			if ($cLevel == 'file' || $cLevel == 'item'){?> 
 				<div class="fileRow">
 					<?php foreach ($c->did->children() as $child){  ?>
 
