@@ -119,3 +119,151 @@ button.accordion.active:after {
     margin-left: auto;
     margin-right: auto;
 }
+
+ /* Remove the navbar's default margin-bottom and rounded borders */ 
+ .navbar {
+    margin-bottom: 0;
+    border-radius: 0;
+  }
+  
+  /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+  .row.content {height: 450px}
+  
+  /* Set gray background color and 100% height */
+  .sidenav {
+    padding-top: 20px;
+    /*background-color: #f1f1f1;*/
+    height: 100%;
+  }
+  
+  /* Set black background color, white text and some padding */
+  footer {
+    background-color: #555;
+    color: white;
+    padding: 15px;
+  }
+  
+  /* On small screens, set height to 'auto' for sidenav and grid */
+  @media screen and (max-width: 767px) {
+    .sidenav {
+      height: auto;
+      padding: 15px;
+    }
+    .row.content {height:auto;} 
+  }
+
+ #componentList {
+  width:auto;
+  margin:0 auto;
+  height: auto;
+ /* overflow-y: auto; */
+}
+
+.fileRow {
+  line-height:10pt;
+  padding: 5px;
+  border-top: 1px solid #ddd;
+  padding-left: 20px;
+  display: -webkit-box;
+display: -moz-box;
+-webkit-box-orient: vertical;
+/*box-orient: vertical;*/
+}
+.fileTitle{
+
+-webkit-box-ordinal-group: 1;
+-moz-box-ordinal-group: 1;
+
+}
+.fileContainer{
+
+-webkit-box-ordinal-group: 2;
+-moz-box-ordinal-group: 2;
+}
+.fileDate{
+-webkit-box-ordinal-group: 3;
+-moz-box-ordinal-group: 3;
+
+}
+
+.big-checkbox {width: 20px; height: 20px; float: right}
+
+.seriesRow {
+  line-height:10pt;
+  padding: 5px;
+  border-top: 1px solid #ddd;
+}
+
+label{
+margin-right: 25px;
+font-size: 18px;
+}
+
+button{
+margin-bottom: 5px;
+}
+
+.show-when-loading {
+display: none;
+}
+
+  body.loading .show-when-loading {
+    display: inline-block;
+  }
+
+  .researchCart{
+    float: right;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+  }
+  .researchCart, th, td{
+    border: 1px solid #cdcdcd;
+  }
+  .researchCart th{
+
+    text-align: center;
+    background-color:#cdcdcd ;
+
+  }
+  #reserve{        
+    float: right;
+    margin-bottom: 30px;
+    border-collapse: collapse;
+    }
+  /* Style the buttons that are used to open and close the accordion panel */
+.infoAccordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active, .infoAccordion:hover {
+    background-color: #ccc;
+}
+
+/* Style the accordion panel. Note: hidden by default */
+.panel {
+    padding: 0 18px;
+    background-color: white;
+    display: none;
+    overflow: hidden;
+} 
+
+#descId, #adminInfo, #controlHeadings{
+  border: 1px solid #ddd;
+  padding: 25px;
+  margin-top: -10px;
+}
+
+button.btn-custm{
+  background-color: #000;
+  border-color: #000;
+}
+

@@ -4,203 +4,13 @@
   <title>EADitor EAD view</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"-->
-    <link rel="stylesheet" href="styles/bootstrap.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <!--link rel="stylesheet" href="styles/bootstrap.css"-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link rel="stylesheet" type="text/css" href="./styles/main.css" />
   <link rel="stylesheet" type="text/css" href="./styles/chronlogy.css" />
-
-  <style>
-    /* Remove the navbar's default margin-bottom and rounded borders */ 
-    .navbar {
-      margin-bottom: 0;
-      border-radius: 0;
-    }
-    
-    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-    .row.content {height: 450px}
-    
-    /* Set gray background color and 100% height */
-    .sidenav {
-      padding-top: 20px;
-      /*background-color: #f1f1f1;*/
-      height: 100%;
-    }
-    
-    /* Set black background color, white text and some padding */
-    footer {
-      background-color: #555;
-      color: white;
-      padding: 15px;
-    }
-    
-    /* On small screens, set height to 'auto' for sidenav and grid */
-    @media screen and (max-width: 767px) {
-      .sidenav {
-        height: auto;
-        padding: 15px;
-      }
-      .row.content {height:auto;} 
-    }
-
-	#componentList {
-    width:auto;
-    margin:0 auto;
-    height: 600px;
-    overflow-y: auto;
-}
-
-.fileRow {
-    line-height:10pt;
-    padding: 5px;
-    border-top: 1px solid #ddd;
-    padding-left: 20px;
-    display: -webkit-box;
-#    display: -moz-box;
-
-  -webkit-box-orient: vertical;
-  box-orient: vertical;
-}
-.fileTitle{
-
-  -webkit-box-ordinal-group: 1;
-  -moz-box-ordinal-group: 1;
-
-}
-.fileContainer{
-
-  -webkit-box-ordinal-group: 2;
-  -moz-box-ordinal-group: 2;
-}
-.fileDate{
-  -webkit-box-ordinal-group: 3;
-  -moz-box-ordinal-group: 3;
-
-}
-
-
-    .big-checkbox {width: 20px; height: 20px; float: right}
-
-.seriesRow {
-	line-height:10pt;
-    padding: 5px;
-    border-top: 1px solid #ddd;
- }
-
-label{
-  margin-right: 25px;
-}
-
-button{
-  margin-bottom: 5px;
-}
-
-    .show-when-loading {
-      display: none;
-    }
-
-    body.loading .show-when-loading {
-      display: inline-block;
-    }
-
-    .researchCart{
-      float: right;
-      margin-bottom: 20px;
-      border-collapse: collapse;
-    }
-    .researchCart, th, td{
-      border: 1px solid #cdcdcd;
-    }
-    .researchCart th{
-
-      text-align: center;
-      background-color:#cdcdcd ;
-
-    }
-      #reserve{
-          float: right;
-          margin-bottom: 30px;
-          border-collapse: collapse;
-
-      }
-
-
-
-</style>
-<script>
-  function removeCartItem(a)
-  {
-    var row = document.getElementById("trow-"+a);
-
-    row.parentNode.removeChild(row);
-    document.getElementById(a).checked = false;
-    localStorage.removeItem(a);
-      if($('#researchCart tbody tr').length == 1) {
-
-          document.getElementById("researchCart").style.visibility = "hidden";
-      }
-
-  }
-
-  $(document).ready(function () {
-
-    for (var i = 0; i < localStorage.length; i++) {
-         var checkbox = localStorage.key(i);
-         var checkbox_value = decodeURIComponent(localStorage.getItem(checkbox));
-      if(checkbox.substring(0,6) == 'crtitm') {
-          if(document.getElementById(checkbox)) {
-              document.getElementById(checkbox).checked = true;
-          }
-          var remove_anchor = "<a href=\"#\" onclick=removeCartItem("+"\""+checkbox+"\""+");>Remove</a>";
-          var trow = "trow-";
-
-          var checkbox_disp_val = decodeURIComponent(checkbox_value);
-          var markup = "<tr id=\"" +trow+ checkbox + "\"><td><p>" + checkbox_disp_val+ "</p></td><td>" + remove_anchor + "</td></tr>";
-          $("table#researchCart tbody").append(markup);
-        if( document.getElementById("cart")) {
-          document.getElementById("cart").style.visibility = "visible";
-        }
-      }
-
-    }
-
-  $(':checkbox').change(function() {
-    var checkbox_id = $(this).attr('id');
-    var checkbox_value = encodeURIComponent($(this).val());
-    if($(this).is(':checked')){
-      localStorage.setItem(checkbox_id, checkbox_value);
-      var remove_anchor = "<a href=\"#\" onclick=removeCartItem("+"\""+checkbox_id+"\""+");>Remove</a>";
-      var trow = "trow-";
-      var markup = "<tr id=\""+trow+checkbox_id+"\"><td><p>"+decodeURIComponent(checkbox_value)+"</p></td><td>"+remove_anchor+"</td></tr>";
-      $("table#researchCart tbody").append(markup);
-      document.getElementById("cart").style.visibility = "visible";
-
-    }else if(!$(this).is(':checked')){
-      localStorage.removeItem(checkbox_id);
-      var row = document.getElementById("trow-"+checkbox_id);
-      row.parentNode.removeChild(row);
-        if($('#researchCart tbody tr').length <1){
-            document.getElementById("cart").style.visibility = "hidden";
-
-        }
-    }
-
-
-  });
-
-  });
-
-</script>
-<!--script>
-  	$(document).ready(function() {
-	    $(".fileRow:even").css("background-color","#f2f2f2"); 
-    	$(".fileRow:odd").css("background-color","#ffffff"); 
-	});
-</script-->
-    <?php
-    // $xml = simplexml_load_file('https://www.empireadc.org/ead/nalsu/id/ua950.015.xml');
-    //$xml = simplexml_load_file('https://www.empireadc.org/ead/nalsu/id/apap134.xml');
+  <?php
     $link = "https://www.empireadc.org/ead/". strtolower($collId) ."/id/".$eadId.".xml";
     $rdf = "https://www.empireadc.org/ead/". $collId ."/id/".$eadId.".rdf";
     $is_chron_available = false;
@@ -392,7 +202,8 @@ button{
 							  }
 					if ($flag == 0){ // if no other level exists, display the files 
             if($fileLevel == 1){ ?>
-              	<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#<?php echo $obj['id']; ?>" style="margin-bottom: 5px;">View the files.</button>
+            
+              	<button type="button" class="btn btn-custm" data-toggle="collapse" data-target="#<?php echo $obj['id']; ?>" style="margin-bottom: 5px; text-decoration: none; color: #fff;">View the files.</button>
                 <div id="<?php echo $obj['id']; ?>" class="collapse" style="width: 75%; border-left: 1px solid #ccc; border-right: 1px solid #ccc; margin-left:auto; margin-right: auto;">
 								<?php 
 									foreach ($obj->c as $fileObj){?>
@@ -467,36 +278,60 @@ button{
          foreach($addressline as $a){ ?>
             <h5 style="font-style: italic"><?php echo $a; ?></h5>
        <?php }}?>
-       <div>
-         <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#descId" style="font-size: 14px;">Descriptive Identification</button>
-         <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#adminInfo" style="font-size: 14px;">Administrative Information</button>
-         <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#controlHeadings" style="font-size: 14px;">Controlled Access Headings</button>
-         <?php if($is_chron_available) { ?>
-         <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#chronology" style="font-size: 14px;">Chronology</button>
-         <?php } ?>
-       </div>
+       
 		<h4>Output formats:</h4>
-		 <a href='<?php echo $link; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-info" >XML</button></a>
-     <a href='<?php echo $rdf; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-info" >RDF/XML</button> </a>      
-       <!--?php if($digitalObject == TRUE) { ?>
-          <h5> Digital Images: </h5>
-          <!--?php foreach ($xml->archdesc->did->daogrp->daoloc as $file){ ?>
-              
-                  <p><!--?php echo $file['xlink:label']; ?></p>
-         
-     
-      <!--?php }} ?-->
+		 <a href='<?php echo $link; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-custm" >XML</button></a>
+     <a href='<?php echo $rdf; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-custm" >RDF/XML</button> </a>      
+</div> 
 
+<h4 data-toggle="collapse" data-target="#descId" class='infoAccordion accordion'>Descriptive Identification  <span class="glyphicon glyphicon-menu-right" style="float:right;"></span></h4> 
+<div id="descId" class="collapse">
+       <label>Repository: </label><p><?php echo $repository; ?></p>
+        <?php if($address == TRUE){ ?>
+          <label>Address: </label>
+         <?php foreach($addressline as $a){ ?>
+            <h5 style="font-style: italic"><?php echo $a; ?></h5>
+       <?php }}?>
+        <label>Date: </label>
+        <?php foreach ($dateRange as $y){ ?>
+          <p><?php echo $y; ?></p>
+        <?php } ?>
+        <label>Extent: </label><p><span property="dcterms:extent"><?php echo $extent; ?></span></p>
+        <label>Creator: </label>
+        <?php foreach ($creatorList as $c){ ?>
+          <p><span property="dcterms:creator"><?php echo $c; ?></span></p>
+        <?php } ?>
+        <label>Location: </label><p><?php echo $location; ?></p>
+        <label>Language: </label>
+        <?php foreach ($languageList as $l){ ?>
+          <p><?php echo $l; ?></p>
+        <?php } ?>
+        <?php if($eadId == TRUE){ ?>
+          <label>EmpireADC ID: </label>
+            <p><span property="dcterms:identifier"><?php echo $eadId; ?></span></p>
+       <?php } ?>
+        <label>Abstract: </label><p><span property="dcterms:abstract"><?php echo $abstract; ?></span></p>
+</div>
 
-<div id="controlHeadings" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title" style="text-align:center;">Controlled Access Headings</h4>
-      </div>
-      <div class="modal-body">
+<h4 data-toggle="collapse" data-target="#adminInfo" class='infoAccordion accordion'>Administrative Information<span class="glyphicon glyphicon-menu-right" style="float:right;"></span></h4> 
+<div id="adminInfo" class="collapse">
+        <label>Processing Information: </label><p><?php echo $processInfo; ?></p>
+        <label>Access: </label><p><?php echo $access; ?></p>
+        <label>Copyright: </label><p><?php echo $copyright; ?></p>
+        <label>Acquisition Information: </label><p><?php echo $acqInfo; ?></p>
+        <label>Preferred Citation: </label><p><?php echo $prefCitation; ?></p>
+        <label>Historical Note: </label><p><?php echo $histNote; ?></p>
+        <label>Scope and Content: </label><p><?php echo $scopeContent; ?></p>
+        <label>Arrangement: </label><p><?php echo $arrangement; ?></p>
+        <?php if($relatedMaterial == TRUE){ ?>
+          <label>Related Materials: </label><br/>
+          <?php for($i=0 ; $i < sizeof($relatedMaterialLink) ; $i ++){ ?>
+          <a href='<?php echo $relatedMaterialLink[$i][1] ; ?>' target="_blank"><?php echo $relatedMaterialLink[$i][0]; ?></a></br> 
+        <?php }}?>  
+</div>   
+
+<h4 data-toggle="collapse" data-target="#controlHeadings" class='infoAccordion accordion'>Controlled Access Headings<span class="glyphicon glyphicon-menu-right" style="float:right;"></span></h4> 
+<div id="controlHeadings" class="collapse">
          <?php 
          $controlledAccess = (isset($xml->archdesc->controlaccess)? TRUE : FALSE);
 
@@ -533,7 +368,7 @@ button{
              <h5><?php echo $headValue; ?></h5>
             <?php  foreach($xml->archdesc->controlaccess->children() as $list) {
                 if ($value == $list->getname()){ ?>
-                    <ul><li><a href="#" class='controlledHeader' ><span property="dcterms:coverage"><?php echo $list; ?></span></a></li></ul>
+                    <ul style='font-size:15px;'><li><a href="#" class='controlledHeader' ><span property="dcterms:coverage"><?php echo $list; ?></span></a></li></ul>
             <?php } #End if statement
               }  #End Foreach loop
             }else{ #Output rest of control Headings
@@ -541,7 +376,7 @@ button{
            <h5><?php echo $headValue; ?></h5>
             <?php  foreach($xml->archdesc->controlaccess->children() as $list) {
                 if ($value == $list->getname()){ ?>
-                    <ul><li><a href="#" class='controlledHeader' <span property="dcterms:subject"><?php echo $list; ?></span></a></li></ul>
+                    <ul style='font-size:15px;'><li><a href="#" class='controlledHeader' <span property="dcterms:subject"><?php echo $list; ?></span></a></li></ul>
             <?php }#End of statment
              } #End foreach loop
            }# End the if statement looking for geogname
@@ -552,56 +387,11 @@ button{
 
       ?>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-</div> 
- 
-<div id="descId" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title" style="text-align:center;">Descriptive Identification</h4>
-      </div>
-      <div class="modal-body">
-        <label>Repository: </label><p><?php echo $repository; ?></p>
+<?php if($is_chron_available) { ?>
+  <!--button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#chronology" style="font-size: 14px;">Chronology</button-->
+  <h4 data-target="#chronology" data-toggle="modal" class='infoAccordion accordion'>Chronology</h4>
+<?php } ?>
 
-        <?php if($address == TRUE){ ?>
-          <label>Address: </label>
-         <?php foreach($addressline as $a){ ?>
-            <h5 style="font-style: italic"><?php echo $a; ?></h5>
-       <?php }}?>
-        <label>Date: </label>
-        <?php foreach ($dateRange as $y){ ?>
-          <p><?php echo $y; ?></p>
-        <?php } ?>
-        <label>Extent: </label><p><span property="dcterms:extent"><?php echo $extent; ?></span></p>
-        <label>Creator: </label>
-        <?php foreach ($creatorList as $c){ ?>
-          <p><span property="dcterms:creator"><?php echo $c; ?></span></p>
-        <?php } ?>
-        <label>Location: </label><p><?php echo $location; ?></p>
-        <label>Language: </label>
-        <?php foreach ($languageList as $l){ ?>
-          <p><?php echo $l; ?></p>
-        <?php } ?>
-        <?php if($eadId == TRUE){ ?>
-          <label>EmpireADC ID: </label>
-            <p><span property="dcterms:identifier"><?php echo $eadId; ?></span></p>
-       <?php } ?>
-        <label>Abstract: </label><p><span property="dcterms:abstract"><?php echo $abstract; ?></span></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
 <div id="chronology" class="modal fade" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -656,45 +446,13 @@ button{
   </div>
     </div>
   </div>
-<div id="adminInfo" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title" style="text-align:center;">Administrative Information</h4>
-      </div>
-      <div class="modal-body">
-        <label>Processing Information: </label><p><?php echo $processInfo; ?></p>
-        <label>Access: </label><p><?php echo $access; ?></p>
-        <label>Copyright: </label><p><?php echo $copyright; ?></p>
-        <label>Acquisition Information: </label><p><?php echo $acqInfo; ?></p>
-        <label>Preferred Citation: </label><p><?php echo $prefCitation; ?></p>
-        <label>Historical Note: </label><p><?php echo $histNote; ?></p>
-        <label>Scope and Content: </label><p><?php echo $scopeContent; ?></p>
-        <label>Arrangement: </label><p><?php echo $arrangement; ?></p>
-        <?php if($relatedMaterial == TRUE){ ?>
-          <label>Related Materials: </label><br/>
-          <?php for($i=0 ; $i < sizeof($relatedMaterialLink) ; $i ++){ ?>
-          <a href='<?php echo $relatedMaterialLink[$i][1] ; ?>' target="_blank"><?php echo $relatedMaterialLink[$i][0]; ?></a></br> 
-        <?php }}?>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-<div>
-<!--h4>Components List <p style="float: right">Add to Cart</p></h4-->
-</div>
 
 <div id="componentList">
 <?php if ($componentList == TRUE){
   /* For cases where high level series list exists but a more detailed container list is available for download*/
    if ($otherfindaids != FALSE){ ?>
-    <h4>Download Container List:</h4>
-    <a href='<?php echo $downloadLink; ?>' itemprop="url"><img src='<?php echo $iconLink;?>' class="doc-icon"></a></br></br> 
+    <h4 style="margin-left:17px;">Download Container List:</h4>
+    <a href='<?php echo $downloadLink; ?>' itemprop="url" style="margin-left: 17px;"><img src='<?php echo $iconLink;?>' class="doc-icon"></a></br></br> 
   <?php }
   $component = 0;
 	foreach ($xml->archdesc->dsc->c as $c){
@@ -735,7 +493,7 @@ button{
   <a href='<?php echo $downloadLink; ?>' itemprop="url"><img src='<?php echo $iconLink;?>' class="doc-icon"></a> 
 <?php }
 else{?>
-		<h4 style="font-style: italic">Container List Not Available</h4>
+		<h4 style="font-style: italic; margin-left: 17px;">Container List Not Available</h4>
 	<?php	
 }
 ?>
@@ -771,9 +529,9 @@ else{?>
 </div>
 
 </br>
-<footer class="container-fluid text-center">
+<!--footer class="container-fluid text-center">
   <p>Footer Text</p>
-</footer>
+</footer-->
 </body>
 <script>
 	$('a.controlledHeader').click(function(){
@@ -802,6 +560,9 @@ else{?>
         }
       }
     }
+ $('h4.infoAccordion').click(function(){
+  $(this).find('span').toggleClass('glyphicon-menu-right').toggleClass('glyphicon-menu-down');
+ });
 </script>
 </html>
 
