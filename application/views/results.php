@@ -157,7 +157,30 @@
         var searchTerm = $('input#searchBox').val();
         var selectedTag = ($(this).parents().attr('id')) + ':"' + ($(this).text().substr(0, $(this).text().indexOf('['))) + '"';
         var selectedTagId = selectedTag.replace(/"/g, '');
-        $('#selectedFacet').append('<a href="#" class="remove" style="margin-left:10px;"><button class="taglist" id="'+ selectedTagId +'" style="border: 1px solid #cccccc; background: #eeeeee; padding: 5px; margin-right: 10px; margin-top: 5px;">'+ selectedTag +' X</button></a>');
+		var selectedFacet = $(this).parents().attr('id');
+		//User friendly display for selected facets
+		if(selectedFacet == "subject_facet")
+		{
+			selectedFacet = selectedTag.replace("subject_facet", "Subject");
+		}else if(selectedFacet == "agency_facet"){
+			selectedFacet = selectedTag.replace("agency_facet", "Agency");
+		}else if(selectedFacet == "corpname_facet"){
+			selectedFacet = selectedTag.replace("corpname_facet", "Organization");
+		}else if(selectedFacet == "genreform_facet"){
+			selectedFacet = selectedTag.replace("genreform_facet", "Genre/Format");
+		}else if(selectedFacet == "persname_facet"){
+			selectedFacet = selectedTag.replace("persname_facet", "Person");
+		}else if(selectedFacet == "century_num"){
+			selectedFacet = selectedTag.replace("century_num", "Date");
+		}else if(selectedFacet == "famname_facet"){
+			selectedFacet = selectedTag.replace("famname_facet", "Family");
+		}else if(selectedFacet == "geogname_facet"){
+			selectedFacet = selectedTag.replace("geogname_facet", "Place");
+		}else if(selectedFacet == "language_facet"){
+			selectedFacet = selectedTag.replace("language_facet", "Language");
+		}
+
+        $('#selectedFacet').append('<a href="#" class="remove" style="margin-left:10px;"><button class="taglist" id="'+ selectedTagId +'" style="border: 1px solid #cccccc; background: #eeeeee; padding: 5px; margin-right: 10px; margin-top: 5px;">'+ selectedFacet +' X</button></a>');
         $('input#queryTag').val($('input#queryTag').val() + "fq=" + selectedTag);
         var queryTag = $('input#queryTag').val();
         searchTerm = searchTerm + queryTag;

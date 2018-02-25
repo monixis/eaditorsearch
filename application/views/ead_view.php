@@ -295,13 +295,20 @@
         <label>Date: </label>
         <?php foreach ($dateRange as $y){ ?>
           <p><?php echo $y; ?></p>
+        <?php }
+        if($extent != 'Unspecified'){ ?>
+          <label>Extent: </label><p><span property="dcterms:extent"><?php echo $extent; ?></span></p>
         <?php } ?>
-        <label>Extent: </label><p><span property="dcterms:extent"><?php echo $extent; ?></span></p>
+        
         <label>Creator: </label>
         <?php foreach ($creatorList as $c){ ?>
           <p><span property="dcterms:creator"><?php echo $c; ?></span></p>
-        <?php } ?>
+        <?php } 
+
+        if($location != 'Unspecified'){ ?>
         <label>Location: </label><p><?php echo $location; ?></p>
+        <?php } ?>
+        
         <label>Language: </label>
         <?php foreach ($languageList as $l){ ?>
           <p><?php echo $l; ?></p>
@@ -309,21 +316,40 @@
         <?php if($eadId == TRUE){ ?>
           <label>EmpireADC ID: </label>
             <p><span property="dcterms:identifier"><?php echo $eadId; ?></span></p>
-       <?php } ?>
+       <?php }
+
+      if($abstract != 'Unspecified'){ ?>
         <label>Abstract: </label><p><span property="dcterms:abstract"><?php echo $abstract; ?></span></p>
+       <?php } ?> 
 </div>
 
 <h4 data-toggle="collapse" data-target="#adminInfo" class='infoAccordion accordion'>Administrative Information<span class="glyphicon glyphicon-menu-right" style="float:right;"></span></h4> 
 <div id="adminInfo" class="collapse">
-        <label>Processing Information: </label><p><?php echo $processInfo; ?></p>
-        <label>Access: </label><p><?php echo $access; ?></p>
-        <label>Copyright: </label><p><?php echo $copyright; ?></p>
-        <label>Acquisition Information: </label><p><?php echo $acqInfo; ?></p>
-        <label>Preferred Citation: </label><p><?php echo $prefCitation; ?></p>
-        <label>Historical Note: </label><p><?php echo $histNote; ?></p>
-        <label>Scope and Content: </label><p><?php echo $scopeContent; ?></p>
-        <label>Arrangement: </label><p><?php echo $arrangement; ?></p>
-        <?php if($relatedMaterial == TRUE){ ?>
+        <?php if($processInfo != 'Unspecified'){ ?>
+          <label>Processing Information: </label><p><?php echo $processInfo; ?></p>
+        <?php }       
+        if($access != 'Unspecified'){ ?>
+          <label>Access: </label><p><?php echo $access; ?></p>
+        <?php }  
+        if($copyright != 'Unspecified'){ ?>  
+          <label>Copyright: </label><p><?php echo $copyright; ?></p>
+        <?php } 
+        if($acqInfo != 'Unspecified'){ ?>  
+          <label>Acquisition Information: </label><p><?php echo $acqInfo; ?></p>
+        <?php }   
+        if($prefCitation != 'Unspecified'){ ?>
+          <label>Preferred Citation: </label><p><?php echo $prefCitation; ?></p>
+        <?php }  
+        if($histNote != 'Unspecified'){ ?>
+          <label>Historical Note: </label><p><?php echo $histNote; ?></p>
+        <?php }  
+        if($scopeContent != 'Unspecified'){ ?>
+          <label>Scope and Content: </label><p><?php echo $scopeContent; ?></p>
+        <?php } 
+        if($arrangement != 'Unspecified'){ ?>
+          <label>Arrangement: </label><p><?php echo $arrangement; ?></p>
+        <?php }
+        if($relatedMaterial == TRUE){ ?>
           <label>Related Materials: </label><br/>
           <?php for($i=0 ; $i < sizeof($relatedMaterialLink) ; $i ++){ ?>
           <a href='<?php echo $relatedMaterialLink[$i][1] ; ?>' target="_blank"><?php echo $relatedMaterialLink[$i][0]; ?></a></br> 
