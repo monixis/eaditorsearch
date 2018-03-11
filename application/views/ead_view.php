@@ -11,6 +11,7 @@
   <link rel="stylesheet" type="text/css" href="./styles/main.css" />
   <link rel="stylesheet" type="text/css" href="./styles/chronlogy.css" />
   <?php
+    $this->load->helper('url');
     $link = "https://www.empireadc.org/ead/". strtolower($collId) ."/id/".$eadId.".xml";
     $rdf = "https://www.empireadc.org/ead/". $collId ."/id/".$eadId.".rdf";
     $is_chron_available = false;
@@ -102,6 +103,15 @@
         foreach($xml->archdesc->scopecontent->children() as $p){
             if($p->getname() == 'p'){
                 $scopeContent = $scopeContent  . $p . "<br /><br />\n" ;
+            }else if ($p->getname() == 'list'){
+                foreach($xml->archdesc->scopecontent->list->children() as $c){
+                  if($c -> getname() == 'head'){
+                    $scopeContent = $scopeContent . "<h4>" . $c . "</h4>";
+                  }else{
+                    $scopeContent = $scopeContent . $c . "<br />";
+                  }
+                  
+                }
             }
         }
     }
@@ -209,24 +219,33 @@
 									foreach ($obj->c as $fileObj){?>
 										<div class="fileRow">
 											<?php	
-												foreach ($fileObj->did->children() as $file){
-													if($file->getname() == 'unittitle'){
-     													if(count($file) > 0){?>
-            												<h4><?php echo $file->title; $component = $file->title;?></h4>
-                										<h4><?php echo $file->emph; ?><?php	echo $file; ?></h4>
-           												<?php }else{?>
-           													<h4><?php	echo $file; $component = $file;?></h4>
-           												<?php }
-													}elseif($file->getname() == 'unitdate'){?>
-          												<p><?php echo ucfirst($file['type']).' Date: '.$file; ?></p><?php
-          											}elseif($file->getname() == 'container'){?>
-          												<p><?php echo ucfirst($file['type']).": ". $file;     $arr = explode(' ',ucfirst($file['type'])."-". $file);
-                                      $component = $component."-". $arr[0];  ?></p><?php
-          											}	
-												}?>
-                                         <!--   <input type="checkbox" class="big-checkbox" id="<?php echo  "crtitm"."-".$collId."-".$component; ?>" value="<?php echo  $repository.substr(0,13)."..."."-".$collId."-".$component; ?>">
-                                          -->
-                                        </div>
+												foreach ($fileObj->children() as $c){
+                          if($c->getname() == 'did'){
+                            foreach ($fileObj->did->children() as $file){
+                              if($file->getname() == 'unittitle'){
+                                if(count($file) > 0){?>
+                                     <h4><?php echo $file->title; $component = $file->title;?></h4>
+                                     <h4><?php echo $file->emph; ?><?php	echo $file; ?></h4>
+                                    <?php }else{?>
+                                      <h4><?php	echo $file; $component = $file;?></h4>
+                                    <?php }
+                              }elseif($file->getname() == 'unitdate'){?>
+                                   <p><?php echo ucfirst($file['type']).' Date: '.$file; ?></p><?php
+                              }elseif($file->getname() == 'container'){?>
+                                  <p><?php echo ucfirst($file['type']).": ". $file;     $arr = explode(' ',ucfirst($file['type'])."-". $file);
+                                  $component = $component."-". $arr[0];  ?></p><?php
+                              }	
+                              ?><!--   <input type="checkbox" class="big-checkbox" id="<?php echo  "crtitm"."-".$collId."-".$component; ?>" value="<?php echo  $repository.substr(0,13)."..."."-".$collId."-".$component; ?>">--><?php
+                            }
+                          }elseif($c->getname() == 'scopecontent'){
+                              ?><h4>Scope and Content</h4><?php
+                              foreach ($fileObj->scopecontent->p as $p){ ?>
+                                  <p style="line-height: 1.6"><?php echo $p; ?></p>
+                          <?php }
+                            }
+                          }
+												?>
+                    </div>
 								<?php } ?>	
 						</div>
                 <?php } ?>
@@ -319,40 +338,40 @@
        <?php }
 
       if($abstract != 'Unspecified'){ ?>
-        <label>Abstract: </label><p><span property="dcterms:abstract"><?php echo $abstract; ?></span></p>
+        <label>Abstract: </label><p><span property="dcterms:abstract"><?php echo auto_link($abstract, 'both', TRUE); ?></span></p>
        <?php } ?> 
 </div>
 
 <h4 data-toggle="collapse" data-target="#adminInfo" class='infoAccordion accordion'>Administrative Information<span class="glyphicon glyphicon-menu-right" style="float:right;"></span></h4> 
 <div id="adminInfo" class="collapse">
         <?php if($processInfo != 'Unspecified'){ ?>
-          <label>Processing Information: </label><p><?php echo $processInfo; ?></p>
+          <label>Processing Information: </label><p><?php echo auto_link($processInfo, 'both', TRUE); ?></p>
         <?php }       
         if($access != 'Unspecified'){ ?>
-          <label>Access: </label><p><?php echo $access; ?></p>
+          <label>Access: </label><p><?php echo auto_link($access, 'both', TRUE); ?></p>
         <?php }  
         if($copyright != 'Unspecified'){ ?>  
-          <label>Copyright: </label><p><?php echo $copyright; ?></p>
+          <label>Copyright: </label><p><?php echo auto_link($copyright, 'both', TRUE); ?></p>
         <?php } 
         if($acqInfo != 'Unspecified'){ ?>  
-          <label>Acquisition Information: </label><p><?php echo $acqInfo; ?></p>
+          <label>Acquisition Information: </label><p><?php echo auto_link($acqInfo, 'both', TRUE); ?></p>
         <?php }   
         if($prefCitation != 'Unspecified'){ ?>
-          <label>Preferred Citation: </label><p><?php echo $prefCitation; ?></p>
+          <label>Preferred Citation: </label><p><?php echo auto_link($prefCitation, 'both', TRUE); ?></p>
         <?php }  
         if($histNote != 'Unspecified'){ ?>
-          <label>Historical Note: </label><p><?php echo $histNote; ?></p>
+          <label>Historical Note: </label><p><?php echo auto_link($histNote, 'both', TRUE); ?></p>
         <?php }  
         if($scopeContent != 'Unspecified'){ ?>
-          <label>Scope and Content: </label><p><?php echo $scopeContent; ?></p>
+          <label>Scope and Content: </label><p><?php echo auto_link($scopeContent, 'both', TRUE); ?></p>
         <?php } 
         if($arrangement != 'Unspecified'){ ?>
-          <label>Arrangement: </label><p><?php echo $arrangement; ?></p>
+          <label>Arrangement: </label><p><?php echo auto_link($arrangement, 'both', TRUE); ?></p>
         <?php }
         if($relatedMaterial == TRUE){ ?>
           <label>Related Materials: </label><br/>
           <?php for($i=0 ; $i < sizeof($relatedMaterialLink) ; $i ++){ ?>
-          <a href='<?php echo $relatedMaterialLink[$i][1] ; ?>' target="_blank"><?php echo $relatedMaterialLink[$i][0]; ?></a></br> 
+          <a href='<?php $relatedMaterialLink[$i][1]; ?>' target="_blank"><?php echo $relatedMaterialLink[$i][0]; ?></a></br> 
         <?php }}?>  
 </div>   
 
@@ -591,11 +610,3 @@ else{?>
  });
 </script>
 </html>
-
-
-
-
-
-
-
-
