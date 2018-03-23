@@ -8,6 +8,10 @@ class eaditorsearch extends CI_Controller
 
     }
 
+    public function test($val){
+		$date = date_default_timezone_set('US/Eastern');
+		echo $val;	
+	 }
 
     public function index()
     {
@@ -23,9 +27,9 @@ class eaditorsearch extends CI_Controller
         $this->load->view('search', $data);
     }
        
-  public function searchKeyWords()
+  public function searchKeyWords($key)
 	{
-        $key = $this -> input -> get('key');
+        //$key = $this -> input -> get('key');
         $key = trim($key);
      	$key = str_replace(" ","%20", $key);
     	$key = str_replace("&","%26", $key);
@@ -36,20 +40,16 @@ class eaditorsearch extends CI_Controller
         $this->load->view('results', $data);
      }
 	
-     public function viewEAD()
+     public function ead($collId, $eadId)
 	{
-        $data['collId'] = $this->input->get('collId');
-        $data['eadId'] = $this->input->get('eadId');
+        $data['collId'] = $collId;
+        $data['eadId'] = $eadId;
         $this->load->view('ead_view', $data);
      }
 
      public function reserve(){
          $this->load->view('reserve');
-
-
      }
-
-
 
    public function sendEmail(){
        $cart_items = json_decode($_POST['final_cart'], true);
