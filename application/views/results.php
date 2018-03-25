@@ -119,7 +119,8 @@
 					$collId = (isset($row -> agencycode_facet[0] ) ? str_replace('US-','',$row -> agencycode_facet[0]) : FALSE);
 					$fileId = $row -> id ;
 					//$link = "https://www.empireadc.org/ead/". $collection ."/id/".$row -> id.".xml"; 
-					$link = base_url('?c=eaditorsearch&m=viewEAD&collId='.$collId.'&eadId='.$row -> id);
+					//$link = base_url('?c=eaditorsearch&m=viewEAD&collId='.$collId.'&eadId='.$row -> id);
+					$link = base_url("eaditorsearch/ead") . "/" . $collId . "/" . $fileId;
 			?>
 				<li class="results" style="height: auto; padding: 10px;">
 						<a href=<?php echo $link ?> target="_blank"><?php echo $title ?></a></br>

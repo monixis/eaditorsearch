@@ -8,8 +8,8 @@
   <!--link rel="stylesheet" href="styles/bootstrap.css"-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="./styles/main.css" />
-  <link rel="stylesheet" type="text/css" href="./styles/chronlogy.css" />
+  <link rel="stylesheet" type="text/css" href="<?php echo base_url("/styles/main.css"); ?>"/>
+  <link rel="stylesheet" type="text/css" href="<?php echo base_url("/styles/chronlogy.css"); ?>"/>
   <?php
     $this->load->helper('url');
     $link = "https://www.empireadc.org/ead/". strtolower($collId) ."/id/".$eadId.".xml";
