@@ -30,10 +30,12 @@ class eaditorsearch extends CI_Controller
   public function searchKeyWords($key)
 	{
         $key = trim($key);
-     	$key = str_replace(" ","%20", $key);
-    	$key = str_replace("&","%26", $key);
+        //$key = str_replace(" ","%20", $key);
+        $key = str_replace("%2520","%20", $key);
+    	//$key = str_replace("&","%26", $key);
         $key = str_replace("fq%3D","&fq=", $key);
         $resultsLink = "http://www.empireadc.org:8080/solr/eaditor-published/select?indent=on&q=". $key ."&wt=json&facet=true&facet.field=subject_facet&facet.field=agency_facet&facet.field=corpname_facet&facet.field=genreform_facet&facet.field=persname_facet&facet.field=language_facet&facet.field=century_num&facet.field=famname_facet&facet.field=geogname_facet&rows=200";
+        echo $resultsLink;
         $json = file_get_contents($resultsLink);
         $data['results'] = json_decode($json);
         $this->load->view('results', $data);
@@ -71,15 +73,12 @@ class eaditorsearch extends CI_Controller
 
        $message .= "<tr><td><h3>Your Finalized Cart:</h3></br></br>" ;
        $message .= '<table width="80%"; rules="all" style="border:1px solid #3A5896;" align="center" cellpadding="10">';
-
        for($i=0;$i<sizeof($cart_items);$i++){
            $Sno = $i+1;
            $message .=  "<tr><td>$Sno</td><td>".urldecode($cart_items[$i])."</td></tr>";
        };
        $message .= "</table></br></td></tr><tr><td><h3>Your Message:</h3></br>$user_message</h3></td></tr></table>";
-
        $message .= "</body></html>";
-
        $ci = get_instance();
        $ci->load->library('email');
        $config['protocol'] = "smtp";
@@ -90,25 +89,18 @@ class eaditorsearch extends CI_Controller
        $config['charset'] = "utf-8";
        $config['mailtype'] = "html";
        $config['newline'] = "\r\n";
-
        $ci->email->initialize($config);
-
        $ci->email->from('empireadc@gmail.com', "Empire ADC");
        $ci->email->cc('empireadc@gmail.com');
        $ci->email->to($emailId);
        $ci->email->reply_to('empireadc@gmail.com', "Empite ADC");
        $ci->email->message($message);
-
        $ci->email->subject("EADC research request");
        if($ci->email->send()){
            echo 1;
        }else{
            echo 0;
        }
-
    }
-
-
-
 }
 ?>
