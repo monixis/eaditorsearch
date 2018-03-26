@@ -129,16 +129,27 @@
     $relatedMaterialLink = array();
     $relatedMaterial = (isset($xml->archdesc->relatedmaterial)? TRUE : FALSE);
     if($relatedMaterial == TRUE){
-    $i = 0;   
-      foreach($xml->archdesc->relatedmaterial->p->extref as $rm){
-        $rmLinkAttr = $rm -> attributes('http://www.w3.org/1999/xlink');
-        $rmLink = $rmLinkAttr['href'];   
-       // array_push($relatedMaterialLink, $rmLink);
-       // array_push($relatedMaterialList, $rm);
-        $relatedMaterialLink[$i][0] = $rm;
-        $relatedMaterialLink[$i][1] = $rmLink;
-        $i = $i + 1; 
-      }
+      $relatedMaterialChild = (isset($xml->archdesc->relatedmaterial->p->extref)? TRUE : FALSE);
+        if($relatedMaterialChild == TRUE){     
+            $linksAvailable = TRUE;
+            $i = 0;   
+            foreach($xml->archdesc->relatedmaterial->p->extref as $rm)
+            {
+              $rmLinkAttr = $rm -> attributes('http://www.w3.org/1999/xlink');
+              $rmLink = $rmLinkAttr['href'];   
+              $relatedMaterialLink[$i][0] = $rm;
+              $relatedMaterialLink[$i][1] = $rmLink;
+              $i = $i + 1; 
+            }
+        }else{ //to deal with two variations in relatedmaterial encoding
+          $linksAvailable = FALSE;
+          $i = 0;
+          foreach($xml->archdesc->relatedmaterial->p as $rm)
+          {
+            $relatedMaterialLink[$i][0] = $rm;
+            $i = $i + 1; 
+          }
+        }
     }
     
     $componentList = (isset($xml->archdesc->dsc->c)? TRUE : FALSE);
@@ -370,9 +381,13 @@
         <?php }
         if($relatedMaterial == TRUE){ ?>
           <label>Related Materials: </label><br/>
-          <?php for($i=0 ; $i < sizeof($relatedMaterialLink) ; $i ++){ ?>
-          <a href='<?php $relatedMaterialLink[$i][1]; ?>' target="_blank"><?php echo $relatedMaterialLink[$i][0]; ?></a></br> 
-        <?php }}?>  
+          <?php for($i=0 ; $i < sizeof($relatedMaterialLink) ; $i ++){
+          if ($linksAvailable == TRUE){ ?>
+            <a href='<?php $relatedMaterialLink[$i][1]; ?>' target="_blank"><?php echo $relatedMaterialLink[$i][0]; ?></a></br> 
+          <?php }else{ ?>
+            <a style='pointer-events: none; color: #000000;'><?php echo $relatedMaterialLink[$i][0]; ?></a></br> 
+          <?php }
+          }}?>  
 </div>   
 
 <h4 data-toggle="collapse" data-target="#controlHeadings" class='infoAccordion accordion'>Controlled Access Headings<span class="glyphicon glyphicon-menu-right" style="float:right;"></span></h4> 
