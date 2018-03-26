@@ -180,7 +180,6 @@
 		}else if(selectedFacet == "language_facet"){
 			selectedFacet = selectedTag.replace("language_facet", "Language");
 		}
-
         $('#selectedFacet').append('<a href="#" class="remove" style="margin-left:10px;"><button class="taglist" id="'+ selectedTagId +'" style="border: 1px solid #cccccc; background: #eeeeee; padding: 5px; margin-right: 10px; margin-top: 5px;">'+ selectedFacet +' X</button></a>');
         $('input#queryTag').val($('input#queryTag').val() + "fq=" + selectedTag);
         var queryTag = $('input#queryTag').val();
@@ -188,8 +187,9 @@
 		//var searchTerm = searchTerm.replace(/ /g,"%20");
 		// encoding string into UTF - 8 to carry all the required characters in the ajax request.
 		var searchTerm = encodeURIComponent(searchTerm);
-		var resultUrl = "<?php echo base_url("?c=eaditorsearch&m=searchKeyWords&key=")?>"+searchTerm;
-        NProgress.start();
+		//var resultUrl = "<!--?php echo base_url("?c=eaditorsearch&m=searchKeyWords&key=")?>"+searchTerm;
+        var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm;
+		NProgress.start();
         NProgress.configure({ showSpinner: true });
         $('#searchResults').load(resultUrl);
         NProgress.done();
@@ -209,8 +209,9 @@
 		var searchTerm = encodeURIComponent(searchTerm);
         NProgress.start();
         NProgress.configure({ showSpinner: true });
-        var resultUrl = "<?php echo base_url("?c=eaditorsearch&m=searchKeyWords&key=")?>"+searchTerm;
-        $('#searchResults').load(resultUrl);
+        //var resultUrl = "<!--?php echo base_url("?c=eaditorsearch&m=searchKeyWords&key=")?>"+searchTerm;
+        var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm;
+		$('#searchResults').load(resultUrl);
         NProgress.done();
     });
 
