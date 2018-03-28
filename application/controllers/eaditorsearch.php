@@ -10,7 +10,7 @@ class eaditorsearch extends CI_Controller
 
     public function test($val){
 		$date = date_default_timezone_set('US/Eastern');
-		echo $val;	
+		echo $val;
 	 }
 
     public function index()
@@ -24,19 +24,33 @@ class eaditorsearch extends CI_Controller
         else
             $data["key"] = "";
 
+        if($this -> input -> get('facet'))
+            $data["facet"] = $this -> input -> get('facet');
+        else
+            $data["facet"]="";
         $this->load->view('search', $data);
     }
        
   public function searchKeyWords($key)
 	{
+        //$key = $this -> input -> get('key');
+        $subject_facet ="";
+        if($this -> input -> get('facet'))
+            $subject_facet = $this -> input -> get('facet');
         $key = trim($key);
         //$key = str_replace(" ","%20", $key);
         $key = str_replace("%2520","%20", $key);
     	//$key = str_replace("&","%26", $key);
         $key = str_replace("fq%3D","&fq=", $key);
-        $resultsLink = "http://www.empireadc.org:8080/solr/eaditor-published/select?indent=on&q=". $key ."&wt=json&facet=true&facet.field=subject_facet&facet.field=agency_facet&facet.field=corpname_facet&facet.field=genreform_facet&facet.field=persname_facet&facet.field=language_facet&facet.field=century_num&facet.field=famname_facet&facet.field=geogname_facet&rows=200";
-        // this is for testing echo $resultsLink;
-        $json = file_get_contents($resultsLink);
+
+        if($subject_facet != ""){
+            $resultsLink = "http://www.empireadc.org:8080/solr/eaditor-published/select?indent=on&q=".$subject_facet.':"'. $key .'"'."&wt=json&facet=true&facet.field=subject_facet&facet.field=agency_facet&facet.field=corpname_facet&facet.field=genreform_facet&facet.field=persname_facet&facet.field=language_facet&facet.field=century_num&facet.field=famname_facet&facet.field=geogname_facet&rows=200";
+        }else{
+            $resultsLink = "http://www.empireadc.org:8080/solr/eaditor-published/select?indent=on&q=". $key ."&wt=json&facet=true&facet.field=subject_facet&facet.field=agency_facet&facet.field=corpname_facet&facet.field=genreform_facet&facet.field=persname_facet&facet.field=language_facet&facet.field=century_num&facet.field=famname_facet&facet.field=geogname_facet&rows=200";
+        }
+	    $json = file_get_contents($resultsLink);
+        $data['key'] = $key;
+        $data['facet'] = $subject_facet;
         $data['results'] = json_decode($json);
         $this->load->view('results', $data);
      }

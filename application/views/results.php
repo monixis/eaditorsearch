@@ -219,7 +219,11 @@
         elementsPerPage: 10
         /* effect: 'climb'*/
   });
-
+    //$(document).ready(function () {
+    //     var key ="<!--?php //echo $key;?>//";
+    //     var facet= "<!--?php //echo $facet;?>//";
+    //
+    //});
     var sFacet = {};
     sFacet.filterHTML = function(id, sel, filter) {
         var a, b, c, i, ii, iii, hit;

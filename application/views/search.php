@@ -105,6 +105,7 @@
 			var searchTerm = searchTerm.trim();
 			var searchTerm = searchTerm.replace(/ /g,"%20");
 			var searchTerm = encodeURIComponent(searchTerm);
+
 			if(searchTerm != "" ) {
 				var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm;
 				//var resultUrl = "<!--?php echo base_url("?c=eaditorsearch&m=searchKeyWords&key=")?>" + searchTerm;
@@ -145,8 +146,13 @@
                 var searchTerm = searchTerm.trim();
                 var searchTerm = searchTerm.replace(/ /g,"%20");
                 var searchTerm = encodeURIComponent(searchTerm);
-                var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm;
-			    $('#searchResults').load(resultUrl);
+              //  var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm;
+			   // $('#searchResults').load(resultUrl);
+                var facet = "<?php echo $facet; ?>";
+
+                var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/"+ searchTerm+"/?facet="+facet;
+
+                $('#searchResults').load(resultUrl);
 
             }
 
