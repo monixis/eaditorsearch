@@ -175,6 +175,17 @@
       array_push($dateRange, $dateValue);
     }
     ?>
+
+
+    <style>
+
+        .p-list {
+            list-style:disc outside none;
+            display:list-item;
+        }
+
+
+    </style>
 </head>
 <body>
 
@@ -505,22 +516,48 @@
 
              <ul class="tl" id="<?php echo $chron ->head ; ?>">
            <?php $i= 0; foreach($xml->archdesc->bioghist->chronlist -> children() as $chronChild) {   if($chronChild -> getname() =='chronitem') { if($i % 2 == 0){ ?>
-              <li class='tl-inverted' id="<?php echo $chron ->head ; ?>"><div class="tl-badge info">
-                <?php echo $chronChild -> date  ;?></div><div class="tl-panel">
-                  <div class="tl-body"><p>
-                  <?php echo $chronChild -> event ;?></p></div></div>
+
+                   <li class='tl-inverted' id="<?php echo $chron ->head ; ?>">
+                  <div class="tl-badge info"><?php echo $chronChild -> date ;?>
+                  </div><div class="tl-panel">
+                  <div class="tl-body">
+                               <?php if($chronChild -> eventgrp){
+
+                              foreach ($chronChild-> eventgrp -> children()  as $chronEventChild){ ?>
+
+                                  <p class="p-list"><?php echo $chronEventChild ;?> </p>
+                          <?php } ?>
+                     </div></div>
+
+                   <?php } else { ?>
+
+                    <p><?php echo $chronChild -> event ; ?></p>
+                   <?php } ?>
               </li>
 
 
-           <?php } else {  ?>
-             <li class='tl' id="<?php echo $chron ->head ; ?>"><div class="tl-badge info">
+           <?php  } else {  ?>
+
+                   <li class='tl' id="<?php echo $chron ->head ; ?>"><div class="tl-badge info">
                  <?php echo $chronChild -> date  ;?></div><div class="tl-panel">
-                 <div class="tl-body"><p>
-                     <?php echo $chronChild -> event ;?></p></div></div>
-             </li>
+               <div class="tl-body">
+               <?php if($chronChild -> eventgrp){
+
+                   foreach ($chronChild-> eventgrp -> children()  as $chronEvenChild){ ?>
+
+                       <p class="p-list"><?php echo $chronEvenChild ; ?></p>
+                    <?php }?>
+                   </div></div>
+
+               <?php } else { ?>
+
+                   <p><?php echo $chronChild -> event ; ?></p>
+
+                   <?php } ?>
+                   </li>
 
 
-           <?php } $i++;}}?>
+           <?php  } $i++;}}?>
              </ul>
            </div>
 
