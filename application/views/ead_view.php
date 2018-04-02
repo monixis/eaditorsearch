@@ -333,13 +333,15 @@
          <?php foreach($addressline as $a){ ?>
             <h5 style="font-style: italic"><?php echo $a; ?></h5>
        <?php }}?>
-        <label>Date: </label>
         <?php foreach ($dateRange as $y){ ?>
+          <label>Date: </label>
           <p><?php echo $y; ?></p>
         <?php }
-        if($extent != 'Unspecified'){ ?>
-          <label>Extent: </label><p><span property="dcterms:extent"><?php echo $extent; ?></span></p>
-        <?php } ?>
+        if($extent != 'Unspecified'){ 
+         foreach ($extent as $y){
+         ?>
+          <label>Extent: </label><p><span property="dcterms:extent"><?php echo $y; ?></span></p>
+        <?php }} ?>
 
         <label>Creator: </label>
         <?php foreach ($creatorList as $c){ ?>
