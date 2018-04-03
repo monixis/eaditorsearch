@@ -16,6 +16,7 @@
     $rdf = "https://www.empireadc.org/ead/". $collId ."/id/".$eadId.".rdf";
     $is_chron_available = false;
     $xml = simplexml_load_file($link);
+    
     $title = $xml->archdesc->did->unittitle;
     $repository = (isset($xml->archdesc->did->repository->corpname)? $xml->archdesc->did->repository->corpname : $xml->archdesc->did->repository);
     
@@ -28,7 +29,7 @@
     }
     $extent = (isset($xml->archdesc->did->physdesc->extent)? $xml->archdesc->did->physdesc->extent : 'Unspecified');
     
-        $creatorList = array();
+    $creatorList = array();
     $cnt =  0;
     $creator =  (isset($xml->archdesc->did->origination)? TRUE : FALSE);
     if ($creator != FALSE){
@@ -58,6 +59,14 @@
     }
    
     $abstract = (isset($xml->archdesc->did->abstract)? $xml->archdesc->did->abstract : 'Unspecified');
+    if ($abstract != 'Unspecified'){
+      foreach($xml->archdesc->did->abstract as $a){
+          if($a->getname() == 'abstract'){
+              $abstract = $a . "<br />\n" ;
+          }
+      }
+    }
+
     $processInfo = (isset($xml->archdesc->processinfo->p)? $xml->archdesc->processinfo->p : 'Unspecified');
 
     $prefercite = (isset($xml->archdesc->prefercite->p)?  $xml->archdesc->prefercite->p : 'Unspecified');
@@ -229,7 +238,7 @@
                     
 								     $cLevel1 = $cAttr1["level"];
 
-									     if($cLevel1 == 'otherlevel' || $cLevel1 == 'subseries'){
+									     if($cLevel1 == 'otherlevel' || $cLevel1 == 'subseries' || $cLevel1 == 'series'){
 									        $flag = 1;
                           seriesLevel($cLevel1, $grandchildObj, $collId, $repository);
                         }elseif($cLevel1 == 'file'){
@@ -597,7 +606,7 @@
 	foreach ($xml->archdesc->dsc->c as $c){
 		$cAttr = $c->attributes();
 		$cLevel = $cAttr["level"];
-			if ($cLevel == 'file' || $cLevel == 'item'){?> 
+			if ($cLevel == 'file' || $cLevel == 'item' || $cLevel == 'otherlevel'){?> 
 				<div class="fileRow">
 					<?php foreach ($c->did->children() as $child){  ?>
 
@@ -623,7 +632,7 @@
                 <!--    <input type="checkbox" class="big-checkbox" id="<?php echo  "crtitm"."-".$collId."-".$component; ?>" value="<?php echo  $repository.substr(0,13)."..."."-".$collId."-".$component; ?>">
                 -->
                 </div>
-			<?php } elseif ($cLevel == 'series' || $cLevel == 'collection'){
+			<?php } elseif ($cLevel == 'series' || $cLevel == 'collection' || $cLevel == 'recordgrp'){
 					seriesLevel($cLevel, $c, $collId, $repository);
 			 }	
   } /* for each */
