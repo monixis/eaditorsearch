@@ -1,7 +1,6 @@
 <!--script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script-->
 <meta charset="utf-8" xmlns="http://www.w3.org/1999/html">
-<!--script type="text/javascript" src="http://library.marist.edu/crrs/js/jquery-ui.js"></script-->
- <script type="text/javascript" src="http://library.marist.edu/js/jquery-ui.js"></script>
+ <script type="text/javascript" src="//beta.empireadc.org/js/jquery-ui.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/list.pagination.js/0.1.1/list.pagination.min.js"></script>
@@ -220,7 +219,11 @@
         elementsPerPage: 10
         /* effect: 'climb'*/
   });
-
+    //$(document).ready(function () {
+    //     var key ="<!--?php //echo $key;?>//";
+    //     var facet= "<!--?php //echo $facet;?>//";
+    //
+    //});
     var sFacet = {};
     sFacet.filterHTML = function(id, sel, filter) {
         var a, b, c, i, ii, iii, hit;

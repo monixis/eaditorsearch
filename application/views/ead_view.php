@@ -115,7 +115,7 @@
                   }else{
                     $scopeContent = $scopeContent . $c . "<br />";
                   }
-                  
+
                 }
             }
         }
@@ -135,16 +135,16 @@
     $relatedMaterial = (isset($xml->archdesc->relatedmaterial)? TRUE : FALSE);
     if($relatedMaterial == TRUE){
       $relatedMaterialChild = (isset($xml->archdesc->relatedmaterial->p->extref)? TRUE : FALSE);
-        if($relatedMaterialChild == TRUE){     
+        if($relatedMaterialChild == TRUE){
             $linksAvailable = TRUE;
-            $i = 0;   
+            $i = 0;
             foreach($xml->archdesc->relatedmaterial->p->extref as $rm)
             {
               $rmLinkAttr = $rm -> attributes('http://www.w3.org/1999/xlink');
-              $rmLink = $rmLinkAttr['href'];   
+              $rmLink = $rmLinkAttr['href'];
               $relatedMaterialLink[$i][0] = $rm;
               $relatedMaterialLink[$i][1] = $rmLink;
-              $i = $i + 1; 
+              $i = $i + 1;
             }
         }else{ //to deal with two variations in relatedmaterial encoding
           $linksAvailable = FALSE;
@@ -152,7 +152,7 @@
           foreach($xml->archdesc->relatedmaterial->p as $rm)
           {
             $relatedMaterialLink[$i][0] = $rm;
-            $i = $i + 1; 
+            $i = $i + 1;
           }
         }
     }
@@ -180,6 +180,17 @@
       array_push($dateRange, $dateValue);
     }
     ?>
+
+
+    <style>
+
+        .p-list {
+            list-style:disc outside none;
+            display:list-item;
+        }
+
+
+    </style>
 </head>
 <body>
 
@@ -250,7 +261,7 @@
                               }elseif($file->getname() == 'container'){?>
                                   <p><?php echo ucfirst($file['type']).": ". $file;     $arr = explode(' ',ucfirst($file['type'])."-". $file);
                                   $component = $component."-". $arr[0];  ?></p><?php
-                              }	
+                              }
                               ?><!--   <input type="checkbox" class="big-checkbox" id="<?php echo  "crtitm"."-".$collId."-".$component; ?>" value="<?php echo  $repository.substr(0,13)."..."."-".$collId."-".$component; ?>">--><?php
                             }
                           }elseif($c->getname() == 'scopecontent'){
@@ -308,42 +319,44 @@
 
 <div id="eadInfo" style="margin-bottom: 30px;">
        <h1><span property="dcterms:title"><?php echo $title; ?></span</h1>
-       <h4 style="font-style: italic"><?php echo $repository; ?></h4> 
+       <a class="searchTerm" style="font-style: italic" href="#"><h4><?php echo $repository; ?></h4></a>
        <?php if($address == TRUE){
          foreach($addressline as $a){ ?>
             <h5 style="font-style: italic"><?php echo $a; ?></h5>
        <?php }}?>
-       
+
 		<h4>Output formats:</h4>
 		 <a href='<?php echo $link; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-custm" >XML</button></a>
-     <a href='<?php echo $rdf; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-custm" >RDF/XML</button> </a>      
-</div> 
+     <a href='<?php echo $rdf; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-custm" >RDF/XML</button> </a>
+</div>
 
-<h4 data-toggle="collapse" data-target="#descId" class='infoAccordion accordion'>Descriptive Identification  <span class="glyphicon glyphicon-menu-right" style="float:right;"></span></h4> 
+<h4 data-toggle="collapse" data-target="#descId" class='infoAccordion accordion'>Descriptive Identification  <span class="glyphicon glyphicon-menu-right" style="float:right;"></span></h4>
 <div id="descId" class="collapse">
-       <label>Repository: </label><p><?php echo $repository; ?></p>
+       <label>Repository: </label><p><a class="searchTerm" href="#"><?php echo $repository; ?></a></p>
         <?php if($address == TRUE){ ?>
           <label>Address: </label>
          <?php foreach($addressline as $a){ ?>
             <h5 style="font-style: italic"><?php echo $a; ?></h5>
        <?php }}?>
-        <label>Date: </label>
         <?php foreach ($dateRange as $y){ ?>
+          <label>Date: </label>
           <p><?php echo $y; ?></p>
         <?php }
-        if($extent != 'Unspecified'){ ?>
-          <label>Extent: </label><p><span property="dcterms:extent"><?php echo $extent; ?></span></p>
-        <?php } ?>
-        
+        if($extent != 'Unspecified'){ 
+         foreach ($extent as $y){
+         ?>
+          <label>Extent: </label><p><span property="dcterms:extent"><?php echo $y; ?></span></p>
+        <?php }} ?>
+
         <label>Creator: </label>
         <?php foreach ($creatorList as $c){ ?>
-          <p><span property="dcterms:creator"><?php echo $c; ?></span></p>
-        <?php }  
+          <p><span property="dcterms:creator"><a href="#" class="searchTerm"><?php echo $c; ?></a></span></p>
+        <?php }
 
         if($location != 'Unspecified'){ ?>
         <label>Location: </label><p><?php echo $location; ?></p>
         <?php } ?>
-        
+
         <label>Language: </label>
         <?php foreach ($languageList as $l){ ?>
           <p><?php echo $l; ?></p>
@@ -356,20 +369,22 @@
       if($abstract != 'Unspecified'){ ?>
         <label>Abstract: </label><p><span property="dcterms:abstract"><?php echo auto_link($abstract, 'both', TRUE); ?></span></p>
        <?php } ?> 
+
 </div>
 
-<h4 data-toggle="collapse" data-target="#adminInfo" class='infoAccordion accordion'>Administrative Information<span class="glyphicon glyphicon-menu-right" style="float:right;"></span></h4> 
+<h4 data-toggle="collapse" data-target="#adminInfo" class='infoAccordion accordion'>Administrative Information<span class="glyphicon glyphicon-menu-right" style="float:right;"></span></h4>
 <div id="adminInfo" class="collapse">
         <?php if($processInfo != 'Unspecified'){ ?>
           <label>Processing Information: </label><p><?php echo auto_link($processInfo, 'both', TRUE); ?></p>
         <?php }       
+
         if($access != 'Unspecified'){ ?>
           <label>Access: </label><p><?php echo auto_link($access, 'both', TRUE); ?></p>
-        <?php }  
-        if($copyright != 'Unspecified'){ ?>  
+        <?php }
+        if($copyright != 'Unspecified'){ ?>
           <label>Copyright: </label><p><?php echo auto_link($copyright, 'both', TRUE); ?></p>
-        <?php } 
-        if($acqInfo != 'Unspecified'){ ?>  
+        <?php }
+        if($acqInfo != 'Unspecified'){ ?>
           <label>Acquisition Information: </label><p><?php echo auto_link($acqInfo, 'both', TRUE); ?></p>
         <?php }   
         if($prefCitation != 'Unspecified'){ ?>
@@ -388,14 +403,14 @@
           <label>Related Materials: </label><br/>
           <?php for($i=0 ; $i < sizeof($relatedMaterialLink) ; $i ++){
           if ($linksAvailable == TRUE){ ?>
-            <a href='<?php $relatedMaterialLink[$i][1]; ?>' target="_blank"><?php echo $relatedMaterialLink[$i][0]; ?></a></br> 
+            <a href='<?php $relatedMaterialLink[$i][1]; ?>' target="_blank"><?php echo $relatedMaterialLink[$i][0]; ?></a></br>
           <?php }else{ ?>
-            <a style='pointer-events: none; color: #000000;'><?php echo $relatedMaterialLink[$i][0]; ?></a></br> 
+            <a style='pointer-events: none; color: #000000;'><?php echo $relatedMaterialLink[$i][0]; ?></a></br>
           <?php }
-          }}?>  
+          }}?>
 </div>   
 
-<h4 data-toggle="collapse" data-target="#controlHeadings" class='infoAccordion accordion'>Controlled Access Headings<span class="glyphicon glyphicon-menu-right" style="float:right;"></span></h4> 
+<h4 data-toggle="collapse" data-target="#controlHeadings" class='infoAccordion accordion'>Controlled Access Headings<span class="glyphicon glyphicon-menu-right" style="float:right;"></span></h4>
 <div id="controlHeadings" class="collapse">
          <?php 
          $controlledAccess = (isset($xml->archdesc->controlaccess)? TRUE : FALSE);
@@ -433,18 +448,45 @@
              <h5><?php echo $headValue; ?></h5>
             <?php  foreach($xml->archdesc->controlaccess->children() as $list) {
                 if ($value == $list->getname()){ ?>
-                    <ul style='font-size:15px;'><li><a href="#" class='controlledHeader' ><span property="dcterms:coverage"><?php echo $list; ?></span></a></li></ul>
+                    <ul style='font-size:15px;'><li><a href="#" id="geogname_facet"class='controlledHeader' ><span property="dcterms:coverage"><?php echo $list; ?></span></a></li></ul>
             <?php } #End if statement
               }  #End Foreach loop
-            }else{ #Output rest of control Headings
-            ?>
-           <h5><?php echo $headValue; ?></h5>
-            <?php  foreach($xml->archdesc->controlaccess->children() as $list) {
-                if ($value == $list->getname()){ ?>
-                    <ul style='font-size:15px;'><li><a href="#" class='controlledHeader' <span property="dcterms:subject"><?php echo $list; ?></span></a></li></ul>
-            <?php }#End of statment
-             } #End foreach loop
-           }# End the if statement looking for geogname
+            }elseif($value == 'subject' ){ #Output rest of control Headings
+                ?>
+                <h5><?php echo $headValue; ?></h5>
+                <?php  foreach($xml->archdesc->controlaccess->children() as $list) {
+                    if ($value == $list->getname()){ ?>
+                        <ul><li><a href="#" id="subject_facet" class='controlledHeader' <span property="dcterms:subject"><?php echo $list; ?></span></a></li></ul>
+                    <?php }#End of statment
+                } #End foreach loop
+            }elseif($value == 'persname' ){ #Output rest of control Headings
+                ?>
+                <h5><?php echo $headValue; ?></h5>
+                <?php  foreach($xml->archdesc->controlaccess->children() as $list) {
+                    if ($value == $list->getname()){ ?>
+                        <ul><li><a href="#" id="persname_facet" class='controlledHeader' <span property="dcterms:subject"><?php echo $list; ?></span></a></li></ul>
+                    <?php }#End of statment
+                } #End foreach loop
+            }elseif($value == 'genreform' ){ #Output rest of control Headings
+                ?>
+                <h5><?php echo $headValue; ?></h5>
+                <?php  foreach($xml->archdesc->controlaccess->children() as $list) {
+                    if ($value == $list->getname()){ ?>
+                        <ul><li><a href="#" id="genreform_facet" class='controlledHeader' <span property="dcterms:subject"><?php echo $list; ?></span></a></li></ul>
+                    <?php }#End of statment
+                } #End foreach loop
+            }elseif($value == 'corpname' ){ #Output rest of control Headings
+                ?>
+                <h5><?php echo $headValue; ?></h5>
+                <?php  foreach($xml->archdesc->controlaccess->children() as $list) {
+                    if ($value == $list->getname()){ ?>
+                        <ul><li><a href="#" id="corpname_facet" class='controlledHeader' <span property="dcterms:subject"><?php echo $list; ?></span></a></li></ul>
+                    <?php }#End of statment
+                } #End foreach loop
+            }
+
+
+           # End the if statement looking for geogname
           }# End the foreach loop of controlheadings
          }else{ ?>
             <h4 style="font-style: italic">Not available</h4>
@@ -481,22 +523,48 @@
 
              <ul class="tl" id="<?php echo $chron ->head ; ?>">
            <?php $i= 0; foreach($xml->archdesc->bioghist->chronlist -> children() as $chronChild) {   if($chronChild -> getname() =='chronitem') { if($i % 2 == 0){ ?>
-              <li class='tl-inverted' id="<?php echo $chron ->head ; ?>"><div class="tl-badge info">
-                <?php echo $chronChild -> date  ;?></div><div class="tl-panel">
-                  <div class="tl-body"><p>
-                  <?php echo $chronChild -> event ;?></p></div></div>
+
+                   <li class='tl-inverted' id="<?php echo $chron ->head ; ?>">
+                  <div class="tl-badge info"><?php echo $chronChild -> date ;?>
+                  </div><div class="tl-panel">
+                  <div class="tl-body">
+                               <?php if($chronChild -> eventgrp){
+
+                              foreach ($chronChild-> eventgrp -> children()  as $chronEventChild){ ?>
+
+                                  <p class="p-list"><?php echo $chronEventChild ;?> </p>
+                          <?php } ?>
+                     </div></div>
+
+                   <?php } else { ?>
+
+                    <p><?php echo $chronChild -> event ; ?></p>
+                   <?php } ?>
               </li>
 
 
-           <?php } else {  ?>
-             <li class='tl' id="<?php echo $chron ->head ; ?>"><div class="tl-badge info">
+           <?php  } else {  ?>
+
+                   <li class='tl' id="<?php echo $chron ->head ; ?>"><div class="tl-badge info">
                  <?php echo $chronChild -> date  ;?></div><div class="tl-panel">
-                 <div class="tl-body"><p>
-                     <?php echo $chronChild -> event ;?></p></div></div>
-             </li>
+               <div class="tl-body">
+               <?php if($chronChild -> eventgrp){
+
+                   foreach ($chronChild-> eventgrp -> children()  as $chronEvenChild){ ?>
+
+                       <p class="p-list"><?php echo $chronEvenChild ; ?></p>
+                    <?php }?>
+                   </div></div>
+
+               <?php } else { ?>
+
+                   <p><?php echo $chronChild -> event ; ?></p>
+
+                   <?php } ?>
+                   </li>
 
 
-           <?php } $i++;}}?>
+           <?php  } $i++;}}?>
              </ul>
            </div>
 
@@ -517,7 +585,7 @@
   /* For cases where high level series list exists but a more detailed container list is available for download*/
    if ($otherfindaids != FALSE){ ?>
     <h4 style="margin-left:17px;">Download Container List:</h4>
-    <a href='<?php echo $downloadLink; ?>' itemprop="url" style="margin-left: 17px;"><img src='<?php echo $iconLink;?>' class="doc-icon"></a></br></br> 
+    <a href='<?php echo $downloadLink; ?>' itemprop="url" style="margin-left: 17px;"><img src='<?php echo $iconLink;?>' class="doc-icon"></a></br></br>
   <?php }
   $component = 0;
 	foreach ($xml->archdesc->dsc->c as $c){
@@ -601,13 +669,21 @@ else{?>
 <script>
 	$('a.controlledHeader').click(function(){
       var selectedHeader = $(this).text();
+      var selectedFacet = $(this).attr('id');
       var selectedHeader = selectedHeader.trim();
       var selectedHeader = selectedHeader.replace(/ /g,"%20");
       var selectedHeader = encodeURIComponent(selectedHeader);
-      resultUrl = "<?php echo base_url("?key=")?>" + selectedHeader;
+      resultUrl = "<?php echo base_url("?key=")?>"+ selectedHeader+"&facet="+selectedFacet;
 	  window.open(resultUrl);
     });
-
+    $('a.searchTerm').click(function() {
+      var repositoryName =  $(this).text();
+        var repositoryName = repositoryName.trim();
+        var repositoryName = repositoryName.replace(/ /g,"%20");
+        var repositoryName = encodeURIComponent(repositoryName);
+        resultUrl = "<?php echo base_url("?key=")?>"+ repositoryName;
+        window.open(resultUrl);
+    });
     var acc = document.getElementsByClassName("accordion");
     var i;
 
