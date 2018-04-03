@@ -52,6 +52,8 @@
       }  
     }
 
+    
+
     $location = (isset($xml->archdesc->did->physloc)? $xml->archdesc->did->physloc : 'Unspecified');
    
     $languageList = array();
@@ -74,6 +76,15 @@
     }
 
     $processInfo = (isset($xml->archdesc->processinfo->p)? $xml->archdesc->processinfo->p : 'Unspecified');
+
+    $prefercite = (isset($xml->archdesc->prefercite->p)?  $xml->archdesc->prefercite->p : 'Unspecified');
+    if ($prefercite != 'Unspecified'){
+        foreach($xml->archdesc->prefercite->children() as $p){
+            if($p->getname() == 'p'){
+                $prefercite = $prefercite . $p . "<br />\n" ;
+            }
+        }
+    }
 
     $access = (isset($xml->archdesc->accessrestrict)? $xml->archdesc->accessrestrict : 'Unspecified');
     if ($access != 'Unspecified'){
@@ -353,9 +364,9 @@
          ?>
           <label>Extent: </label><p><span property="dcterms:extent"><?php echo $y; ?></span></p>
         <?php }} ?>
-
-        <label>Creator: </label>
-        <?php foreach ($creatorList as $c){ ?>
+        <?php 
+          foreach ($creatorList as $c){ ?>
+          <label>Creator: </label>
           <p><span property="dcterms:creator"><a href="#" class="searchTerm"><?php echo $c; ?></a></span></p>
         <?php }
 
@@ -387,6 +398,10 @@
         if($access != 'Unspecified'){ ?>
           <label>Access: </label><p><?php echo auto_link($access, 'both', TRUE); ?></p>
         <?php }
+        if($prefercite != 'Unspecified'){ ?>
+          <label>Preferred Citation: </label><p><?php echo auto_link($prefercite, 'both', TRUE); ?></p>
+        <?php }
+
         if($copyright != 'Unspecified'){ ?>
           <label>Copyright: </label><p><?php echo auto_link($copyright, 'both', TRUE); ?></p>
         <?php }
