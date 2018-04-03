@@ -20,6 +20,14 @@
     $title = $xml->archdesc->did->unittitle;
     $repository = (isset($xml->archdesc->did->repository->corpname)? $xml->archdesc->did->repository->corpname : $xml->archdesc->did->repository);
     
+    $rURL = " ";
+    $repo = (isset($xml->archdesc->did->repository->extptr)? TRUE : FALSE);
+    if ($repo == TRUE){
+      $repo = $xml->archdesc->did->repository->extptr;
+      $repoAttr = $repo ->  attributes('http://www.w3.org/1999/xlink');
+      $rURL = $repoAttr['href'];
+    }
+
     $addressline = array();
     $address = (isset($xml->archdesc->did->repository->address)? TRUE : FALSE);
     if($address == TRUE){
@@ -181,9 +189,7 @@
     }
     ?>
 
-
     <style>
-
         .p-list {
             list-style:disc outside none;
             display:list-item;
@@ -324,7 +330,7 @@
          foreach($addressline as $a){ ?>
             <h5 style="font-style: italic"><?php echo $a; ?></h5>
        <?php }}?>
-
+       <h5><a href='<?php echo $rURL; ?>' style='font-size: 15px' target="_blank"><?php echo $rURL; ?></a></h5>    
 		<h4>Output formats:</h4>
 		 <a href='<?php echo $link; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-custm" >XML</button></a>
      <a href='<?php echo $rdf; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-custm" >RDF/XML</button> </a>
