@@ -16,6 +16,7 @@
     $rdf = "https://www.empireadc.org/ead/". $collId ."/id/".$eadId.".rdf";
     $is_chron_available = false;
     $xml = simplexml_load_file($link);
+    
     $title = $xml->archdesc->did->unittitle;
     $repository = (isset($xml->archdesc->did->repository->corpname)? $xml->archdesc->did->repository->corpname : $xml->archdesc->did->repository);
     
@@ -29,22 +30,18 @@
     $extent = (isset($xml->archdesc->did->physdesc->extent)? $xml->archdesc->did->physdesc->extent : 'Unspecified');
     
     $creatorList = array();
-    $creator =  (isset($xml->archdesc->did->origination->corpname)? $xml->archdesc->did->origination->corpname : FALSE);
+    $cnt =  0;
+    $creator =  (isset($xml->archdesc->did->origination)? TRUE : FALSE);
     if ($creator != FALSE){
-      foreach($xml->archdesc->did->origination->corpname as $c){
-        array_push($creatorList, $c);
-      }
-    }else if ($creator == FALSE){
-      $creator =  (isset($xml->archdesc->did->origination->persname)? $xml->archdesc->did->origination->persname : FALSE);
-      if ($creator != FALSE){
-        foreach($xml->archdesc->did->origination->persname as $c){
-          array_push($creatorList, $c);
+      foreach($xml->archdesc->did->origination as $c){
+        if($c->children()->getname() == 'persname' ){
+          array_push($creatorList, $c->persname);
+        }else if($c->children()->getname() == 'famname' ){
+          array_push($creatorList, $c->famname);
+        }else if($c->children()->getname() == 'corpname' ){
+          array_push($creatorList, $c->corpname);  
         }
-      }else if ($creator == FALSE){
-          foreach($xml->archdesc->did->origination->famname as $c){
-            array_push($creatorList, $c);
-          }
-      }
+      }  
     }
 
     $location = (isset($xml->archdesc->did->physloc)? $xml->archdesc->did->physloc : 'Unspecified');
@@ -60,6 +57,14 @@
     }
    
     $abstract = (isset($xml->archdesc->did->abstract)? $xml->archdesc->did->abstract : 'Unspecified');
+    if ($abstract != 'Unspecified'){
+      foreach($xml->archdesc->did->abstract as $a){
+          if($a->getname() == 'abstract'){
+              $abstract = $a . "<br />\n" ;
+          }
+      }
+    }
+
     $processInfo = (isset($xml->archdesc->processinfo->p)? $xml->archdesc->processinfo->p : 'Unspecified');
 
     $access = (isset($xml->archdesc->accessrestrict)? $xml->archdesc->accessrestrict : 'Unspecified');
@@ -211,7 +216,7 @@
                     
 								     $cLevel1 = $cAttr1["level"];
 
-									     if($cLevel1 == 'otherlevel' || $cLevel1 == 'subseries'){
+									     if($cLevel1 == 'otherlevel' || $cLevel1 == 'subseries' || $cLevel1 == 'series'){
 									        $flag = 1;
                           seriesLevel($cLevel1, $grandchildObj, $collId, $repository);
                         }elseif($cLevel1 == 'file'){
@@ -333,7 +338,7 @@
         <label>Creator: </label>
         <?php foreach ($creatorList as $c){ ?>
           <p><span property="dcterms:creator"><?php echo $c; ?></span></p>
-        <?php } 
+        <?php }  
 
         if($location != 'Unspecified'){ ?>
         <label>Location: </label><p><?php echo $location; ?></p>
@@ -518,7 +523,7 @@
 	foreach ($xml->archdesc->dsc->c as $c){
 		$cAttr = $c->attributes();
 		$cLevel = $cAttr["level"];
-			if ($cLevel == 'file' || $cLevel == 'item'){?> 
+			if ($cLevel == 'file' || $cLevel == 'item' || $cLevel == 'otherlevel'){?> 
 				<div class="fileRow">
 					<?php foreach ($c->did->children() as $child){  ?>
 
@@ -544,7 +549,7 @@
                 <!--    <input type="checkbox" class="big-checkbox" id="<?php echo  "crtitm"."-".$collId."-".$component; ?>" value="<?php echo  $repository.substr(0,13)."..."."-".$collId."-".$component; ?>">
                 -->
                 </div>
-			<?php } elseif ($cLevel == 'series' || $cLevel == 'collection'){
+			<?php } elseif ($cLevel == 'series' || $cLevel == 'collection' || $cLevel == 'recordgrp'){
 					seriesLevel($cLevel, $c, $collId, $repository);
 			 }	
   } /* for each */
