@@ -28,24 +28,22 @@
     }
     $extent = (isset($xml->archdesc->did->physdesc->extent)? $xml->archdesc->did->physdesc->extent : 'Unspecified');
     
-    $creatorList = array();
-    $creator =  (isset($xml->archdesc->did->origination->corpname)? $xml->archdesc->did->origination->corpname : FALSE);
+        $creatorList = array();
+    $cnt =  0;
+    $creator =  (isset($xml->archdesc->did->origination)? TRUE : FALSE);
     if ($creator != FALSE){
-      foreach($xml->archdesc->did->origination->corpname as $c){
-        array_push($creatorList, $c);
-      }
-    }else if ($creator == FALSE){
-      $creator =  (isset($xml->archdesc->did->origination->persname)? $xml->archdesc->did->origination->persname : FALSE);
-      if ($creator != FALSE){
-        foreach($xml->archdesc->did->origination->persname as $c){
-          array_push($creatorList, $c);
+      foreach($xml->archdesc->did->origination as $c){
+        if($c->children()->getname() == 'persname' ){
+          array_push($creatorList, $c->persname);
+        }else if($c->children()->getname() == 'famname' ){
+          array_push($creatorList, $c->famname);
+        }else if($c->children()->getname() == 'corpname' ){
+          array_push($creatorList, $c->corpname);  
         }
-      }else if ($creator == FALSE){
-          foreach($xml->archdesc->did->origination->famname as $c){
-            array_push($creatorList, $c);
-          }
-      }
+      }  
     }
+
+    
 
     $location = (isset($xml->archdesc->did->physloc)? $xml->archdesc->did->physloc : 'Unspecified');
    
@@ -61,6 +59,15 @@
    
     $abstract = (isset($xml->archdesc->did->abstract)? $xml->archdesc->did->abstract : 'Unspecified');
     $processInfo = (isset($xml->archdesc->processinfo->p)? $xml->archdesc->processinfo->p : 'Unspecified');
+
+    $prefercite = (isset($xml->archdesc->prefercite->p)?  $xml->archdesc->prefercite->p : 'Unspecified');
+    if ($prefercite != 'Unspecified'){
+        foreach($xml->archdesc->prefercite->children() as $p){
+            if($p->getname() == 'p'){
+                $prefercite = $prefercite . $p . "<br />\n" ;
+            }
+        }
+    }
 
     $access = (isset($xml->archdesc->accessrestrict)? $xml->archdesc->accessrestrict : 'Unspecified');
     if ($access != 'Unspecified'){
@@ -342,9 +349,9 @@
          ?>
           <label>Extent: </label><p><span property="dcterms:extent"><?php echo $y; ?></span></p>
         <?php }} ?>
-
-        <label>Creator: </label>
-        <?php foreach ($creatorList as $c){ ?>
+        <?php 
+          foreach ($creatorList as $c){ ?>
+          <label>Creator: </label>
           <p><span property="dcterms:creator"><a href="#" class="searchTerm"><?php echo $c; ?></a></span></p>
         <?php }
 
@@ -376,6 +383,10 @@
         if($access != 'Unspecified'){ ?>
           <label>Access: </label><p><?php echo auto_link($access, 'both', TRUE); ?></p>
         <?php }
+        if($prefercite != 'Unspecified'){ ?>
+          <label>Preferred Citation: </label><p><?php echo auto_link($prefercite, 'both', TRUE); ?></p>
+        <?php }
+
         if($copyright != 'Unspecified'){ ?>
           <label>Copyright: </label><p><?php echo auto_link($copyright, 'both', TRUE); ?></p>
         <?php }
