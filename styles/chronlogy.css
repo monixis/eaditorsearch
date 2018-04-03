@@ -50,6 +50,7 @@
     border-radius: 5px;
     -webkit-box-shadow: 0 1px 6px rgba(0,0,0,0.175);
     box-shadow: 0 1px 6px rgba(0,0,0,0.175);
+    margin-right: -8px;
 }
 
 .tl-body {
@@ -86,10 +87,10 @@
     z-index: 1;
     position: absolute;
     top: 16px;
-    left: 48%;
-    width: 70px;
+    left: 49%;
+    width: 85px;
     height: 50px;
-    margin-left: -25px;
+    margin-left: -35px;
     border-radius: 50% 50% 50% 50%;
     text-align: center;
     font-size: 1.4em;
@@ -117,7 +118,7 @@
 }
 
 .tl-badge {
-    font-size: 14px !important;
+    font-size: 13px !important;
     font-weight: bold;
 }
 
