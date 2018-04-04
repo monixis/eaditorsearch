@@ -9,23 +9,26 @@
 		<meta name="author" content="">
 
 		<title>Empire Archival Discovery Cooperative | Finding Aids at Your Fingertips</title>
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 		<!-- Bootstrap core CSS -->
-		<link href="styles/bootstrap.css" rel="stylesheet">
+		<link href="<?php echo base_url("/styles/bootstrap.css"); ?>" rel="stylesheet">
+		
 		<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-		<link href="//beta.empireadc.org/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-		<link href="styles/main.css" rel="stylesheet">
-
+		
+		<link href="<?php echo base_url("/css/ie10-viewport-bug-workaround.css"); ?>" rel="stylesheet">
+		<link href="<?php echo base_url("/styles/main.css"); ?>" rel="stylesheet">
+		
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 		<![endif]-->
-		<script type="text/javascript" src="//beta.empireadc.org/js/jquery-ui.js"></script>
-		<link rel="stylesheet" href="//beta.empireadc.org/font-awesome/css/font-awesome.min.css">
-		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-		<script src="./js/nprogress.js"></script>
-		<link rel="stylesheet" type="text/css" href="./styles/nprogress.css" />
+		
+		<script type="text/javascript" src="<?php echo base_url("/js/jquery-ui.js"); ?>"></script>
+		<link rel="stylesheet" href="<?php echo base_url("/font-awesome/css/font-awesome.min.css"); ?>" />
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+		<script src="<?php echo base_url("/js/nprogress.js"); ?>"></script>
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url("/styles/nprogress.css"); ?>" />
 
 		<!--style>
             @media all and (min-width:1000px) {
@@ -43,13 +46,10 @@
        
 	</head>
 	<body>
-		
-		
+	
 		<div id="headerContainer">
 			<a href="https://beta.empireadc.org/" target="_self"> <div id="header"></div> </a>
 		</div>
-		
-		
 		<!-- Main jumbotron for a primary marketing message or call to action -->
 		<div id="main-container" class="container">
 			<div class="jumbotron" style="background: #ffffff;">
@@ -62,10 +62,10 @@
 							<div id="custom-search-input">
 								<div class="input-group col-md-12">
 									<input type="text" class="form-control input-lg" id="searchBox" placeholder="Finding Aids at Your Fingertips" />
-									<input type="hidden" class="form-control input-lg" id="queryTag" />
+									<input type="text" class="form-control input-lg" id="queryTag" />
 									<span class="input-group-btn">
 										<button id="initiateSearch" class="btn btn-info btn-lg" type="button" style="background: #ffffff; border-color: #ccc;">
-											<img src="./icons/search.png"  style="height: 25px;"/>
+											<img src="<?php echo base_url("/icons/search.png"); ?>" style="height: 25px;"/>
 										</button> </span>
 								</div>
 									<!--p id="message" style="display: none;color: #B31B1B"> Please enter any text or word to search</p-->
@@ -144,19 +144,19 @@
             }else{
                 document.getElementById("searchBox").value = decodeURIComponent(searchTerm);
                 var searchTerm = searchTerm.trim();
-                var searchTerm = searchTerm.replace(/ /g,"%20");
+				var searchTerm = searchTerm.replace(/ /g,"%20");
                 var searchTerm = encodeURIComponent(searchTerm);
-              //  var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm;
+              //  var resultUrl = "<!--?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm;
 			   // $('#searchResults').load(resultUrl);
                 var facet = "<?php echo $facet; ?>";
 
-                var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/"+ searchTerm+"/?facet="+facet;
+                var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/?facet=" + facet;
 
                 $('#searchResults').load(resultUrl);
 
             }
 
-        });
+		});
 
 </script>
 </html>
