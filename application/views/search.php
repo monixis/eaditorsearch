@@ -43,7 +43,7 @@
             }
 
         </style-->
-       
+		
 	</head>
 	<body>
 	
@@ -62,14 +62,15 @@
 							<div id="custom-search-input">
 								<div class="input-group col-md-12">
 									<input type="text" class="form-control input-lg" id="searchBox" placeholder="Finding Aids at Your Fingertips" />
-									<input type="text" class="form-control input-lg" id="queryTag" />
+									<input type="hidden" class="form-control input-lg" id="queryTag" />
 									<span class="input-group-btn">
 										<button id="initiateSearch" class="btn btn-info btn-lg" type="button" style="background: #ffffff; border-color: #ccc;">
 											<img src="<?php echo base_url("/icons/search.png"); ?>" style="height: 25px;"/>
 										</button> </span>
 								</div>
 									<!--p id="message" style="display: none;color: #B31B1B"> Please enter any text or word to search</p-->
-									<a href='https://drive.google.com/open?id=1hsFy_xJ9uIP_wkRZjityXVdWVHSQF3X9eVALv2sMEo4' target='_blank'>Feedback/Issue</a>
+									<button class="btn btn-default btn-md" style='margin-top: 5px;'><a href='<?php echo base_url("/eaditorsearch/browse")?>'>Browse</a></button>
+									<a href='https://drive.google.com/open?id=1hsFy_xJ9uIP_wkRZjityXVdWVHSQF3X9eVALv2sMEo4' target='_blank' style='float:right;'>Feedback/Issue</a>
 							</div>
 							<div id="selectedFacet" >
 							
@@ -97,6 +98,7 @@
 		</div>
 </body>
 <script type="text/javascript">
+	
 		$('#initiateSearch').click(function(){
 			// Clear the selected facets of the previous search
 			$("#selectedFacet").empty();
@@ -105,9 +107,10 @@
 			var searchTerm = searchTerm.trim();
 			var searchTerm = searchTerm.replace(/ /g,"%20");
 			var searchTerm = encodeURIComponent(searchTerm);
+			var facet = 'NULL';
 
 			if(searchTerm != "" ) {
-				var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm;
+				var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
 				//var resultUrl = "<!--?php echo base_url("?c=eaditorsearch&m=searchKeyWords&key=")?>" + searchTerm;
 				$('#searchResults').load(resultUrl);
 			}else{
@@ -126,37 +129,30 @@
 				var searchTerm = searchTerm.trim();
 				var searchTerm = searchTerm.replace(/ /g,"%20");
 				var searchTerm = encodeURIComponent(searchTerm);
+				var facet = 'NULL';
 
 				if(searchTerm != "") {
-					var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm;
+					var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet;
 					$('#searchResults').load(resultUrl);
 				}else{
 					$("p#message").show().delay(3000).fadeOut();}}
 		});
-        $(document).ready(function () {
 
-              var searchTerm = "<?php echo $key; ?>";
-
-            if(searchTerm == "" || searchTerm == null){
-
-                $("p#message").show().delay(3000).fadeOut();
-
-            }else{
-                document.getElementById("searchBox").value = decodeURIComponent(searchTerm);
-                var searchTerm = searchTerm.trim();
-				var searchTerm = searchTerm.replace(/ /g,"%20");
-                var searchTerm = encodeURIComponent(searchTerm);
-              //  var resultUrl = "<!--?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm;
-			   // $('#searchResults').load(resultUrl);
-                var facet = "<?php echo $facet; ?>";
-
-                var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/?facet=" + facet;
-
-                $('#searchResults').load(resultUrl);
-
-            }
-
+        $(document).ready(function(){
+			var searchTerm = "<?php echo $key; ?>";
+		  	if(searchTerm == "" || searchTerm == null){ 
+				$("p#message").show().delay(3000).fadeOut();
+		  	}else{
+					document.getElementById("searchBox").value = decodeURIComponent(searchTerm);
+					var searchTerm = searchTerm.trim();
+					var searchTerm = searchTerm.replace(/ /g,"%20");
+					var searchTerm = encodeURIComponent(searchTerm);
+					var facet = "<?php echo $facet; ?>";
+					var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
+					$('#searchResults').load(resultUrl);
+			}
 		});
+
 
 </script>
 </html>

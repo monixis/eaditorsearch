@@ -332,7 +332,7 @@
 
         <label>Creator: </label>
         <?php foreach ($creatorList as $c){ ?>
-          <p><span property="dcterms:creator"><a href="#" class="searchTerm"><?php echo $c; ?></a></span></p>
+          <p><span property="dcterms:creator"><a href="#" id="persname_facet" class="controlledHeader"><?php echo $c; ?></a></span></p>
         <?php }
 
         if($location != 'Unspecified'){ ?>
@@ -637,7 +637,7 @@ else{?>
         var repositoryName = repositoryName.trim();
         var repositoryName = repositoryName.replace(/ /g,"%20");
         var repositoryName = encodeURIComponent(repositoryName);
-        resultUrl = "<?php echo base_url("?key=")?>"+ repositoryName;
+        resultUrl = "<?php echo base_url("?key=")?>"+ repositoryName +"&facet=agency_facet";
         window.open(resultUrl);
     });
     var acc = document.getElementsByClassName("accordion");

@@ -178,7 +178,7 @@ body {
 											//$facetList = trim($facetList);
 											//$link = base_url("eaditorsearch/agency") . "/" . rawurlencode($facetList); 
 											?>
-											<div class="element-item"><h3 class='name'><?php echo $facetList ; ?></h3><p class="number"><?php echo $row ;?></p></div><?php
+											<div class="element-item"><h3 class='name'><a href='#' id='browseLink'><?php echo $facetList ; ?></a></h3><p class="number"><?php echo $row ;?></p></div><?php
 											}
 											$i += 1;
 										}
@@ -261,8 +261,8 @@ $('.element-item').click(function(){
 	var searchTerm = $(this).children('h3').text();
 			//var searchTerm = searchTerm.replace(/ /g,"%20");
 			/*var searchTerm = searchTerm.trim();
-			var searchTerm = searchTerm.replace(/ /g,"%20");		
-	var searchTerm = encodeURIComponent(searchTerm);*/
+			var searchTerm = searchTerm.replace(/ /g,"%20");		*/
+	var searchTerm = encodeURIComponent(searchTerm);
 	var resultUrl = "<?php echo base_url("/eaditorsearch/agency")?>" + "/" + searchTerm;
 	window.open(resultUrl);
 });
