@@ -16,9 +16,18 @@
     $rdf = "https://www.empireadc.org/ead/". $collId ."/id/".$eadId.".rdf";
     $is_chron_available = false;
     $xml = simplexml_load_file($link);
+    
     $title = $xml->archdesc->did->unittitle;
     $repository = (isset($xml->archdesc->did->repository->corpname)? $xml->archdesc->did->repository->corpname : $xml->archdesc->did->repository);
     
+    $rURL = " ";
+    $repo = (isset($xml->archdesc->did->repository->extptr)? TRUE : FALSE);
+    if ($repo == TRUE){
+      $repo = $xml->archdesc->did->repository->extptr;
+      $repoAttr = $repo ->  attributes('http://www.w3.org/1999/xlink');
+      $rURL = $repoAttr['href'];
+    }
+
     $addressline = array();
     $address = (isset($xml->archdesc->did->repository->address)? TRUE : FALSE);
     if($address == TRUE){
@@ -29,23 +38,21 @@
     $extent = (isset($xml->archdesc->did->physdesc->extent)? $xml->archdesc->did->physdesc->extent : 'Unspecified');
     
     $creatorList = array();
-    $creator =  (isset($xml->archdesc->did->origination->corpname)? $xml->archdesc->did->origination->corpname : FALSE);
+    $cnt =  0;
+    $creator =  (isset($xml->archdesc->did->origination)? TRUE : FALSE);
     if ($creator != FALSE){
-      foreach($xml->archdesc->did->origination->corpname as $c){
-        array_push($creatorList, $c);
-      }
-    }else if ($creator == FALSE){
-      $creator =  (isset($xml->archdesc->did->origination->persname)? $xml->archdesc->did->origination->persname : FALSE);
-      if ($creator != FALSE){
-        foreach($xml->archdesc->did->origination->persname as $c){
-          array_push($creatorList, $c);
+      foreach($xml->archdesc->did->origination as $c){
+        if($c->children()->getname() == 'persname' ){
+          array_push($creatorList, $c->persname);
+        }else if($c->children()->getname() == 'famname' ){
+          array_push($creatorList, $c->famname);
+        }else if($c->children()->getname() == 'corpname' ){
+          array_push($creatorList, $c->corpname);  
         }
-      }else if ($creator == FALSE){
-          foreach($xml->archdesc->did->origination->famname as $c){
-            array_push($creatorList, $c);
-          }
-      }
+      }  
     }
+
+    
 
     $location = (isset($xml->archdesc->did->physloc)? $xml->archdesc->did->physloc : 'Unspecified');
    
@@ -60,7 +67,24 @@
     }
    
     $abstract = (isset($xml->archdesc->did->abstract)? $xml->archdesc->did->abstract : 'Unspecified');
+    if ($abstract != 'Unspecified'){
+      foreach($xml->archdesc->did->abstract as $a){
+          if($a->getname() == 'abstract'){
+              $abstract = $a . "<br />\n" ;
+          }
+      }
+    }
+
     $processInfo = (isset($xml->archdesc->processinfo->p)? $xml->archdesc->processinfo->p : 'Unspecified');
+
+    $prefercite = (isset($xml->archdesc->prefercite->p)?  $xml->archdesc->prefercite->p : 'Unspecified');
+    if ($prefercite != 'Unspecified'){
+        foreach($xml->archdesc->prefercite->children() as $p){
+            if($p->getname() == 'p'){
+                $prefercite = $prefercite . $p . "<br />\n" ;
+            }
+        }
+    }
 
     $access = (isset($xml->archdesc->accessrestrict)? $xml->archdesc->accessrestrict : 'Unspecified');
     if ($access != 'Unspecified'){
@@ -175,6 +199,15 @@
       array_push($dateRange, $dateValue);
     }
     ?>
+
+    <style>
+        .p-list {
+            list-style:disc outside none;
+            display:list-item;
+        }
+
+
+    </style>
 </head>
 <body>
 
@@ -211,7 +244,7 @@
                     
 								     $cLevel1 = $cAttr1["level"];
 
-									     if($cLevel1 == 'otherlevel' || $cLevel1 == 'subseries'){
+									     if($cLevel1 == 'otherlevel' || $cLevel1 == 'subseries' || $cLevel1 == 'series'){
 									        $flag = 1;
                           seriesLevel($cLevel1, $grandchildObj, $collId, $repository);
                         }elseif($cLevel1 == 'file'){
@@ -308,7 +341,7 @@
          foreach($addressline as $a){ ?>
             <h5 style="font-style: italic"><?php echo $a; ?></h5>
        <?php }}?>
-
+       <h5><a href='<?php echo $rURL; ?>' style='font-size: 15px' target="_blank"><?php echo $rURL; ?></a></h5>    
 		<h4>Output formats:</h4>
 		 <a href='<?php echo $link; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-custm" >XML</button></a>
      <a href='<?php echo $rdf; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-custm" >RDF/XML</button> </a>
@@ -322,16 +355,19 @@
          <?php foreach($addressline as $a){ ?>
             <h5 style="font-style: italic"><?php echo $a; ?></h5>
        <?php }}?>
-        <label>Date: </label>
         <?php foreach ($dateRange as $y){ ?>
+          <label>Date: </label>
           <p><?php echo $y; ?></p>
         <?php }
-        if($extent != 'Unspecified'){ ?>
-          <label>Extent: </label><p><span property="dcterms:extent"><?php echo $extent; ?></span></p>
-        <?php } ?>
-
-        <label>Creator: </label>
-        <?php foreach ($creatorList as $c){ ?>
+  
+        if($extent != 'Unspecified'){ 
+         foreach ($extent as $y){
+         ?>
+          <label>Extent: </label><p><span property="dcterms:extent"><?php echo $y; ?></span></p>
+        <?php }} ?>
+        <?php 
+          foreach ($creatorList as $c){ ?>
+          <label>Creator: </label>
           <p><span property="dcterms:creator"><a href="#" id="persname_facet" class="controlledHeader"><?php echo $c; ?></a></span></p>
         <?php }
 
@@ -363,6 +399,10 @@
         if($access != 'Unspecified'){ ?>
           <label>Access: </label><p><?php echo auto_link($access, 'both', TRUE); ?></p>
         <?php }
+        if($prefercite != 'Unspecified'){ ?>
+          <label>Preferred Citation: </label><p><?php echo auto_link($prefercite, 'both', TRUE); ?></p>
+        <?php }
+
         if($copyright != 'Unspecified'){ ?>
           <label>Copyright: </label><p><?php echo auto_link($copyright, 'both', TRUE); ?></p>
         <?php }
@@ -505,22 +545,48 @@
 
              <ul class="tl" id="<?php echo $chron ->head ; ?>">
            <?php $i= 0; foreach($xml->archdesc->bioghist->chronlist -> children() as $chronChild) {   if($chronChild -> getname() =='chronitem') { if($i % 2 == 0){ ?>
-              <li class='tl-inverted' id="<?php echo $chron ->head ; ?>"><div class="tl-badge info">
-                <?php echo $chronChild -> date  ;?></div><div class="tl-panel">
-                  <div class="tl-body"><p>
-                  <?php echo $chronChild -> event ;?></p></div></div>
+
+                   <li class='tl-inverted' id="<?php echo $chron ->head ; ?>">
+                  <div class="tl-badge info"><?php echo $chronChild -> date ;?>
+                  </div><div class="tl-panel">
+                  <div class="tl-body">
+                               <?php if($chronChild -> eventgrp){
+
+                              foreach ($chronChild-> eventgrp -> children()  as $chronEventChild){ ?>
+
+                                  <p class="p-list"><?php echo $chronEventChild ;?> </p>
+                          <?php } ?>
+                     </div></div>
+
+                   <?php } else { ?>
+
+                    <p><?php echo $chronChild -> event ; ?></p>
+                   <?php } ?>
               </li>
 
 
-           <?php } else {  ?>
-             <li class='tl' id="<?php echo $chron ->head ; ?>"><div class="tl-badge info">
+           <?php  } else {  ?>
+
+                   <li class='tl' id="<?php echo $chron ->head ; ?>"><div class="tl-badge info">
                  <?php echo $chronChild -> date  ;?></div><div class="tl-panel">
-                 <div class="tl-body"><p>
-                     <?php echo $chronChild -> event ;?></p></div></div>
-             </li>
+               <div class="tl-body">
+               <?php if($chronChild -> eventgrp){
+
+                   foreach ($chronChild-> eventgrp -> children()  as $chronEvenChild){ ?>
+
+                       <p class="p-list"><?php echo $chronEvenChild ; ?></p>
+                    <?php }?>
+                   </div></div>
+
+               <?php } else { ?>
+
+                   <p><?php echo $chronChild -> event ; ?></p>
+
+                   <?php } ?>
+                   </li>
 
 
-           <?php } $i++;}}?>
+           <?php  } $i++;}}?>
              </ul>
            </div>
 
@@ -547,7 +613,7 @@
 	foreach ($xml->archdesc->dsc->c as $c){
 		$cAttr = $c->attributes();
 		$cLevel = $cAttr["level"];
-			if ($cLevel == 'file' || $cLevel == 'item'){?> 
+			if ($cLevel == 'file' || $cLevel == 'item' || $cLevel == 'otherlevel'){?> 
 				<div class="fileRow">
 					<?php foreach ($c->did->children() as $child){  ?>
 
@@ -573,7 +639,7 @@
                 <!--    <input type="checkbox" class="big-checkbox" id="<?php echo  "crtitm"."-".$collId."-".$component; ?>" value="<?php echo  $repository.substr(0,13)."..."."-".$collId."-".$component; ?>">
                 -->
                 </div>
-			<?php } elseif ($cLevel == 'series' || $cLevel == 'collection'){
+			<?php } elseif ($cLevel == 'series' || $cLevel == 'collection' || $cLevel == 'recordgrp'){
 					seriesLevel($cLevel, $c, $collId, $repository);
 			 }	
   } /* for each */
