@@ -154,14 +154,18 @@
         foreach($xml->archdesc->arrangement->children() as $p){
             if($p->getname() == 'p'){
                 $arrangement = $arrangement . $p . "<br />\n" ;
-                $arrangementlist = array();
-     		foreach($p->list->item as $child) {
-		        array_push($arrangementlist, $child->ref);
-           	}
+	        $arrangementlist = (isset($p->list)? $p->list : 'Unspecified');
+		if($arrangementlist != 'Unspecified'){
+                	$arrangementlist = array();
+     			foreach($p->list->item as $child) {
+		        	array_push($arrangementlist, $child->ref);
+           		}
+		}
             }
           }
         
     }
+
 
    // $relatedMaterialList = array();
     $relatedMaterialLink = array();
@@ -189,7 +193,16 @@
           }
         }
     }
-    
+   
+   $seperateMaterial = (isset($xml->archdesc->separatedmaterial)? $xml->archdesc->separatedmaterial : 'Unspecified');
+   if($seperateMaterial != 'Unspecified'){
+       foreach($xml->archdesc->separatedmaterial->children() as $p){
+           if($p->getname() == 'p'){
+               $seperateMaterial  = $seperateMaterial  . $p . "<br />\n" ;
+           }
+         }
+   }
+ 
     $componentList = (isset($xml->archdesc->dsc->c)? TRUE : FALSE);
     $digitalObject = (isset($xml->archdesc->did->daogrp)? TRUE : FALSE);
     $otherfindaids = (isset($xml->archdesc->otherfindaid->bibref->extptr)? $xml->archdesc->otherfindaid->bibref->extptr : FALSE);
@@ -438,10 +451,10 @@
         if($arrangement != 'Unspecified'){ ?>
           <label>Arrangement: </label><p><?php echo auto_link($arrangement, 'both', TRUE); ?></p>
            <ul>
-           <?php
+           <?php  if ($arrangementlist != 'Unspecified'){
   		 foreach($arrangementlist as $listitem){ 
 			echo "<li>$listitem</li>";
- 		}?>
+ 		}}?>
 	  </ul>
         <?php }
         if($relatedMaterial == TRUE){ ?>
@@ -453,6 +466,11 @@
             <a style='pointer-events: none; color: #000000;'><?php echo $relatedMaterialLink[$i][0]; ?></a></br>
           <?php }
           }}?>
+	<?php
+ 	if($seperateMaterial != 'Unspecified'){ ?>
+          <label>Separated Material: </label><p><?php echo auto_link($seperateMaterial, 'both', TRUE); ?></p>
+        <?php }?>
+
 </div>   
 
 <h4 data-toggle="collapse" data-target="#controlHeadings" class='infoAccordion accordion'>Controlled Access Headings<span class="glyphicon glyphicon-menu-right" style="float:right;"></span></h4>
