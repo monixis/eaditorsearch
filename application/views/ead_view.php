@@ -145,8 +145,13 @@
         foreach($xml->archdesc->arrangement->children() as $p){
             if($p->getname() == 'p'){
                 $arrangement = $arrangement . $p . "<br />\n" ;
+                $arrangementlist = array();
+     		foreach($p->list->item as $child) {
+		        array_push($arrangementlist, $child->ref);
+           	}
             }
-        }
+          }
+        
     }
 
    // $relatedMaterialList = array();
@@ -420,6 +425,12 @@
         <?php } 
         if($arrangement != 'Unspecified'){ ?>
           <label>Arrangement: </label><p><?php echo auto_link($arrangement, 'both', TRUE); ?></p>
+           <ul>
+           <?php
+  		 foreach($arrangementlist as $listitem){ 
+			echo "<li>$listitem</li>";
+ 		}?>
+	  </ul>
         <?php }
         if($relatedMaterial == TRUE){ ?>
           <label>Related Materials: </label><br/>
