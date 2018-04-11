@@ -97,11 +97,20 @@
 
     $copyright = (isset($xml->archdesc->userestrict->p)? $xml->archdesc->userestrict->p : 'Unspecified');
 
-    $acqInfo = (isset($xml->archdesc->acqinfo)? $xml->archdesc->acqinfo : 'Unspecified');
+    $acqInfo = (isset($xml->archdesc->descgrp->acqinfo)? $xml->archdesc->descgrp->acqinfo : 'Unspecified');
     if ($acqInfo != 'Unspecified'){
-        foreach($xml->archdesc->acqinfo->children() as $p){
+        foreach($xml->archdesc->descgrp->acqinfo->children() as $p){
             if($p->getname() == 'p'){
                 $acqInfo = $acqInfo . $p . "<br />\n" ;
+            }
+        }
+    }
+
+    $accruals  = (isset($xml->archdesc->descgrp->accruals)? $xml->archdesc->descgrp->accruals : 'Unspecified');
+    if ($accruals != 'Unspecified'){
+        foreach($xml->archdesc->descgrp->accruals->children() as $p){
+            if($p->getname() == 'p'){
+                $accruals = $accruals . $p . "<br />\n" ;
             }
         }
     }
@@ -413,6 +422,9 @@
         <?php }
         if($acqInfo != 'Unspecified'){ ?>
           <label>Acquisition Information: </label><p><?php echo auto_link($acqInfo, 'both', TRUE); ?></p>
+        <?php }
+        if($accruals != 'Unspecified'){ ?>
+          <label>Accruals and Additions: </label><p><?php echo auto_link($accruals, 'both', TRUE); ?></p>
         <?php }   
         if($prefCitation != 'Unspecified'){ ?>
           <label>Preferred Citation: </label><p><?php echo auto_link($prefCitation, 'both', TRUE); ?></p>
