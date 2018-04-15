@@ -183,8 +183,12 @@
         $('input#queryTag').val($('input#queryTag').val() + "fq=" + selectedTag);
         var queryTag = $('input#queryTag').val();
         searchTerm = searchTerm + queryTag;
-		// encoding string into UTF - 8 to carry all the required characters in the ajax request.
-		var searchTerm = encodeURIComponent(searchTerm);
+        var searchTerm = encodeURIComponent(searchTerm);
+        var searchTerm = searchTerm.replace(/\(/g,"%28");
+        var searchTerm = searchTerm.replace(/\)/g,"%29");
+
+        // encoding string into UTF - 8 to carry all the required characters in the ajax request.
+
 		// facet = 'NULL' indicates that we are not using the facet searching. In this case selected facets are dynamically attached to the keywords itself.
 		var facet = 'NULL';
         var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
