@@ -14,11 +14,9 @@ class eaditorsearch extends CI_Controller
 	 }
 
     public function index()
-    {
+    {  
         $date = date_default_timezone_set('US/Eastern');
-       // $this->load->model('repository_model');
-        //$data['keywords'] = $this->repository_model->getKeywords();
-        //$data["searchString"] = "";
+       
         if($this -> input -> get('key'))
             $data["key"] = $this -> input -> get('key');
         else
@@ -31,26 +29,24 @@ class eaditorsearch extends CI_Controller
         $this->load->view('search', $data);
     }
        
-  public function searchKeyWords($key)
+  public function searchKeyWords($key, $facet)
 	{
-        //$key = $this -> input -> get('key');
-        $subject_facet ="";
-        if($this -> input -> get('facet'))
-            $subject_facet = $this -> input -> get('facet');
         $key = trim($key);
-        //$key = str_replace(" ","%20", $key);
-        $key = str_replace("%2520","%20", $key);
-    	//$key = str_replace("&","%26", $key);
+        $key = str_replace("%2520","+", $key);
         $key = str_replace("fq%3D","&fq=", $key);
-
-        if($subject_facet != ""){
-            $resultsLink = "http://www.empireadc.org:8080/solr/eaditor-published/select?indent=on&q=".$subject_facet.':"'. $key .'"'."&wt=json&facet=true&facet.field=subject_facet&facet.field=agency_facet&facet.field=corpname_facet&facet.field=genreform_facet&facet.field=persname_facet&facet.field=language_facet&facet.field=century_num&facet.field=famname_facet&facet.field=geogname_facet&rows=200";
+        $key = str_replace("%252C","%2C", $key);
+        $key = str_replace("&#40;","%28", $key);
+        $key = str_replace("&#41;","%29", $key);
+       
+        if($facet != "NULL"){
+            $resultsLink = "http://www.empireadc.org:8080/solr/eaditor-published/select?indent=on&q=*:*&fq=".$facet.'%3A%22'. $key .'%22'."&wt=json&facet=true&facet.field=subject_facet&facet.field=agency_facet&facet.field=corpname_facet&facet.field=genreform_facet&facet.field=persname_facet&facet.field=language_facet&facet.field=century_num&facet.field=famname_facet&facet.field=geogname_facet&rows=200";
         }else{
             $resultsLink = "http://www.empireadc.org:8080/solr/eaditor-published/select?indent=on&q=". $key ."&wt=json&facet=true&facet.field=subject_facet&facet.field=agency_facet&facet.field=corpname_facet&facet.field=genreform_facet&facet.field=persname_facet&facet.field=language_facet&facet.field=century_num&facet.field=famname_facet&facet.field=geogname_facet&rows=200";
         }
+        //echo $resultsLink;
 	    $json = file_get_contents($resultsLink);
         $data['key'] = $key;
-        $data['facet'] = $subject_facet;
+        $data['facet'] = $facet;
         $data['results'] = json_decode($json);
         $this->load->view('results', $data);
      }
@@ -62,7 +58,39 @@ class eaditorsearch extends CI_Controller
         $this->load->view('ead_view', $data);
      }
 
-     public function reserve(){
+     public function browse()
+     {
+        $resultsLink = "http://www.empireadc.org:8080/solr/eaditor-published/select?indent=on&q=*:*&wt=json&facet=true&facet.field=agency_facet";
+        $json = file_get_contents($resultsLink);
+        $data['results'] = json_decode($json);
+        $this->load->view('browse', $data);
+     }
+
+     public function agency($key){ 
+        $data['key'] = $key ;
+        $data['facet'] = 'agency_facet';
+        $this->load->view('search', $data);
+     }
+
+    
+    /* public function agencyEADs($agencyKey){
+        $agencyKey = trim($agencyKey);
+        $agencyKey = str_replace("%2520","%20", $agencyKey);
+        $agencyKey = str_replace("fq%3D","&fq=", $agencyKey);
+        $agencyKey = str_replace("%252C","%2C", $agencyKey);
+        $resultsLink = "http://www.empireadc.org:8080/solr/eaditor-published/select?indent=on&q=*:*&fq=agency_facet".'%3A%22'. $agencyKey .'%22'."&wt=json&facet=true&facet.field=subject_facet&facet.field=agency_facet&facet.field=corpname_facet&facet.field=genreform_facet&facet.field=persname_facet&facet.field=language_facet&facet.field=century_num&facet.field=famname_facet&facet.field=geogname_facet&rows=200";
+       // echo $resultsLink;
+	    $json = file_get_contents($resultsLink);
+        //$data['key'] = $key;
+        //$data['facet'] = $subject_facet;
+        $data['results'] = json_decode($json);
+        $this->load->view('results', $data);
+     }
+
+   
+
+
+  /*   public function reserve(){
          $this->load->view('reserve');
      }
 
@@ -115,6 +143,6 @@ class eaditorsearch extends CI_Controller
        }else{
            echo 0;
        }
-   }
+   }*/
 }
 ?>

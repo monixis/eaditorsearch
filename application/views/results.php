@@ -1,10 +1,10 @@
 <!--script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script-->
 <meta charset="utf-8" xmlns="http://www.w3.org/1999/html">
- <script type="text/javascript" src="//beta.empireadc.org/js/jquery-ui.js"></script>
+<script type="text/javascript" src="<?php echo base_url("/js/jquery-ui.js"); ?>"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/list.pagination.js/0.1.1/list.pagination.min.js"></script>
-<script src="./js/jquery.easyPaginate.js"></script>
+<script src="<?php echo base_url("/js/jquery.easyPaginate.js"); ?>"></script>
 
 <style>
 	p.labelInfo {font-size: 10pt; margin-top: -10px;}
@@ -161,33 +161,37 @@
 		//User friendly display for selected facets
 		if(selectedFacet == "subject_facet")
 		{
-			selectedFacet = selectedTag.replace("subject_facet", "Subject");
+			selectedFacetDisplay = selectedTag.replace("subject_facet", "Subject");
 		}else if(selectedFacet == "agency_facet"){
-			selectedFacet = selectedTag.replace("agency_facet", "Agency");
+			selectedFacetDisplay = selectedTag.replace("agency_facet", "Agency");
 		}else if(selectedFacet == "corpname_facet"){
-			selectedFacet = selectedTag.replace("corpname_facet", "Organization");
+			selectedFacetDisplay = selectedTag.replace("corpname_facet", "Organization");
 		}else if(selectedFacet == "genreform_facet"){
-			selectedFacet = selectedTag.replace("genreform_facet", "Genre/Format");
+			selectedFacetDisplay = selectedTag.replace("genreform_facet", "Genre/Format");
 		}else if(selectedFacet == "persname_facet"){
-			selectedFacet = selectedTag.replace("persname_facet", "Person");
+			selectedFacetDisplay = selectedTag.replace("persname_facet", "Person");
 		}else if(selectedFacet == "century_num"){
-			selectedFacet = selectedTag.replace("century_num", "Date");
+			selectedFacetDisplay = selectedTag.replace("century_num", "Date");
 		}else if(selectedFacet == "famname_facet"){
-			selectedFacet = selectedTag.replace("famname_facet", "Family");
+			selectedFacetDisplay = selectedTag.replace("famname_facet", "Family");
 		}else if(selectedFacet == "geogname_facet"){
-			selectedFacet = selectedTag.replace("geogname_facet", "Place");
+			selectedFacetDisplay = selectedTag.replace("geogname_facet", "Place");
 		}else if(selectedFacet == "language_facet"){
-			selectedFacet = selectedTag.replace("language_facet", "Language");
+			selectedFacetDisplay = selectedTag.replace("language_facet", "Language");
 		}
-        $('#selectedFacet').append('<a href="#" class="remove" style="margin-left:10px;"><button class="taglist" id="'+ selectedTagId +'" style="border: 1px solid #cccccc; background: #eeeeee; padding: 5px; margin-right: 10px; margin-top: 5px;">'+ selectedFacet +' X</button></a>');
+        $('#selectedFacet').append('<a href="#" class="remove" style="margin-left:10px;"><button class="taglist" id="'+ selectedTagId +'" style="border: 1px solid #cccccc; background: #eeeeee; padding: 5px; margin-right: 10px; margin-top: 5px;">'+ selectedFacetDisplay +' X</button></a>');
         $('input#queryTag').val($('input#queryTag').val() + "fq=" + selectedTag);
         var queryTag = $('input#queryTag').val();
         searchTerm = searchTerm + queryTag;
-		//var searchTerm = searchTerm.replace(/ /g,"%20");
-		// encoding string into UTF - 8 to carry all the required characters in the ajax request.
-		var searchTerm = encodeURIComponent(searchTerm);
-		//var resultUrl = "<!--?php echo base_url("?c=eaditorsearch&m=searchKeyWords&key=")?>"+searchTerm;
-        var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm;
+        var searchTerm = encodeURIComponent(searchTerm);
+        var searchTerm = searchTerm.replace(/\(/g,"%28");
+        var searchTerm = searchTerm.replace(/\)/g,"%29");
+
+        // encoding string into UTF - 8 to carry all the required characters in the ajax request.
+
+		// facet = 'NULL' indicates that we are not using the facet searching. In this case selected facets are dynamically attached to the keywords itself.
+		var facet = 'NULL';
+        var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
 		NProgress.start();
         NProgress.configure({ showSpinner: true });
         $('#searchResults').load(resultUrl);
@@ -207,9 +211,10 @@
 		// encoding string into UTF - 8 to carry all the required characters in the ajax request.
 		var searchTerm = encodeURIComponent(searchTerm);
         NProgress.start();
-        NProgress.configure({ showSpinner: true });
+		NProgress.configure({ showSpinner: true });
+		var facet = 'NULL';
         //var resultUrl = "<!--?php echo base_url("?c=eaditorsearch&m=searchKeyWords&key=")?>"+searchTerm;
-        var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm;
+		var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
 		$('#searchResults').load(resultUrl);
         NProgress.done();
     });
