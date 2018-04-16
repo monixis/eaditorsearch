@@ -15,6 +15,7 @@
     $link = "https://www.empireadc.org/ead/". strtolower($collId) ."/id/".$eadId.".xml";
     $rdf = "https://www.empireadc.org/ead/". $collId ."/id/".$eadId.".rdf";
     $is_chron_available = false;
+    //$xml = simplexml_load_file($link);
     
     $reader = new XMLReader();
     $reader->open($link);
@@ -23,8 +24,7 @@
       if ($reader->nodeType == XMLReader::ELEMENT && $reader->name == 'ead') {  
         $doc = new DOMDocument('1.0', 'UTF-8');
         $xml = simplexml_import_dom($doc->importNode($reader->expand(),true));
-        //$xml = new SimpleXMLElement($reader->readOuterXML());  
-        //$xml = simplexml_load_file($link);
+
         $title = $xml->archdesc->did->unittitle;
         $repository = (isset($xml->archdesc->did->repository->corpname)? $xml->archdesc->did->repository->corpname : $xml->archdesc->did->repository);
         
@@ -59,6 +59,8 @@
             }
           }  
         }
+    
+        
     
         $location = (isset($xml->archdesc->did->physloc)? $xml->archdesc->did->physloc : 'Unspecified');
        
@@ -100,39 +102,40 @@
                 }
             }
         }
-    }
-
-    $copyright = (isset($xml->archdesc->userestrict->p)? $xml->archdesc->userestrict->p : 'Unspecified');
-
-    $acqInfo = (isset($xml->archdesc->descgrp->acqinfo)? $xml->archdesc->descgrp->acqinfo : 'Unspecified');
-    if ($acqInfo != 'Unspecified'){
-        foreach($xml->archdesc->descgrp->acqinfo->children() as $p){
-            if($p->getname() == 'p'){
-                $acqInfo = $acqInfo . $p . "<br />\n" ;
+    
+        $copyright = (isset($xml->archdesc->userestrict->p)? $xml->archdesc->userestrict->p : 'Unspecified');
+    
+        $acqInfo = (isset($xml->archdesc->descgrp->acqinfo)? $xml->archdesc->descgrp->acqinfo : 'Unspecified');
+        if ($acqInfo != 'Unspecified'){
+            foreach($xml->archdesc->descgrp->acqinfo->children() as $p){
+                if($p->getname() == 'p'){
+                    $acqInfo = $acqInfo . $p . "<br />\n" ;
+                }
             }
         }
-    }
-
-    $accruals  = (isset($xml->archdesc->descgrp->accruals)? $xml->archdesc->descgrp->accruals : 'Unspecified');
-    if ($accruals != 'Unspecified'){
-        foreach($xml->archdesc->descgrp->accruals->children() as $p){
-            if($p->getname() == 'p'){
-                $accruals = $accruals . $p . "<br />\n" ;
+    
+        $accruals  = (isset($xml->archdesc->descgrp->accruals)? $xml->archdesc->descgrp->accruals : 'Unspecified');
+        if ($accruals != 'Unspecified'){
+            foreach($xml->archdesc->descgrp->accruals->children() as $p){
+                if($p->getname() == 'p'){
+                    $accruals = $accruals . $p . "<br />\n" ;
+                }
             }
         }
-    }
-
-    $prefCitation = (isset($xml->archdesc->prefercite->p[1])? $xml->archdesc->prefercite->p[1] : 'Unspecified');
-
-    $histNote = (isset($xml->archdesc->bioghist)? $xml->archdesc->bioghist : 'Unspecified');
-    if ($histNote != 'Unspecified'){
-      $chronList = array();
-        foreach($xml->archdesc->bioghist->children() as $p){
-            if($p->getname() == 'p'){
-                $histNote = $histNote . $p . "<br /><br />\n" ;
-            }else if($p ->getname() == 'chronlist'){
-              $is_chron_available = true;
-
+    
+        $prefCitation = (isset($xml->archdesc->prefercite->p[1])? $xml->archdesc->prefercite->p[1] : 'Unspecified');
+    
+        $histNote = (isset($xml->archdesc->bioghist)? $xml->archdesc->bioghist : 'Unspecified');
+        if ($histNote != 'Unspecified'){
+          $chronList = array();
+            foreach($xml->archdesc->bioghist->children() as $p){
+                if($p->getname() == 'p'){
+                    $histNote = $histNote . $p . "<br /><br />\n" ;
+                }else if($p ->getname() == 'chronlist'){
+                  $is_chron_available = true;
+    
+                }
+    
             }
         }
     
@@ -153,44 +156,61 @@
                 }
             }
         }
-    }
-
-    $arrangement = (isset($xml->archdesc->arrangement)? $xml->archdesc->arrangement : 'Unspecified');
-    if($arrangement != 'Unspecified'){
-        foreach($xml->archdesc->arrangement->children() as $p){
-            if($p->getname() == 'p'){
-                $arrangement = $arrangement . $p . "<br />\n" ;
-	        $arrangementlist = (isset($p->list)? $p->list : 'Unspecified');
-		if($arrangementlist != 'Unspecified'){
-                	$arrangementlist = array();
-     			foreach($p->list->item as $child) {
-		        	array_push($arrangementlist, $child->ref);
-           		}
-		}
-            }
-          }
-        
-    }
-
-
-   // $relatedMaterialList = array();
-    $relatedMaterialLink = array();
-    $relatedMaterial = (isset($xml->archdesc->relatedmaterial)? TRUE : FALSE);
-    if($relatedMaterial == TRUE){
-      $relatedMaterialChild = (isset($xml->archdesc->relatedmaterial->p->extref)? TRUE : FALSE);
-        if($relatedMaterialChild == TRUE){
-            $linksAvailable = TRUE;
-            $i = 0;
-            foreach($xml->archdesc->relatedmaterial->p->extref as $rm)
-            {
-              $rmLinkAttr = $rm -> attributes('http://www.w3.org/1999/xlink');
-              $rmLink = $rmLinkAttr['href'];
-              $relatedMaterialLink[$i][0] = $rm;
-              $relatedMaterialLink[$i][1] = $rmLink;
-              $i = $i + 1;
+    
+        $arrangement = (isset($xml->archdesc->arrangement)? $xml->archdesc->arrangement : 'Unspecified');
+        if($arrangement != 'Unspecified'){
+            foreach($xml->archdesc->arrangement->children() as $p){
+                if($p->getname() == 'p'){
+                    $arrangement = $arrangement . $p . "<br />\n" ;
+              $arrangementlist = (isset($p->list)? $p->list : 'Unspecified');
+        if($arrangementlist != 'Unspecified'){
+                      $arrangementlist = array();
+               foreach($p->list->item as $child) {
+                  array_push($arrangementlist, $child->ref);
+                   }
+        }
+                }
+              }
+            
+        }
+    
+    
+       // $relatedMaterialList = array();
+        $relatedMaterialLink = array();
+        $relatedMaterial = (isset($xml->archdesc->relatedmaterial)? TRUE : FALSE);
+        if($relatedMaterial == TRUE){
+          $relatedMaterialChild = (isset($xml->archdesc->relatedmaterial->p->extref)? TRUE : FALSE);
+            if($relatedMaterialChild == TRUE){
+                $linksAvailable = TRUE;
+                $i = 0;
+                foreach($xml->archdesc->relatedmaterial->p->extref as $rm)
+                {
+                  $rmLinkAttr = $rm -> attributes('http://www.w3.org/1999/xlink');
+                  $rmLink = $rmLinkAttr['href'];
+                  $relatedMaterialLink[$i][0] = $rm;
+                  $relatedMaterialLink[$i][1] = $rmLink;
+                  $i = $i + 1;
+                }
+            }else{ //to deal with two variations in relatedmaterial encoding
+              $linksAvailable = FALSE;
+              $i = 0;
+              foreach($xml->archdesc->relatedmaterial->p as $rm)
+              {
+                $relatedMaterialLink[$i][0] = $rm;
+                $i = $i + 1;
+              }
             }
         }
-        
+       
+       $seperateMaterial = (isset($xml->archdesc->separatedmaterial)? $xml->archdesc->separatedmaterial : 'Unspecified');
+       if($seperateMaterial != 'Unspecified'){
+           foreach($xml->archdesc->separatedmaterial->children() as $p){
+               if($p->getname() == 'p'){
+                   $seperateMaterial  = $seperateMaterial  . $p . "<br />\n" ;
+               }
+             }
+       }
+     
         $componentList = (isset($xml->archdesc->dsc->c)? TRUE : FALSE);
         $digitalObject = (isset($xml->archdesc->did->daogrp)? TRUE : FALSE);
         $otherfindaids = (isset($xml->archdesc->otherfindaid->bibref->extptr)? $xml->archdesc->otherfindaid->bibref->extptr : FALSE);
@@ -208,39 +228,13 @@
           }
           $downloadLink = "https://www.empireadc.org/ead/uploads/". $collId ."/".$otherfindaidsAttr['href'];
         }
-    }
-   
-   $seperateMaterial = (isset($xml->archdesc->separatedmaterial)? $xml->archdesc->separatedmaterial : 'Unspecified');
-   if($seperateMaterial != 'Unspecified'){
-       foreach($xml->archdesc->separatedmaterial->children() as $p){
-           if($p->getname() == 'p'){
-               $seperateMaterial  = $seperateMaterial  . $p . "<br />\n" ;
-           }
-         }
-   }
- 
-    $componentList = (isset($xml->archdesc->dsc->c)? TRUE : FALSE);
-    $digitalObject = (isset($xml->archdesc->did->daogrp)? TRUE : FALSE);
-    $otherfindaids = (isset($xml->archdesc->otherfindaid->bibref->extptr)? $xml->archdesc->otherfindaid->bibref->extptr : FALSE);
-    if ($otherfindaids != FALSE){
-      $otherfindaidsAttr = $otherfindaids -> attributes('http://www.w3.org/1999/xlink');
-      $filename = $otherfindaidsAttr['href'];
-      $ext = pathinfo($filename, PATHINFO_EXTENSION);
-      $iconLink = 'https://www.empireadc.org/ead/ui/images/';
-      if ($ext == 'docx'){
-          $iconLink = $iconLink . 'word.png';
-      }else if ($ext == 'pdf'){
-        $iconLink = $iconLink . 'adobe.png';
-      }else if ($ext == 'xlsx'){
-        $iconLink = $iconLink . 'excel.png';
+        $dateRange = array();
+        foreach($xml->archdesc->did->unitdate as $x){
+          $dateValue = ucfirst($x['type']). ' Date: '.$x ;
+          array_push($dateRange, $dateValue);
+        }
       }
-      $downloadLink = "https://www.empireadc.org/ead/uploads/". $collId ."/".$otherfindaidsAttr['href'];
-    }
-    $dateRange = array();
-    foreach($xml->archdesc->did->unitdate as $x){
-      $dateValue = ucfirst($x['type']). ' Date: '.$x ;
-      array_push($dateRange, $dateValue);
-    }
+    } //while ends 
     ?>
 
     <style>
