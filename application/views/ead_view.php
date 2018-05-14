@@ -10,13 +10,41 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link rel="stylesheet" type="text/css" href="<?php echo base_url("/styles/main.css"); ?>"/>
   <link rel="stylesheet" type="text/css" href="<?php echo base_url("/styles/chronlogy.css"); ?>"/>
+  <style>
+    ul{list-style-type:none;}
+    li.Subseries{margin-left: 20px;}
+    #tocbutton {
+        visibility: hidden;
+      }
+    #tocResponsive {
+        display: none;
+      }
+    @media only screen and (max-width: 600px) {
+      #toc {
+       visibility: hidden;
+       margin-top: 30px;
+      }
+      #tocbutton {
+        visibility: visible;
+        position:absolute; 
+        top: 80px; 
+        left: 5%;
+        margin-top: 10px;
+      }
+     #tocResponsive {
+        display:block;
+        margin-top: 50px;
+      }
+    }
+  </style> 
+
   <?php
     $this->load->helper('url');
     $link = "https://www.empireadc.org/ead/". strtolower($collId) ."/id/".$eadId.".xml";
     $rdf = "https://www.empireadc.org/ead/". $collId ."/id/".$eadId.".rdf";
     $is_chron_available = false;
     //$xml = simplexml_load_file($link);
-    
+    $GLOBALS['tree'] = ' ';
     $reader = new XMLReader();
     $reader->open($link);
 
@@ -59,9 +87,7 @@
             }
           }  
         }
-    
-        
-    
+                
         $location = (isset($xml->archdesc->did->physloc)? $xml->archdesc->did->physloc : 'Unspecified');
        
         $languageList = array();
@@ -249,6 +275,7 @@
 <body>
 
 <?php 
+  
 	function seriesLevel($level, $obj, $collId , $repository){ //recursive function that creates placeholder for series and other sub levels
     $flag = 0;
     $component = 0;
@@ -256,14 +283,14 @@
 	?>
 		<div class="<?php echo $level; ?> seriesRow">
 					<?php
-						foreach ($obj->did->children() as $childObj){
+          	foreach ($obj->did->children() as $childObj){
 							if($childObj->getname() == 'unittitle'){
             					if(count($childObj) > 0){?>
             						<!--h4><?php echo $childObj->title; ?></h4>
                 				<h4><?php echo $childObj->title->emph; ?></h4-->
-                				<h4><?php echo ucfirst($level) . " " . $obj->did->unitid . ": " . $childObj->title . $childObj->title->emph . $childObj->emph; ?></h4>                        
+                        <h4 id = <?php echo ucfirst($level) . $obj->did->unitid;?> ><?php echo ucfirst($level) . " " . $obj->did->unitid . ": " . $childObj->title . $childObj->title->emph . $childObj->emph; ?></h4>                        
            						<?php }else{?>
-           							<h4><?php echo ucfirst($level) . " " . $obj->did->unitid . ": " . $childObj; ?></h4>
+           							<h4 id = <?php echo ucfirst($level) . $obj->did->unitid;?> ><?php echo ucfirst($level) . " " . $obj->did->unitid . ": " . $childObj; ?></h4>
            						<?php }
           					}elseif($childObj->getname() == 'unitdate'){?>
           						<p><?php echo ucfirst($childObj['type']).' Date: '.$childObj; ?></p><?php
@@ -272,7 +299,11 @@
           					}?>
           			<?php } ?>
           			<p style="line-height: 24px;"><?php echo isset($obj->scopecontent->p)?$obj->scopecontent->p : '' ;?></p>	
-          			
+
+                <?php
+                  $GLOBALS['tree'] = $GLOBALS['tree'] . '<li class='. ucfirst($level) . '><a href='."#" . ucfirst($level) . $obj->did->unitid . ' class="tocLink">' .  ucfirst($level) . " " . $obj->did->unitid . ": " . $obj->did->unittitle . '</a></li>';
+                ?>   
+
           			<!-- Check if this series has children levels -->
           			<?php
           			foreach ($obj->children() as $grandchildObj){
@@ -282,7 +313,7 @@
 								     $cLevel1 = $cAttr1["level"];
 
 									     if($cLevel1 == 'otherlevel' || $cLevel1 == 'subseries' || $cLevel1 == 'series'){
-									        $flag = 1;
+                          $flag = 1;
                           seriesLevel($cLevel1, $grandchildObj, $collId, $repository);
                         }elseif($cLevel1 == 'file'){
                           $fileLevel = 1;
@@ -364,109 +395,88 @@
   <div class="row content">
     <div class="col-sm-2 sidenav">
 		<a href='<?php echo base_url( ); ?>'><img src='https://www.empireadc.org/sites/www.empireadc.org/files/ead_logo.gif' style='width:220px; margin-top: -75px'/></a>
-      <!--p><a href="#">Link</a></p>
-      <p><a href="#">Link</a></p>
-      <p><a href="#">Link</a></p-->
     </div>
     <div class="col-sm-8 text-left">
-
-
-<div id="eadInfo" style="margin-bottom: 30px;">
-       <h1><span property="dcterms:title"><?php echo $title; ?></span</h1>
-       <a class="searchTerm" style="font-style: italic" href="#"><h4><?php echo $repository; ?></h4></a>
+    <h1><span property="dcterms:title"><?php echo $title; ?></span></h1>      
+     <div id="tocResponsive"></div>     
+     <div id="eadInfo" style="margin-bottom: 30px;">
+          
+       <!--if($eadId == TRUE){ ?>
+          <label>EAD Id:</label><p><span property="dcterms:identifier"><!--?php echo $eadId; ?></span></p>
+       <--?php } */?> -->
+       
+       <label>Repository:</label><a class="searchTerm" style="font-style: italic" href="#"><p style="width: 230px;"><?php echo $repository; ?></p></a>
        <?php if($address == TRUE){
          foreach($addressline as $a){ ?>
             <h5 style="font-style: italic"><?php echo $a; ?></h5>
-       <?php }}?>
-       <h5><a href='<?php echo $rURL; ?>' style='font-size: 15px' target="_blank"><?php echo $rURL; ?></a></h5>    
-		<h4>Output formats:</h4>
-		 <a href='<?php echo $link; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-custm" >XML</button></a>
-     <a href='<?php echo $rdf; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-custm" >RDF/XML</button> </a>
-</div>
+       <?php }}
 
-<h4 data-toggle="collapse" data-target="#descId" class='infoAccordion accordion'>Descriptive Identification  <span class="glyphicon glyphicon-menu-right" style="float:right;"></span></h4>
-<div id="descId" class="collapse">
-       <label>Repository: </label><p><a class="searchTerm" href="#"><?php echo $repository; ?></a></p>
-        <?php if($address == TRUE){ ?>
-          <label>Address: </label>
-         <?php foreach($addressline as $a){ ?>
-            <h5 style="font-style: italic"><?php echo $a; ?></h5>
-       <?php }}?>
-        <?php foreach ($dateRange as $y){ ?>
-          <label>Date: </label>
-          <p><?php echo $y; ?></p>
-        <?php }
-  
-        if($extent != 'Unspecified'){ 
+      foreach ($dateRange as $y){ ?>
+        <label>Dates: </label>
+        <p><?php echo $y; ?></p>
+      <?php }
+
+      foreach ($creatorList as $c){ ?>
+        <label>Creator: </label>
+        <p><span property="dcterms:creator"><a href="#" id="persname_facet" class="controlledHeader"><?php echo $c; ?></a></span></p>
+      <?php }
+     
+      if($extent != 'Unspecified'){ 
          foreach ($extent as $y){
          ?>
-          <label>Extent: </label><p><span property="dcterms:extent"><?php echo $y; ?></span></p>
+          <label>Size: </label><p><span property="dcterms:extent"><?php echo $y; ?></span></p>
         <?php }} ?>
-        <?php 
-          foreach ($creatorList as $c){ ?>
-          <label>Creator: </label>
-          <p><span property="dcterms:creator"><a href="#" id="persname_facet" class="controlledHeader"><?php echo $c; ?></a></span></p>
-        <?php }
-
-        if($location != 'Unspecified'){ ?>
-        <label>Location: </label><p><?php echo $location; ?></p>
-        <?php } ?>
 
         <label>Language: </label>
-        <?php foreach ($languageList as $l){ ?>
-          <p><?php echo $l; ?></p>
-        <?php } ?>
-        <?php if($eadId == TRUE){ ?>
-          <label>EmpireADC ID: </label>
-            <p><span property="dcterms:identifier"><?php echo $eadId; ?></span></p>
-       <?php }
+      
+      <?php foreach ($languageList as $l){ ?>
+         <p><?php echo $l; ?></p>
+      <?php } ?>      
+      <h5><a href='<?php echo $rURL; ?>' style='font-size: 15px' target="_blank"><?php echo $rURL; ?></a></h5>    
 
-      if($abstract != 'Unspecified'){ ?>
-        <label>Abstract: </label><p><span property="dcterms:abstract"><?php echo auto_link($abstract, 'both', TRUE); ?></span></p>
-       <?php } ?> 
-
-</div>
-
-<h4 data-toggle="collapse" data-target="#adminInfo" class='infoAccordion accordion'>Administrative Information<span class="glyphicon glyphicon-menu-right" style="float:right;"></span></h4>
-<div id="adminInfo" class="collapse">
+      <?php if($abstract != 'Unspecified'){ ?>
+        <label>Abstract:</label><p><span property="dcterms:abstract"><?php echo auto_link($abstract, 'both', TRUE); ?></span></p>
+      <?php } ?>
+               
+  </div>
+  
+<h4 data-toggle="collapse" data-target="#descId" class='infoAccordion accordion'>Collection Details<span class="glyphicon glyphicon-menu-right" style="float:right;"></span></h4>
+<div id="descId" class="collapse">
         <?php if($processInfo != 'Unspecified'){ ?>
           <label>Processing Information: </label><p><?php echo auto_link($processInfo, 'both', TRUE); ?></p>
-        <?php }       
-
-        if($access != 'Unspecified'){ ?>
-          <label>Access: </label><p><?php echo auto_link($access, 'both', TRUE); ?></p>
-        <?php }
-        if($prefercite != 'Unspecified'){ ?>
-          <label>Preferred Citation: </label><p><?php echo auto_link($prefercite, 'both', TRUE); ?></p>
-        <?php }
-
-        if($copyright != 'Unspecified'){ ?>
-          <label>Copyright: </label><p><?php echo auto_link($copyright, 'both', TRUE); ?></p>
-        <?php }
+        <?php }   
+        
         if($acqInfo != 'Unspecified'){ ?>
           <label>Acquisition Information: </label><p><?php echo auto_link($acqInfo, 'both', TRUE); ?></p>
         <?php }
-        if($accruals != 'Unspecified'){ ?>
-          <label>Accruals and Additions: </label><p><?php echo auto_link($accruals, 'both', TRUE); ?></p>
-        <?php }   
-        if($prefCitation != 'Unspecified'){ ?>
-          <label>Preferred Citation: </label><p><?php echo auto_link($prefCitation, 'both', TRUE); ?></p>
-        <?php }  
+
+        if($location != 'Unspecified'){ ?>
+          <label>Location: </label><p><?php echo $location; ?></p>
+        <?php }
+
         if($histNote != 'Unspecified'){ ?>
           <label>Historical Note: </label><p><?php echo auto_link($histNote, 'both', TRUE); ?></p>
-        <?php }  
+        <?php }
+
         if($scopeContent != 'Unspecified'){ ?>
           <label>Scope and Content: </label><p><?php echo auto_link($scopeContent, 'both', TRUE); ?></p>
         <?php } 
+        
         if($arrangement != 'Unspecified'){ ?>
           <label>Arrangement: </label><p><?php echo auto_link($arrangement, 'both', TRUE); ?></p>
-           <ul>
-           <?php  if ($arrangementlist != 'Unspecified'){
-  		 foreach($arrangementlist as $listitem){ 
-			echo "<li>$listitem</li>";
- 		}}?>
-	  </ul>
+          <ul>
+            <?php  if ($arrangementlist != 'Unspecified'){
+                foreach($arrangementlist as $listitem){ 
+                    echo "<li>$listitem</li>";
+                }
+              }?>
+            </ul>
+        <?php }      
+
+        if($seperateMaterial != 'Unspecified'){ ?>
+          <label>Separated Material: </label><p><?php echo auto_link($seperateMaterial, 'both', TRUE); ?></p>
         <?php }
+        
         if($relatedMaterial == TRUE){ ?>
           <label>Related Materials: </label><br/>
           <?php for($i=0 ; $i < sizeof($relatedMaterialLink) ; $i ++){
@@ -475,15 +485,28 @@
           <?php }else{ ?>
             <a style='pointer-events: none; color: #000000;'><?php echo $relatedMaterialLink[$i][0]; ?></a></br>
           <?php }
-          }}?>
-	<?php
- 	if($seperateMaterial != 'Unspecified'){ ?>
-          <label>Separated Material: </label><p><?php echo auto_link($seperateMaterial, 'both', TRUE); ?></p>
-        <?php }?>
+        }}
+       
+        if($accruals != 'Unspecified'){ ?>
+          <label>Accruals and Additions: </label><p><?php echo auto_link($accruals, 'both', TRUE); ?></p>
+        <?php } ?> 
+</div>
 
+<h4 data-toggle="collapse" data-target="#adminInfo" class='infoAccordion accordion'>Collection Access &amp; Use<span class="glyphicon glyphicon-menu-right" style="float:right;"></span></h4>
+<div id="adminInfo" class="collapse">      
+        <?php      
+        if($access != 'Unspecified'){ ?>
+          <label>Access: </label><p><?php echo auto_link($access, 'both', TRUE); ?></p>
+        <?php }
+        if($copyright != 'Unspecified'){ ?>
+          <label>Copyright: </label><p><?php echo auto_link($copyright, 'both', TRUE); ?></p>
+        <?php }
+        if($prefercite != 'Unspecified'){ ?>
+          <label>Preferred Citation: </label><p><?php echo auto_link($prefercite, 'both', TRUE); ?></p>
+        <?php } ?>
 </div>   
 
-<h4 data-toggle="collapse" data-target="#controlHeadings" class='infoAccordion accordion'>Controlled Access Headings<span class="glyphicon glyphicon-menu-right" style="float:right;"></span></h4>
+<h4 data-toggle="collapse" data-target="#controlHeadings" class='infoAccordion accordion'>Collection Subjects &amp; Formats<span class="glyphicon glyphicon-menu-right" style="float:right;"></span></h4>
 <div id="controlHeadings" class="collapse">
          <?php 
          $controlledAccess = (isset($xml->archdesc->controlaccess)? TRUE : FALSE);
@@ -703,9 +726,22 @@ else{?>
 	<?php	
 }
 ?>
-				</div><!-- componentList -->
+		</div><!-- componentList -->
 
-    </div></br></br>
+    <!-- Dynamic table of contents based on series and subseries -->
+      <?php if($GLOBALS['tree'] != ' ') { ?>
+        <button id="tocbutton" type="button" class="btn btn-default">Series in this Collection:</button> 
+          <div id='toc' style='position:absolute; top: 70px; right: 0%; width: 370px; height: 290px; overflow-y: auto;'>
+            <label>Series in this Collection:</label>
+            <?php echo '<ul id="tree">' . $GLOBALS['tree'] . '</ul>'; ?>
+          </div>  
+      <?php } ?> 
+    
+    <h4><label>Output formats:</label></h4>
+		    <a href='<?php echo $link; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-custm" >XML</button></a>
+        <a href='<?php echo $rdf; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-custm" >RDF/XML</button> </a>
+    </div>
+     </br></br>
     <!--div id="cart" style="visibility:hidden;">
           <div align="right">
           </div>
@@ -774,8 +810,14 @@ else{?>
         }
       }
     }
+
  $('h4.infoAccordion').click(function(){
   $(this).find('span').toggleClass('glyphicon-menu-right').toggleClass('glyphicon-menu-down');
  });
+
+ $('button#tocbutton').click(function(){
+    $('#tocResponsive').html('<?php echo '<ul id="tree">' . $GLOBALS['tree'] . '</ul>'; ?>');
+ });
+
 </script>
 </html>
