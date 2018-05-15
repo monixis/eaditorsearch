@@ -13,27 +13,16 @@
   <style>
     ul{list-style-type:none;}
     li.Subseries{margin-left: 20px;}
-    #tocbutton {
-        visibility: hidden;
-      }
-    #tocResponsive {
+     #tocResponsive {
         display: none;
       }
     @media only screen and (max-width: 600px) {
       #toc {
-       visibility: hidden;
-       margin-top: 30px;
+        visibility: hidden; 
       }
-      #tocbutton {
-        visibility: visible;
-        position:absolute; 
-        top: 80px; 
-        left: 5%;
-        margin-top: 10px;
-      }
-     #tocResponsive {
+      #tocResponsive {
         display:block;
-        margin-top: 50px;
+        margin-top: 30px;
       }
     }
   </style> 
@@ -44,6 +33,7 @@
     $rdf = "https://www.empireadc.org/ead/". $collId ."/id/".$eadId.".rdf";
     $is_chron_available = false;
     //$xml = simplexml_load_file($link);
+   //Global variable to create the table of contents
     $GLOBALS['tree'] = ' ';
     $reader = new XMLReader();
     $reader->open($link);
@@ -268,8 +258,6 @@
             list-style:disc outside none;
             display:list-item;
         }
-
-
     </style>
 </head>
 <body>
@@ -280,6 +268,7 @@
     $flag = 0;
     $component = 0;
     $fileLevel = 0;
+    $titleInfo = ' ';
 	?>
 		<div class="<?php echo $level; ?> seriesRow">
 					<?php
@@ -301,7 +290,14 @@
           			<p style="line-height: 24px;"><?php echo isset($obj->scopecontent->p)?$obj->scopecontent->p : '' ;?></p>	
 
                 <?php
-                  $GLOBALS['tree'] = $GLOBALS['tree'] . '<li class='. ucfirst($level) . '><a href='."#" . ucfirst($level) . $obj->did->unitid . ' class="tocLink">' .  ucfirst($level) . " " . $obj->did->unitid . ": " . $obj->did->unittitle . '</a></li>';
+                  if ($obj->did->unittitle != ''){
+                    $titleInfo = $obj->did->unittitle;
+                  }else{
+                    $titleInfo = $obj->did->unittitle->emph; 
+                  }
+                  $GLOBALS['tree'] = $GLOBALS['tree'] . '<li class="'. ucfirst($level) . '"><a href="' . '#' . ucfirst($level) . $obj->did->unitid . '"' . ' class="tocLink">' .  ucfirst($level) . " " . $obj->did->unitid . ": " . $obj->did->unittitle . $obj->did->unittitle->emph . '</a></li>';
+                  $GLOBALS['tree'] = str_replace("'", "&#039;", $GLOBALS['tree']);
+                  $GLOBALS['tree'] = str_replace("&", "&amp;", $GLOBALS['tree']);
                 ?>   
 
           			<!-- Check if this series has children levels -->
@@ -397,7 +393,7 @@
 		<a href='<?php echo base_url( ); ?>'><img src='https://www.empireadc.org/sites/www.empireadc.org/files/ead_logo.gif' style='width:220px; margin-top: -75px'/></a>
     </div>
     <div class="col-sm-8 text-left">
-    <h1><span property="dcterms:title"><?php echo $title; ?></span></h1>      
+    <h1><span property="dcterms:title"><?php echo $title; ?></span></h1>     
      <div id="tocResponsive"></div>     
      <div id="eadInfo" style="margin-bottom: 30px;">
           
@@ -730,7 +726,7 @@ else{?>
 
     <!-- Dynamic table of contents based on series and subseries -->
       <?php if($GLOBALS['tree'] != ' ') { ?>
-        <button id="tocbutton" type="button" class="btn btn-default">Series in this Collection:</button> 
+        <button id="tocbutton" type="button" class="btn btn-default" style="display: hidden;">Series in this Collection:</button> 
           <div id='toc' style='position:absolute; top: 70px; right: 0%; width: 370px; height: 290px; overflow-y: auto;'>
             <label>Series in this Collection:</label>
             <?php echo '<ul id="tree">' . $GLOBALS['tree'] . '</ul>'; ?>
@@ -815,8 +811,8 @@ else{?>
   $(this).find('span').toggleClass('glyphicon-menu-right').toggleClass('glyphicon-menu-down');
  });
 
- $('button#tocbutton').click(function(){
-    $('#tocResponsive').html('<?php echo '<ul id="tree">' . $GLOBALS['tree'] . '</ul>'; ?>');
+ $('button#tocbutton').toggle(function(){
+    $('#tocResponsive').html('<label>Series in this Collection: </label><?php echo '<ul id="tree">' . $GLOBALS['tree'] . '</ul>'; ?>');
  });
 
 </script>
