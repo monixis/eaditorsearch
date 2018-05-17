@@ -10,6 +10,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link rel="stylesheet" type="text/css" href="<?php echo base_url("/styles/main.css"); ?>"/>
   <link rel="stylesheet" type="text/css" href="<?php echo base_url("/styles/chronlogy.css"); ?>"/>
+  <link rel="stylesheet" type="text/css" href="<?php echo base_url("/styles/768.css"); ?>"/>  
   <style>
     ul{list-style-type:none;}
     li.Subseries{margin-left: 20px;}
@@ -393,7 +394,7 @@
 		<a href='<?php echo base_url( ); ?>'><img src='https://www.empireadc.org/sites/www.empireadc.org/files/ead_logo.gif' style='width:220px; margin-top: -75px'/></a>
     </div>
     <div class="col-sm-8 text-left">
-    <h1><span property="dcterms:title"><?php echo $title; ?></span></h1>     
+    <div class="reptitle"><h1><span property="dcterms:title"><?php echo $title; ?></span></h1></div>     
      <div id="tocResponsive"></div>     
      <div id="eadInfo" style="margin-bottom: 30px;">
           
@@ -731,8 +732,8 @@ else{?>
 
     <!-- Dynamic table of contents based on series and subseries -->
       <?php if($GLOBALS['tree'] != ' ') { ?>
-        <button id="tocbutton" type="button" class="btn btn-default" style="display: hidden;">Series in this Collection:</button> 
-          <div id='toc' style='position:absolute; top: 70px; right: 0%; width: 370px; height: 290px; overflow-y: auto;'>
+        <button id="tocbutton" type="button" class="btn btn-default" style="display: hidden;">Series in this Collection:</button>
+          <div id='toc' style='position:absolute; width: 370px; height: 290px; overflow-y: auto;' 
             <label>Series in this Collection:</label>
             <?php echo '<ul id="tree">' . $GLOBALS['tree'] . '</ul>'; ?>
           </div>  

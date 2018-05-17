@@ -1,0 +1,13 @@
+/*-------------------------------------------*/
+/* #Tablet (Portrait)*/
+/*-------------------------------------------*/
+@media only screen and (min-width: 768px) and (max-width: 1365px) {
+
+.reptitle  {margin-top:40px; }
+
+#toc {
+  right: -21%;
+  top: 10%;
+}
+
+}
