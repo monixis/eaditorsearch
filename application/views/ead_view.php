@@ -45,7 +45,7 @@
 
         $title = $xml->archdesc->did->unittitle;
         $repository = (isset($xml->archdesc->did->repository->corpname)? $xml->archdesc->did->repository->corpname : $xml->archdesc->did->repository);
-        
+        $subarea = (isset($xml->archdesc->did->repository->subarea)? $xml->archdesc->did->repository->subarea : $xml->archdesc->did->subarea);
         $rURL = " ";
         $repo = (isset($xml->archdesc->did->repository->extptr)? TRUE : FALSE);
         if ($repo == TRUE){
@@ -401,12 +401,18 @@
           <label>EAD Id:</label><p><span property="dcterms:identifier"><!--?php echo $eadId; ?></span></p>
        <--?php } */?> -->
        
-       <label>Repository:</label><a class="searchTerm" style="font-style: italic" href="#"><p style="width: 230px;"><?php echo $repository; ?></p></a>
+       <label>Repository:</label><a class="searchTerm" style="font-style: italic" href="#"><p style="width: 230px;"><?php echo $repository; ?></a><br><?php echo $subarea; ?></p>
        <?php if($address == TRUE){
          foreach($addressline as $a){ ?>
             <h5 style="font-style: italic"><?php echo $a; ?></h5>
-       <?php }}
-
+       <?php }}?>
+       <?php 
+       #Check if URL is missing the http and add it if is missing 
+       $add= strpos($rURL,'http://') !== false ? '' : 'http://'; 
+       $add .=$rURL; 
+       ?>
+       <h5><a href='<?php echo $add; ?>' style='font-size: 15px' target="_blank"><?php echo $rURL; ?></a></h5>
+      <?php
       foreach ($dateRange as $y){ ?>
         <label>Dates: </label>
         <p><?php echo $y; ?></p>
@@ -428,7 +434,6 @@
       <?php foreach ($languageList as $l){ ?>
          <p><?php echo $l; ?></p>
       <?php } ?>      
-      <h5><a href='<?php echo $rURL; ?>' style='font-size: 15px' target="_blank"><?php echo $rURL; ?></a></h5>    
 
       <?php if($abstract != 'Unspecified'){ ?>
         <label>Abstract:</label><p><span property="dcterms:abstract"><?php echo auto_link($abstract, 'both', TRUE); ?></span></p>
