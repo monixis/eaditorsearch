@@ -10,6 +10,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link rel="stylesheet" type="text/css" href="<?php echo base_url("/styles/main.css"); ?>"/>
   <link rel="stylesheet" type="text/css" href="<?php echo base_url("/styles/chronlogy.css"); ?>"/>
+  <link rel="stylesheet" type="text/css" href="<?php echo base_url("/styles/768.css"); ?>"/>  
   <style>
     ul{list-style-type:none;}
     li.Subseries{margin-left: 20px;}
@@ -45,7 +46,7 @@
 
         $title = $xml->archdesc->did->unittitle;
         $repository = (isset($xml->archdesc->did->repository->corpname)? $xml->archdesc->did->repository->corpname : $xml->archdesc->did->repository);
-        
+        $subarea = (isset($xml->archdesc->did->repository->subarea)? $xml->archdesc->did->repository->subarea : $xml->archdesc->did->subarea);
         $rURL = " ";
         $repo = (isset($xml->archdesc->did->repository->extptr)? TRUE : FALSE);
         if ($repo == TRUE){
@@ -392,7 +393,7 @@
 		<a href='<?php echo base_url( ); ?>'><img src='https://www.empireadc.org/sites/www.empireadc.org/files/ead_logo.gif' style='width:220px; margin-top: -75px'/></a>
     </div>
     <div class="col-sm-8 text-left">
-    <h1><span property="dcterms:title"><?php echo $title; ?></span></h1>     
+    <div class="reptitle"><h1><span property="dcterms:title"><?php echo $title; ?></span></h1></div>     
      <div id="tocResponsive"></div>     
      <div id="eadInfo" style="margin-bottom: 30px;">
           
@@ -400,7 +401,7 @@
           <label>EAD Id:</label><p><span property="dcterms:identifier"><!--?php echo $eadId; ?></span></p>
        <--?php } */?> -->
        
-       <label>Repository:</label><a class="searchTerm" style="font-style: italic" href="#"><p style="width: 230px;"><?php echo $repository; ?></p></a>
+       <label>Repository:</label><a class="searchTerm" style="font-style: italic" href="#"><p style="width: 230px;"><?php echo $repository; ?></a><br><?php echo $subarea; ?></p>
        <?php if($address == TRUE){
          foreach($addressline as $a){ ?>
             <h5 style="font-style: italic"><?php echo $a; ?></h5>
@@ -410,6 +411,18 @@
       <?php foreach ($dateRange as $y){ ?>
           <p><?php echo $y; ?></p>
       <?php } ?>
+       <?php }}?>
+       <?php 
+       #Check if URL is missing the http and add it if is missing 
+       $add= strpos($rURL,'http://') !== false ? '' : 'http://'; 
+       $add .=$rURL; 
+       ?>
+       <h5><a href='<?php echo $add; ?>' style='font-size: 15px' target="_blank"><?php echo $rURL; ?></a></h5>
+      <?php
+      foreach ($dateRange as $y){ ?>
+        <label>Dates: </label>
+        <p><?php echo $y; ?></p>
+      <?php }
 
       <label>Creator: </label>  
       <?php foreach ($creatorList as $c){ ?>
@@ -427,7 +440,6 @@
       <?php foreach ($languageList as $l){ ?>
          <p><?php echo $l; ?></p>
       <?php } ?>      
-      <h5><a href='<?php echo $rURL; ?>' style='font-size: 15px' target="_blank"><?php echo $rURL; ?></a></h5>    
 
       <?php if($abstract != 'Unspecified'){ ?>
         <label>Abstract:</label><p><span property="dcterms:abstract"><?php echo auto_link($abstract, 'both', TRUE); ?></span></p>
@@ -725,8 +737,8 @@ else{?>
 
     <!-- Dynamic table of contents based on series and subseries -->
       <?php if($GLOBALS['tree'] != ' ') { ?>
-        <button id="tocbutton" type="button" class="btn btn-default" style="display: hidden;">Series in this Collection:</button> 
-          <div id='toc' style='position:absolute; top: 70px; right: 0%; width: 370px; height: 290px; overflow-y: auto;'>
+        <button id="tocbutton" type="button" class="btn btn-default" style="display: hidden;">Series in this Collection:</button>
+          <div id='toc' style='position:absolute; width: 370px; height: 290px; overflow-y: auto;' 
             <label>Series in this Collection:</label>
             <?php echo '<ul id="tree">' . $GLOBALS['tree'] . '</ul>'; ?>
           </div>  
