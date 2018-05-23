@@ -297,7 +297,6 @@
                   }
                   $GLOBALS['tree'] = $GLOBALS['tree'] . '<li class="'. ucfirst($level) . '"><a href="' . '#' . ucfirst($level) . $obj->did->unitid . '"' . ' class="tocLink">' .  ucfirst($level) . " " . $obj->did->unitid . ": " . $obj->did->unittitle . $obj->did->unittitle->emph . '</a></li>';
                   $GLOBALS['tree'] = str_replace("'", "&#039;", $GLOBALS['tree']);
-                  $GLOBALS['tree'] = str_replace("&", "&amp;", $GLOBALS['tree']);
                 ?>   
 
           			<!-- Check if this series has children levels -->
@@ -405,16 +404,16 @@
        <?php if($address == TRUE){
          foreach($addressline as $a){ ?>
             <h5 style="font-style: italic"><?php echo $a; ?></h5>
-       <?php }}
+       <?php }} ?>
 
-      foreach ($dateRange as $y){ ?>
-        <label>Dates: </label>
-        <p><?php echo $y; ?></p>
-      <?php }
+      <label>Dates: </label>
+      <?php foreach ($dateRange as $y){ ?>
+          <p><?php echo $y; ?></p>
+      <?php } ?>
 
-      foreach ($creatorList as $c){ ?>
-        <label>Creator: </label>
-        <p><span property="dcterms:creator"><a href="#" id="persname_facet" class="controlledHeader"><?php echo $c; ?></a></span></p>
+      <label>Creator: </label>  
+      <?php foreach ($creatorList as $c){ ?>
+            <p><span property="dcterms:creator"><a href="#" id="persname_facet" class="controlledHeader"><?php echo $c; ?></a></span></p>
       <?php }
      
       if($extent != 'Unspecified'){ 
