@@ -264,7 +264,7 @@ $('.element-item').click(function(){
 			var searchTerm = searchTerm.replace(/ /g,"%20");		*/
 	var searchTerm = encodeURIComponent(searchTerm);
 	var resultUrl = "<?php echo base_url("/eaditorsearch/agency")?>" + "/" + searchTerm;
-	window.open(resultUrl);
+	window.open(resultUrl, '_self');
 });
 </script>
 </html>

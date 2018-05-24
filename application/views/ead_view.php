@@ -405,24 +405,18 @@
        <?php if($address == TRUE){
          foreach($addressline as $a){ ?>
             <h5 style="font-style: italic"><?php echo $a; ?></h5>
-       <?php }} ?>
-
-      <label>Dates: </label>
-      <?php foreach ($dateRange as $y){ ?>
-          <p><?php echo $y; ?></p>
-      <?php } ?>
-       <?php }}?>
-       <?php 
-       #Check if URL is missing the http and add it if is missing 
+       <?php }} 
+      #Check if URL is missing the http and add it if is missing 
        $add= strpos($rURL,'http://') !== false ? '' : 'http://'; 
        $add .=$rURL; 
        ?>
        <h5><a href='<?php echo $add; ?>' style='font-size: 15px' target="_blank"><?php echo $rURL; ?></a></h5>
-      <?php
-      foreach ($dateRange as $y){ ?>
-        <label>Dates: </label>
-        <p><?php echo $y; ?></p>
-      <?php }
+      
+       <label>Dates: </label>
+       <?php
+       foreach ($dateRange as $y){ ?>
+          <p><?php echo $y; ?></p>
+      <?php } ?>
 
       <label>Creator: </label>  
       <?php foreach ($creatorList as $c){ ?>
@@ -738,7 +732,7 @@ else{?>
     <!-- Dynamic table of contents based on series and subseries -->
       <?php if($GLOBALS['tree'] != ' ') { ?>
         <button id="tocbutton" type="button" class="btn btn-default" style="display: hidden;">Series in this Collection:</button>
-          <div id='toc' style='position:absolute; width: 370px; height: 290px; overflow-y: auto;' 
+          <div id='toc' style='position:absolute; top: 70px; width: 370px; height: 290px; overflow-y: auto;'>
             <label>Series in this Collection:</label>
             <?php echo '<ul id="tree">' . $GLOBALS['tree'] . '</ul>'; ?>
           </div>  

@@ -69,8 +69,8 @@
 										</button> </span>
 								</div>
 									<!--p id="message" style="display: none;color: #B31B1B"> Please enter any text or word to search</p-->
-									<button class="btn btn-default btn-md" style='margin-top: 5px;'><a href='<?php echo base_url("/eaditorsearch/browse")?>'>Browse</a></button>
-									<a href='https://drive.google.com/open?id=1hsFy_xJ9uIP_wkRZjityXVdWVHSQF3X9eVALv2sMEo4' target='_blank' style='float:right;'>Feedback/Issue</a>
+									<a href='<?php echo base_url("/eaditorsearch/browse")?>' target='_self'><button class="btn btn-default btn-md" style='margin-top: 5px;'>Browse</button></a>
+									<a href='https://drive.google.com/open?id=1hsFy_xJ9uIP_wkRZjityXVdWVHSQF3X9eVALv2sMEo4' target='_self' style='float:right;'>Feedback/Issue</a>
 							</div>
 							<div id="selectedFacet" >
 							
@@ -111,12 +111,12 @@
 
 			if(searchTerm != "" ) {
 				var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
-				//var resultUrl = "<!--?php echo base_url("?c=eaditorsearch&m=searchKeyWords&key=")?>" + searchTerm;
-				$('#searchResults').load(resultUrl);
 			}else{
-				$("p#message").show().delay(3000).fadeOut();
-
+				var resultUrl = "<?php echo base_url("/eaditorsearch/searchAll")?>";
 			}
+
+			$('#searchResults').load(resultUrl);	
+
 		});
 		
 		$('#searchBox').keypress(function(e){
@@ -131,11 +131,14 @@
 				var searchTerm = encodeURIComponent(searchTerm);
 				var facet = 'NULL';
 
-				if(searchTerm != "") {
-					var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet;
-					$('#searchResults').load(resultUrl);
+				if(searchTerm != "" ) {
+					var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
 				}else{
-					$("p#message").show().delay(3000).fadeOut();}}
+					var resultUrl = "<?php echo base_url("/eaditorsearch/searchAll")?>";
+				}
+
+				$('#searchResults').load(resultUrl);	
+			}
 		});
 
         $(document).ready(function(){
