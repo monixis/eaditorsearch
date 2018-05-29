@@ -110,13 +110,13 @@
 			var facet = 'NULL';
 
 			if(searchTerm != "" ) {
-				var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
-			}else{
-				var resultUrl = "<?php echo base_url("/eaditorsearch/searchAll")?>";
+				if(searchTerm == "*"){
+					var resultUrl = "<?php echo base_url("/eaditorsearch/searchAll")?>";
+				}else{
+					var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;	
+				}
 			}
-
 			$('#searchResults').load(resultUrl);	
-
 		});
 		
 		$('#searchBox').keypress(function(e){
@@ -131,13 +131,14 @@
 				var searchTerm = encodeURIComponent(searchTerm);
 				var facet = 'NULL';
 
-				if(searchTerm != "" ) {
-					var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
-				}else{
+			if(searchTerm != "" ) {
+				if(searchTerm == "*"){
 					var resultUrl = "<?php echo base_url("/eaditorsearch/searchAll")?>";
+				}else{
+					var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;	
 				}
-
-				$('#searchResults').load(resultUrl);	
+			}
+			$('#searchResults').load(resultUrl);	
 			}
 		});
 
