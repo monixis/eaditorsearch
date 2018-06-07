@@ -37,72 +37,32 @@
 		<div id="facets" class="page-sidebar col-md-3">
 			<h4>Filter By:</h4>
 			<?php
-				$facets = (array) $results->facet_counts->facet_fields;
+	
+			for ($i=0; $i < 8; $i++){
+				if(sizeof($facetsList[$i][0])>0){ ?>
+					<button class="accordion" id="<?php echo $facetsLabels[$i] . '_facet' ;?>"><?php echo $facetsLabels[$i]; ?></button>
 
-				foreach ($facets as $key => $value){
-					if(sizeof($value)>0){
-			?>
-					<button class="accordion" id="<?php echo $key ; ?>"><?php
-						if($key == "subject_facet"){
-							echo "Subject";
-					     }
-					     else if($key == "agency_facet"){
-							 echo "Agency";
-
-						}else if($key == "corpname_facet"){
-							 echo "Organization";
-
-						 }else if($key == "genreform_facet"){
-							 echo "Genre/Format";
-
-						 }else if($key == "language_facet"){
-							 echo "Language";
-
-						 }else if($key == "persname_facet"){
-							 echo "Person";
-
-						 }else if($key == "century_num"){
-							 echo "Date";
-
-						 }else if($key == "famname_facet"){
-							 echo "Family";
-
-						 }else if($key == "geogname_facet"){
-							 echo "Place";
-						 }
-						?></button>
-					<div class="panel" id="<?php echo $key ; ?>">
+					<div class="panel" id="<?php echo $facetsLabels[$i] . '_facet' ;?>">
 							<form class="form-horizontal">
 								<div class="form-group has-feedback">
-                        <input id="searchInput_<?php echo $key;?>" class="form-control hasclear" oninput="sFacet.filterHTML('#<?php echo $key ; ?>', 'li#<?php echo $key;?>', this.value)" type="text" placeholder="Search">
+                        <input id="searchInput_subject_facet" class="form-control hasclear" oninput="sFacet.filterHTML('#<?php echo $facetsLabels[$i] . '_facet' ;?>', 'li#<?php echo $facetsLabels[$i] . '_facet' ;?>', this.value)" type="text" placeholder="Search">
 						<span></span>
 
 						</div>
 							</form>
-						<ul id="<?php echo $key?>" style="padding-left: 5px;">
+						<ul id="<?php echo $facetsLabels[$i] . '_facet' ;?>" style="padding-left: 5px;">
                         <?php
-						$facetList = " ";
-						$i = 0;
-						foreach ($value as $row) {
-							if ($i % 2 == 0){
-								$facetList = $row;
-							}else{
-								$facetList = $facetList . "[" . $row ."]";
-
-					?>
-								<li id="<?php echo $key;?>" style="margin-bottom:5px;"><a href="#" class='tags'><?php echo $facetList ; ?></a></li><?php
-							}
-							$i += 1;
+						foreach ($facetsList[$i][0] as $row) {
+						?>
+							<li id="<?php echo $facetsLabels[$i] . '_facet' ;?>" style="margin-bottom:5px;"><a href="#" class='tags'><?php echo $row ; ?></a></li><?php
 						}
-					?>
+						?>
                         </ul>
 					</div>
-			<?php
-             }
-				}
-			?>
-		</div> <!-- facets ends -->
 
+				<?php }}?>	
+
+		</div> <!-- facets ends -->
 
 	<div class="col-md-9">
 		
@@ -120,6 +80,7 @@
 					//$link = "https://www.empireadc.org/ead/". $collection ."/id/".$row -> id.".xml"; 
 					//$link = base_url('?c=eaditorsearch&m=viewEAD&collId='.$collId.'&eadId='.$row -> id);
 					$link = base_url("eaditorsearch/ead") . "/" . $collId . "/" . $fileId;
+					
 			?>
 				<li class="results" style="height: auto; padding: 10px;">
 						<a href=<?php echo $link ?> target="_blank"><?php echo $title ?></a></br>

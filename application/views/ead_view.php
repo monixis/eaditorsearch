@@ -732,7 +732,7 @@ else{?>
     <!-- Dynamic table of contents based on series and subseries -->
       <?php if($GLOBALS['tree'] != ' ') { ?>
         <button id="tocbutton" type="button" class="btn btn-default" style="display: hidden;">Series in this Collection:</button>
-	 <div id='toc' style='position:absolute; width: 370px; height: 290px; overflow-y: auto;'
+	 <div id='toc' style='position:absolute; width: 370px; height: 290px; overflow-y: auto;'>
             <label>Series in this Collection:</label>
             <?php echo '<ul id="tree">' . $GLOBALS['tree'] . '</ul>'; ?>
           </div>  
