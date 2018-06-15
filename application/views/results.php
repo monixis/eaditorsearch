@@ -5,32 +5,14 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/list.pagination.js/0.1.1/list.pagination.min.js"></script>
 <script src="<?php echo base_url("/js/jquery.easyPaginate.js"); ?>"></script>
-
 <style>
 	p.labelInfo {font-size: 10pt; margin-top: -10px;}
 	span.labelName {color: #b31b1b;font-weight:bold; }
 	.easyPaginateNav a {padding:5px;float: inherit}
 	.easyPaginateNav a.current {font-weight:bold;text-decoration:underline;}
-	/*@media all and (min-width:992px) {
-		#facets {
-			width: 240px;
-			height: auto;
-			margin-left: -240px;
-		}
-	}
-/*
-	@media all and (max-width:950px) {
-
-		#facets {
-
-			width: 100%;
-			float: left
-			height: 400px;
-		}
-	}
-*/
-
+	
 </style>
+
 <link rel="stylesheet" type="text/css" href="./styles/main.css" />
 
 	<div class="row">
@@ -40,22 +22,22 @@
 	
 			for ($i=0; $i < 8; $i++){
 				if(sizeof($facetsList[$i][0])>0){ ?>
-					<button class="accordion" id="<?php echo $facetsLabels[$i] . '_facet' ;?>"><?php echo $facetsLabels[$i]; ?></button>
-
-					<div class="panel" id="<?php echo $facetsLabels[$i] . '_facet' ;?>">
-							<form class="form-horizontal">
-								<div class="form-group has-feedback">
-                        <input id="searchInput_subject_facet" class="form-control hasclear" oninput="sFacet.filterHTML('#<?php echo $facetsLabels[$i] . '_facet' ;?>', 'li#<?php echo $facetsLabels[$i] . '_facet' ;?>', this.value)" type="text" placeholder="Search">
-						<span></span>
-
-						</div>
-							</form>
-						<ul id="<?php echo $facetsLabels[$i] . '_facet' ;?>" style="padding-left: 5px;">
+					<button class="accordion" id="<?php echo $facetsOrgLabels[$i] ;?>"><?php echo ucfirst($facetsLabels[$i]); ?></button>
+					<div class="panel" id="<?php $facetsOrgLabels[$i] ;?>">
+						<form class="form-horizontal">
+							<div class="form-group has-feedback">
+	                      		<span class="input-group-btn">
+									<input id="<?php echo $facetsOrgLabels[$i] ;?>" class="facetList form-control hasclear" type="text" placeholder="Search" >
+								</span>
+							</div>
+						</form>
+						
+						<ul id="<?php echo $facetsOrgLabels[$i] ;?>" style="padding-left: 5px;">
                         <?php
-						foreach ($facetsList[$i][0] as $row) {
+							foreach ($facetsList[$i][0] as $row) {
 						?>
-							<li id="<?php echo $facetsLabels[$i] . '_facet' ;?>" style="margin-bottom:5px;"><a href="#" class='tags'><?php echo $row ; ?></a></li><?php
-						}
+								<li id="<?php echo $facetsOrgLabels[$i] ;?>" style="margin-bottom:5px;"><a href="#" class='tags'><?php echo $row ; ?></a></li><?php
+							}
 						?>
                         </ul>
 					</div>
@@ -91,9 +73,10 @@
 				}
 			?>	
 		<!--/ol></br-->
+
 		</div><!-- Tab 1 ends --></br>
 	</div><!-- col-md-9 ends -->
-	</div><!-- row ends -->
+</div><!-- row ends -->
 
 <script type="text/javascript">
 	var acc = document.getElementsByClassName("accordion");
@@ -116,8 +99,8 @@
 
     $('a.tags').click(function(){
         var searchTerm = $('input#searchBox').val();
-        var selectedTag = ($(this).parents().attr('id')) + ':"' + ($(this).text().substr(0, $(this).text().indexOf('['))) + '"';
-        var selectedTagId = selectedTag.replace(/"/g, '');
+        var selectedTag = ($(this).parents().attr('id')) + ':"' + ($(this).text()) + '"';
+		var selectedTagId = selectedTag.replace(/"/g, '');
 		var selectedFacet = $(this).parents().attr('id');
 		//User friendly display for selected facets
 		if(selectedFacet == "subject_facet")
@@ -140,6 +123,7 @@
 		}else if(selectedFacet == "language_facet"){
 			selectedFacetDisplay = selectedTag.replace("language_facet", "Language");
 		}
+
         $('#selectedFacet').append('<a href="#" class="remove" style="margin-left:10px;"><button class="taglist" id="'+ selectedTagId +'" style="border: 1px solid #cccccc; background: #eeeeee; padding: 5px; margin-right: 10px; margin-top: 5px;">'+ selectedFacetDisplay +' X</button></a>');
         $('input#queryTag').val($('input#queryTag').val() + "fq=" + selectedTag);
         var queryTag = $('input#queryTag').val();
@@ -180,48 +164,31 @@
         NProgress.done();
     });
 
-   $('#tabs-1').easyPaginate({
+  	$('#tabs-1').easyPaginate({
         paginateElement: 'li',
-        elementsPerPage: 10
-        /* effect: 'climb'*/
-  });
-    //$(document).ready(function () {
-    //     var key ="<!--?php //echo $key;?>//";
-    //     var facet= "<!--?php //echo $facet;?>//";
-    //
-    //});
-    var sFacet = {};
-    sFacet.filterHTML = function(id, sel, filter) {
-        var a, b, c, i, ii, iii, hit;
-        a = sFacet.getElements(id);
-        for (i = 0; i < a.length; i++) {
-            b = sFacet.getElements(sel);
-            for (ii = 0; ii < b.length; ii++) {
-                hit = 0;
-                if (b[ii].innerHTML.toUpperCase().indexOf(filter.toUpperCase()) > -1) {
-                    hit = 1;
-                }
-                c = b[ii].getElementsByTagName("*");
-                for (iii = 0; iii < c.length; iii++) {
-                    if (c[iii].innerHTML.toUpperCase().indexOf(filter.toUpperCase()) > -1) {
-                        hit = 1;
-                    }
-                }
-                if (hit == 1) {
-                    b[ii].style.display = "";
-                } else {
-                    b[ii].style.display = "none";
-                }
-            }
-        }
-    };
-    sFacet.getElements = function (id) {
-        if (typeof id == "object") {
-            return [id];
-        } else {
-            return document.querySelectorAll(id);
-        }
-    };
+        elementsPerPage: 50,
+		effect: 'climb',
+		prevButtonText: 'Prev',
+		nextButtonText: 'Next'
+  	});
+ 
+ 	$('input.facetList').keyup(function(e){
+		var id = $(this).attr('id');
+		var sel = 'li#' + id;
+		var selectedFacet = 'input#' + id;
+		var filter = $(selectedFacet).val();
+		if(e.which = 8){
+			$(sel).each(function(){
+				$(this).show();
+			});	
+		}
+		$(sel).each(function(){
+			var currFacet = $(this).text().toLowerCase();
+			if(!currFacet.includes(filter)){
+				$(this).hide();
+			}
+		});
+	});
 
 	$(".hasclear").keyup(function () {
 		var t = $(this);
