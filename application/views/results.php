@@ -99,7 +99,7 @@
 
     $('a.tags').click(function(){
         var searchTerm = $('input#searchBox').val();
-        var selectedTag = ($(this).parents().attr('id')) + ':"' + ($(this).text()) + '"';
+		var selectedTag = ($(this).parents().attr('id')) + ':"' + ($(this).text()) + '"';
 		var selectedTagId = selectedTag.replace(/"/g, '');
 		var selectedFacet = $(this).parents().attr('id');
 		//User friendly display for selected facets
@@ -123,45 +123,53 @@
 		}else if(selectedFacet == "language_facet"){
 			selectedFacetDisplay = selectedTag.replace("language_facet", "Language");
 		}
-
         $('#selectedFacet').append('<a href="#" class="remove" style="margin-left:10px;"><button class="taglist" id="'+ selectedTagId +'" style="border: 1px solid #cccccc; background: #eeeeee; padding: 5px; margin-right: 10px; margin-top: 5px;">'+ selectedFacetDisplay +' X</button></a>');
         $('input#queryTag').val($('input#queryTag').val() + "fq=" + selectedTag);
-        var queryTag = $('input#queryTag').val();
-        searchTerm = searchTerm + queryTag;
-        var searchTerm = encodeURIComponent(searchTerm);
-        var searchTerm = searchTerm.replace(/\(/g,"%28");
-        var searchTerm = searchTerm.replace(/\)/g,"%29");
-
-        // encoding string into UTF - 8 to carry all the required characters in the ajax request.
-
-		// facet = 'NULL' indicates that we are not using the facet searching. In this case selected facets are dynamically attached to the keywords itself.
-		var facet = 'NULL';
-        var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
-		NProgress.start();
-        NProgress.configure({ showSpinner: true });
+		
+	   	if (searchTerm == '*'){ 
+			var facet = selectedFacet;
+			searchTerm = $(this).text();
+			var searchTerm = encodeURIComponent(searchTerm);
+       		var searchTerm = searchTerm.replace(/\(/g,"%28");
+       		var searchTerm = searchTerm.replace(/\)/g,"%29");
+		}else{
+			var queryTag = $('input#queryTag').val();
+        	searchTerm = searchTerm + queryTag;
+       		var searchTerm = encodeURIComponent(searchTerm);
+       		var searchTerm = searchTerm.replace(/\(/g,"%28");
+       		var searchTerm = searchTerm.replace(/\)/g,"%29");
+        		// encoding string into UTF - 8 to carry all the required characters in the ajax request.
+				// facet = 'NULL' indicates that we are not using the facet searching. In this case selected facets are dynamically attached to the keywords itself. Facet searching is used when links are clicked on the EAD page.
+			var facet = 'NULL';
+		}
+       	
+		var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
         $('#searchResults').load(resultUrl);
-        NProgress.done();
-
-    });
+	});
 
     $('button.taglist').click(function() {
         var searchTerm = $('input#searchBox').val();
         var unselectedTag ='fq=' + $(this).attr('id');
         unselectedTag = unselectedTag.replace(':',':"')+'"';
-       	$(this).closest('button.taglist').remove();
-        $('input#queryTag').val($('input#queryTag').val().replace(unselectedTag, ' '));
-        var queryTag = $('input#queryTag').val();
-        searchTerm = searchTerm + queryTag;
-		//searchTerm = searchTerm.replace(/ /g,"%20");
-		// encoding string into UTF - 8 to carry all the required characters in the ajax request.
-		var searchTerm = encodeURIComponent(searchTerm);
-        NProgress.start();
-		NProgress.configure({ showSpinner: true });
-		var facet = 'NULL';
-        //var resultUrl = "<!--?php echo base_url("?c=eaditorsearch&m=searchKeyWords&key=")?>"+searchTerm;
-		var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
-		$('#searchResults').load(resultUrl);
-        NProgress.done();
+		$('input#queryTag').val($('input#queryTag').val().replace(unselectedTag, ' '));
+		if(searchTerm == '*'){
+			searchTerm = $('input#queryTag').val();
+			searchTerm = searchTerm.replace('fq=', '');
+		}else{
+			var queryTag = $('input#queryTag').val();
+			searchTerm = searchTerm + queryTag;
+		}	
+
+		$(this).closest('button.taglist').remove();
+
+		if(searchTerm == ' '){
+			var resultUrl = "<?php echo base_url("/eaditorsearch/searchAll")?>";
+		}else{	
+			searchTerm = encodeURIComponent(searchTerm);
+			var facet = 'NULL';
+			var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
+		}
+     	$('#searchResults').load(resultUrl);
     });
 
   	$('#tabs-1').easyPaginate({

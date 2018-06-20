@@ -784,7 +784,7 @@ else{?>
       var selectedHeader = selectedHeader.replace(/ /g,"%20");
       var selectedHeader = encodeURIComponent(selectedHeader);
       resultUrl = "<?php echo base_url("?key=")?>"+ selectedHeader+"&facet="+selectedFacet;
-	  window.open(resultUrl);
+	    window.open(resultUrl,"_self");
     });
     $('a.searchTerm').click(function() {
       var repositoryName =  $(this).text();
