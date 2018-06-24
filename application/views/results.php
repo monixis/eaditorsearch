@@ -132,12 +132,14 @@
 			var searchTerm = encodeURIComponent(searchTerm);
        		var searchTerm = searchTerm.replace(/\(/g,"%28");
        		var searchTerm = searchTerm.replace(/\)/g,"%29");
+		   	var searchTerm = searchTerm.replace(/'/g,"%27");
 		}else{
 			var queryTag = $('input#queryTag').val();
         	searchTerm = searchTerm + queryTag;
        		var searchTerm = encodeURIComponent(searchTerm);
        		var searchTerm = searchTerm.replace(/\(/g,"%28");
        		var searchTerm = searchTerm.replace(/\)/g,"%29");
+			var searchTerm = searchTerm.replace(/'/g,"%27");
         		// encoding string into UTF - 8 to carry all the required characters in the ajax request.
 				// facet = 'NULL' indicates that we are not using the facet searching. In this case selected facets are dynamically attached to the keywords itself. Facet searching is used when links are clicked on the EAD page.
 			var facet = 'NULL';

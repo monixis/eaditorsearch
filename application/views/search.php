@@ -106,6 +106,7 @@
 			var searchTerm = $('input#searchBox').val();
 			var searchTerm = searchTerm.trim();
 			var searchTerm = searchTerm.replace(/ /g,"%20");
+			var searchTerm = searchTerm.replace(/'/g,"%27");
 			var searchTerm = encodeURIComponent(searchTerm);
 			var facet = 'NULL';
 
@@ -128,6 +129,7 @@
 				var searchTerm = $('input#searchBox').val();
 				var searchTerm = searchTerm.trim();
 				var searchTerm = searchTerm.replace(/ /g,"%20");
+				var searchTerm = searchTerm.replace(/'/g,"%27");
 				var searchTerm = encodeURIComponent(searchTerm);
 				var facet = 'NULL';
 
