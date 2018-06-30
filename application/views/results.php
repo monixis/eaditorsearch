@@ -79,6 +79,11 @@
 </div><!-- row ends -->
 
 <script type="text/javascript">
+	$body = $("body");
+	$(document).ajaxStop(function() {
+		$body.removeClass("loading");
+	});
+	
 	var acc = document.getElementsByClassName("accordion");
 	var i;
 
@@ -146,6 +151,7 @@
 		}
        	
 		var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
+		$body.addClass("loading");
         $('#searchResults').load(resultUrl);
 	});
 
@@ -171,6 +177,7 @@
 			var facet = 'NULL';
 			var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
 		}
+		$body.addClass("loading");
      	$('#searchResults').load(resultUrl);
     });
 
