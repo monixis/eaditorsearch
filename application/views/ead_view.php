@@ -66,15 +66,25 @@
         
         $creatorList = array();
         $cnt =  0;
+        $x = 0;
         $creator =  (isset($xml->archdesc->did->origination)? TRUE : FALSE);
         if ($creator != FALSE){
           foreach($xml->archdesc->did->origination as $c){
             if($c->children()->getname() == 'persname' ){
-              array_push($creatorList, $c->persname);
+             // array_push($creatorList, $c->persname);
+             $creatorList[$x][0] = $c->persname;
+             $creatorList[$x][1] = "persname_facet"; 
+             $x++;
             }else if($c->children()->getname() == 'famname' ){
-              array_push($creatorList, $c->famname);
+              //array_push($creatorList, $c->famname);
+              $creatorList[$x][0] = $c->famname;
+              $creatorList[$x][1] = "famname_facet"; 
+              $x++;
             }else if($c->children()->getname() == 'corpname' ){
-              array_push($creatorList, $c->corpname);  
+              //array_push($creatorList, $c->corpname);  
+              $creatorList[$x][0] = $c->corpname;
+              $creatorList[$x][1] = "corpname_facet"; 
+              $x++;
             }
           }  
         }
@@ -419,8 +429,12 @@
       <?php } ?>
 
       <label>Creator: </label>  
-      <?php foreach ($creatorList as $c){ ?>
-            <p><span property="dcterms:creator"><a href="#" id="persname_facet" class="controlledHeader"><?php echo $c; ?></a></span></p>
+      <!--?php foreach ($creatorList as $c){ ?>
+            <p><span property="dcterms:creator"><a href="#" id="<?php echo $c[0][1]; ?>" class="controlledHeader"><?php echo $c[0][0]; ?></a></span></p>
+      <!--?php } -->
+
+      <?php for ($y = 0 ; $y < count($creatorList) ; $y++ ){ ?>
+            <p><span property="dcterms:creator"><a href="#" id="<?php echo $creatorList[$y][1]; ?>" class="controlledHeader"><?php echo $creatorList[$y][0]; ?></a></span></p>
       <?php }
      
       if($extent != 'Unspecified'){ 
@@ -732,7 +746,7 @@ else{?>
     <!-- Dynamic table of contents based on series and subseries -->
       <?php if($GLOBALS['tree'] != ' ') { ?>
         <button id="tocbutton" type="button" class="btn btn-default" style="display: hidden;">Series in this Collection:</button>
-	 <div id='toc' style='position:absolute; width: 370px; height: 290px; overflow-y: auto;'
+	 <div id='toc' style='position:absolute; width: 370px; height: 290px; overflow-y: auto;'>
             <label>Series in this Collection:</label>
             <?php echo '<ul id="tree">' . $GLOBALS['tree'] . '</ul>'; ?>
           </div>  
@@ -783,9 +797,16 @@ else{?>
       var selectedHeader = selectedHeader.trim();
       var selectedHeader = selectedHeader.replace(/ /g,"%20");
       var selectedHeader = encodeURIComponent(selectedHeader);
-      resultUrl = "<?php echo base_url("?key=")?>"+ selectedHeader+"&facet="+selectedFacet;
-	  window.open(resultUrl);
+      //if the controlledHeader includes ( ), search without a facet option.
+      if(selectedHeader.indexOf('(') > 0){
+        selectedHeader = selectedHeader.replace('(',"").replace(')',"");
+        resultUrl = "<?php echo base_url("?key=")?>"+ selectedHeader+"&facet=NULL";
+      }else{
+        resultUrl = "<?php echo base_url("?key=")?>"+ selectedHeader+"&facet="+selectedFacet;
+      }
+        window.open(resultUrl,"_self");
     });
+
     $('a.searchTerm').click(function() {
       var repositoryName =  $(this).text();
         var repositoryName = repositoryName.trim();
