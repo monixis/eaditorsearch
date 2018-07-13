@@ -30,15 +30,17 @@ class eaditorsearch extends CI_Controller
         }
         $this->load->view('search', $data);
     }
-       
     public function searchKeyWords($key, $facet)
     {
         $key = trim($key);
+        $key = str_replace("%20", "+", $key);
         $key = str_replace("%2520", "+", $key);
         $key = str_replace("fq%3D", "&fq=", $key);
-        $key = str_replace("%252C", "%2C", $key);
+        $key = str_replace("%2C", "%2C", $key);
         $key = str_replace("&#40;", "%28", $key);
         $key = str_replace("&#41;", "%29", $key);
+        $key = str_replace("%2527", "'", $key);
+
         if ($facet != "NULL") {
             $resultsLink = "http://www.empireadc.org:8080/solr/eaditor-published/select?indent=on&q=*:*&fq=".$facet.'%3A%22'. $key .'%22'."&wt=json&facet=true&facet.field=subject_facet&facet.field=agency_facet&facet.field=corpname_facet&facet.field=genreform_facet&facet.field=persname_facet&facet.field=language_facet&facet.field=century_num&facet.field=famname_facet&facet.field=geogname_facet&rows=1500";
         //$resultsLink = "http://www.empireadc.org:8080/solr/eaditor-published/select?indent=on&q=*:*&fq=".$facet.'%3A%22'. $key .'%22'."&wt=json&facet=true&rows=200";
