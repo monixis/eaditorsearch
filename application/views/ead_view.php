@@ -854,10 +854,10 @@
   <a href='<?php echo $downloadLink; ?>' itemprop="url"><img src='<?php echo $iconLink; ?>' class="doc-icon"></a>
 <?php
       } else {
-    ?>
+          ?>
 		<h4 style="font-style: italic; margin-left: 17px;">Container List Not Available</h4>
 	<?php
-}
+      }
 ?>
 		</div><!-- componentList -->
 
