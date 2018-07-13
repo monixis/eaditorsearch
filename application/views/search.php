@@ -12,18 +12,18 @@
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 		<!-- Bootstrap core CSS -->
 		<link href="<?php echo base_url("/styles/bootstrap.css"); ?>" rel="stylesheet">
-		
+
 		<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 		
 		<link href="<?php echo base_url("/css/ie10-viewport-bug-workaround.css"); ?>" rel="stylesheet">
 		<link href="<?php echo base_url("/styles/main.css"); ?>" rel="stylesheet">
-		
+
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 		<![endif]-->
-		
+
 		<script type="text/javascript" src="<?php echo base_url("/js/jquery-ui.js"); ?>"></script>
 		<link rel="stylesheet" href="<?php echo base_url("/font-awesome/css/font-awesome.min.css"); ?>" />
 		<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
@@ -43,10 +43,10 @@
             }
 
         </style-->
-		
+
 	</head>
 	<body>
-	
+
 		<div id="headerContainer">
 			<a href="https://beta.empireadc.org/" target="_self"> <div id="header"></div> </a>
 		</div>
@@ -73,16 +73,16 @@
 									<a href='https://drive.google.com/open?id=1hsFy_xJ9uIP_wkRZjityXVdWVHSQF3X9eVALv2sMEo4' target='_self' style='float:right;'>Feedback/Issue</a>
 							</div>
 							<div id="selectedFacet" >
-							
+
 							</div>
 							<div id="searchResults" style="position: relative;display: inline-block">
 
 							</div>
-								
+
 						</div>
 					</div><!-- row -->
 				</div><!-- container -->
-				
+
 			</div>
 			<!-- jumbotron -->
 
@@ -92,13 +92,13 @@
 		<!-- main-container -->
 		<div class="container">
 			<p  class = "foot">
-			
+
 			</p>
 
 		</div>
 </body>
 <script type="text/javascript">
-	
+
 		$('#initiateSearch').click(function(){
 			// Clear the selected facets of the previous search
 			$("#selectedFacet").empty();
@@ -114,12 +114,12 @@
 				if(searchTerm == "*"){
 					var resultUrl = "<?php echo base_url("/eaditorsearch/searchAll")?>";
 				}else{
-					var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;	
+					var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
 				}
 			}
-			$('#searchResults').load(resultUrl);	
+			$('#searchResults').load(resultUrl);
 		});
-		
+
 		$('#searchBox').keypress(function(e){
 			var key = e.which;
 			if(key == 13){
@@ -137,16 +137,16 @@
 				if(searchTerm == "*"){
 					var resultUrl = "<?php echo base_url("/eaditorsearch/searchAll")?>";
 				}else{
-					var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;	
+					var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
 				}
 			}
-			$('#searchResults').load(resultUrl);	
+			$('#searchResults').load(resultUrl);
 			}
 		});
 
         $(document).ready(function(){
 			var searchTerm = "<?php echo $key; ?>";
-		  	if(searchTerm == "" || searchTerm == null){ 
+		  	if(searchTerm == "" || searchTerm == null){
 				$("p#message").show().delay(3000).fadeOut();
 		  	}else{
 					document.getElementById("searchBox").value = decodeURIComponent(searchTerm);
