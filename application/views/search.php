@@ -14,7 +14,7 @@
 		<link href="<?php echo base_url("/styles/bootstrap.css"); ?>" rel="stylesheet">
 
 		<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-		
+
 		<link href="<?php echo base_url("/css/ie10-viewport-bug-workaround.css"); ?>" rel="stylesheet">
 		<link href="<?php echo base_url("/styles/main.css"); ?>" rel="stylesheet">
 
