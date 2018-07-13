@@ -10,7 +10,7 @@
 	span.labelName {color: #b31b1b;font-weight:bold; }
 	.easyPaginateNav a {padding:5px;float: inherit}
 	.easyPaginateNav a.current {font-weight:bold;text-decoration:underline;}
-	
+
 </style>
 
 <link rel="stylesheet" type="text/css" href="./styles/main.css" />
@@ -19,59 +19,58 @@
 		<div id="facets" class="page-sidebar col-md-3">
 			<h4>Filter By:</h4>
 			<?php
-	
-			for ($i=0; $i < 8; $i++){
-				if(sizeof($facetsList[$i][0])>0){ ?>
-					<button class="accordion" id="<?php echo $facetsOrgLabels[$i] ;?>"><?php echo ucfirst($facetsLabels[$i]); ?></button>
-					<div class="panel" id="<?php $facetsOrgLabels[$i] ;?>">
+
+            for ($i=0; $i < 8; $i++) {
+                if (sizeof($facetsList[$i][0])>0) {
+                    ?>
+					<button class="accordion" id="<?php echo $facetsOrgLabels[$i] ; ?>"><?php echo ucfirst($facetsLabels[$i]); ?></button>
+					<div class="panel" id="<?php $facetsOrgLabels[$i] ; ?>">
 						<form class="form-horizontal">
 							<div class="form-group has-feedback">
 	                      		<span class="input-group-btn">
-									<input id="<?php echo $facetsOrgLabels[$i] ;?>" class="facetList form-control hasclear" type="text" placeholder="Search" >
+									<input id="<?php echo $facetsOrgLabels[$i] ; ?>" class="facetList form-control hasclear" type="text" placeholder="Search" >
 								</span>
 							</div>
 						</form>
-						
-						<ul id="<?php echo $facetsOrgLabels[$i] ;?>" style="padding-left: 5px;">
+
+						<ul id="<?php echo $facetsOrgLabels[$i] ; ?>" style="padding-left: 5px;">
                         <?php
-							foreach ($facetsList[$i][0] as $row) {
-						?>
-								<li id="<?php echo $facetsOrgLabels[$i] ;?>" style="margin-bottom:5px;"><a href="#" class='tags'><?php echo $row ; ?></a></li><?php
-							}
-						?>
+                            foreach ($facetsList[$i][0] as $row) {
+                                ?>
+								<li id="<?php echo $facetsOrgLabels[$i] ; ?>" style="margin-bottom:5px;"><a href="#" class='tags'><?php echo $row ; ?></a></li><?php
+                            } ?>
                         </ul>
 					</div>
 
-				<?php }}?>	
+				<?php
+                }
+            }?>
 
 		</div> <!-- facets ends -->
 
 	<div class="col-md-9">
-		
+
 		<h4>Total <?php echo $results->response->numFound; ?> Results:</h4>
 		 <div id="tabs-1" >
   	<!--ol id="list"-->
 			<?php
-				foreach ($results->response->docs as $row) {
-
-					$title = $row -> unittitle_display;
-					$date = (isset($row -> unitdate_display) ? $row -> unitdate_display : FALSE) ;
-					$publisher = (isset($row -> publisher_display) ? $row -> publisher_display : FALSE) ;
-					$collId = (isset($row -> agencycode_facet[0] ) ? str_replace('US-','',$row -> agencycode_facet[0]) : FALSE);
-					$fileId = $row -> id ;
-					//$link = "https://www.empireadc.org/ead/". $collection ."/id/".$row -> id.".xml"; 
-					//$link = base_url('?c=eaditorsearch&m=viewEAD&collId='.$collId.'&eadId='.$row -> id);
-					$link = base_url("eaditorsearch/ead") . "/" . $collId . "/" . $fileId;
-					
-			?>
+                foreach ($results->response->docs as $row) {
+                    $title = $row -> unittitle_display;
+                    $date = (isset($row -> unitdate_display) ? $row -> unitdate_display : false) ;
+                    $publisher = (isset($row -> publisher_display) ? $row -> publisher_display : false) ;
+                    $collId = (isset($row -> agencycode_facet[0]) ? str_replace('US-', '', $row -> agencycode_facet[0]) : false);
+                    $fileId = $row -> id ;
+                    //$link = "https://www.empireadc.org/ead/". $collection ."/id/".$row -> id.".xml";
+                    //$link = base_url('?c=eaditorsearch&m=viewEAD&collId='.$collId.'&eadId='.$row -> id);
+                    $link = base_url("eaditorsearch/ead") . "/" . $collId . "/" . $fileId; ?>
 				<li class="results" style="height: auto; padding: 10px;">
 						<a href=<?php echo $link ?> target="_blank"><?php echo $title ?></a></br>
 						<p class="labelInfo"><span class="labelName">Date: </span><?php echo $date ?></p>
 						<p class="labelInfo"><span class="labelName">Publisher: </span><?php echo $publisher ?></p>
 				</li>
 			<?php
-				}
-			?>	
+                }
+            ?>
 		<!--/ol></br-->
 
 		</div><!-- Tab 1 ends --></br>
@@ -83,7 +82,7 @@
 	$(document).ajaxStop(function() {
 		$body.removeClass("loading");
 	});
-	
+
 	var acc = document.getElementsByClassName("accordion");
 	var i;
 
@@ -130,8 +129,8 @@
 		}
         $('#selectedFacet').append('<a href="#" class="remove" style="margin-left:10px;"><button class="taglist" id="'+ selectedTagId +'" style="border: 1px solid #cccccc; background: #eeeeee; padding: 5px; margin-right: 10px; margin-top: 5px;">'+ selectedFacetDisplay +' X</button></a>');
         $('input#queryTag').val($('input#queryTag').val() + "fq=" + selectedTag);
-		
-	   	if (searchTerm == '*'){ 
+
+	   	if (searchTerm == '*'){
 			var facet = selectedFacet;
 			searchTerm = $(this).text();
 			var searchTerm = encodeURIComponent(searchTerm);
@@ -149,7 +148,7 @@
 				// facet = 'NULL' indicates that we are not using the facet searching. In this case selected facets are dynamically attached to the keywords itself. Facet searching is used when links are clicked on the EAD page.
 			var facet = 'NULL';
 		}
-       	
+
 		var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
 		$body.addClass("loading");
         $('#searchResults').load(resultUrl);
@@ -166,13 +165,13 @@
 		}else{
 			var queryTag = $('input#queryTag').val();
 			searchTerm = searchTerm + queryTag;
-		}	
+		}
 
 		$(this).closest('button.taglist').remove();
 
 		if(searchTerm == ' '){
 			var resultUrl = "<?php echo base_url("/eaditorsearch/searchAll")?>";
-		}else{	
+		}else{
 			searchTerm = encodeURIComponent(searchTerm);
 			var facet = 'NULL';
 			var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
@@ -188,7 +187,7 @@
 		prevButtonText: 'Prev',
 		nextButtonText: 'Next'
   	});
- 
+
  	$('input.facetList').keyup(function(e){
 		var id = $(this).attr('id');
 		var sel = 'li#' + id;
@@ -197,7 +196,7 @@
 		if(e.which = 8){
 			$(sel).each(function(){
 				$(this).show();
-			});	
+			});
 		}
 		$(sel).each(function(){
 			var currFacet = $(this).text().toLowerCase();
@@ -220,4 +219,3 @@
 	});
 
 </script>
-
