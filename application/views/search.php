@@ -145,13 +145,15 @@
 		});
 
         $(document).ready(function(){
-			var searchTerm = "<?php echo $key; ?>";
+  	   var searchTerm = "<?php echo $key; ?>";
 		  	if(searchTerm == "" || searchTerm == null){
 				$("p#message").show().delay(3000).fadeOut();
 		  	}else{
 					document.getElementById("searchBox").value = decodeURIComponent(searchTerm);
 					var searchTerm = searchTerm.trim();
 					var searchTerm = searchTerm.replace(/ /g,"%20");
+					var searchTerm = searchTerm.replace(/'/g,"%27");
+
 					var searchTerm = encodeURIComponent(searchTerm);
 					var facet = "<?php echo $facet; ?>";
 					var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
