@@ -144,11 +144,11 @@ body {
 
 </head>
 	<body>
-		
+
 		<div id="headerContainer">
 			<a href="https://beta.empireadc.org/" target="_self"> <div id="header"></div> </a>
 		</div>
-		
+
 		<!-- Main jumbotron for a primary marketing message or call to action -->
 		<div id="main-container" class="container">
 			<div class="jumbotron" style="background: #ffffff;">
@@ -159,7 +159,7 @@ body {
 							<div id="logo" style="width: 300px; margin-left: auto; margin-right: auto;"><a href='/'><img src='https://www.empireadc.org/sites/www.empireadc.org/files/ead_logo.gif' style='width:300px;'/></div></a>
 							<!--input type="text" id="searchBox" placeholder="Search Honor's Thesis Repository" /-->
 							<h2>Sort by: </h2>
-							<div id="sorts" class="button-group">  
+							<div id="sorts" class="button-group">
 								<button class="button is-checked" data-sort-by="original-order">Total EADs</button>
   								<button class="button" data-sort-by="name">Name</button>
 								<!--button class="button" data-sort-by="number">Total EADs - Ascending</button-->
@@ -167,27 +167,26 @@ body {
 
 							<div id="browseList" class="grid">
 								<?php
-									$facets = $results->facet_counts->facet_fields->agency_facet;
-										$facetList = " ";
-										$i = 0;
-										foreach ($facets as $row) {
-											if ($i % 2 == 0){
-												$facetList = $row;
-											}else{
-												$facetList = $facetList;
-											//$facetList = trim($facetList);
-											//$link = base_url("eaditorsearch/agency") . "/" . rawurlencode($facetList); 
-											?>
-											<div class="element-item"><h3 class='name'><a href='#' id='browseLink'><?php echo $facetList ; ?></a></h3><p class="number"><?php echo $row ;?></p></div><?php
-											}
-											$i += 1;
-										}
-								?>
-							</div>		
+                                    $facets = $results->facet_counts->facet_fields->agency_facet;
+                                        $facetList = " ";
+                                        $i = 0;
+                                        foreach ($facets as $row) {
+                                            if ($i % 2 == 0) {
+                                                $facetList = $row;
+                                            } else {
+                                                $facetList = $facetList;
+                                                //$facetList = trim($facetList);
+                                                //$link = base_url("eaditorsearch/agency") . "/" . rawurlencode($facetList); ?>
+											<div class="element-item"><h3 class='name'><a href='#' id='browseLink'><?php echo $facetList ; ?></a></h3><p class="number"><?php echo $row ; ?></p></div><?php
+                                            }
+                                            $i += 1;
+                                        }
+                                ?>
+							</div>
 						</div>
 					</div><!-- row -->
 				</div><!-- container -->
-				
+
 			</div>
 			<!-- jumbotron -->
 
@@ -197,7 +196,7 @@ body {
 		<!-- main-container -->
 		<div class="container">
 			<p  class = "foot">
-			
+
 			</p>
 
 		</div>
