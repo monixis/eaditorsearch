@@ -30,15 +30,15 @@
 
   <?php
     $this->load->helper('url');
-    $link = "https://www.empireadc.org/ead/". strtolower($collId) ."/id/".$eadId.".xml";
+    #$link = "https://www.empireadc.org/ead/". strtolower($collId) ."/id/".$eadId.".xml";
+    #Link directly to exist to help with large size xml
+    $link ="http://www.empireadc.org:8080/exist/rest/db/eaditor/". strtolower($collId) ."/guides/".$eadId.".xml";
     $rdf = "https://www.empireadc.org/ead/". $collId ."/id/".$eadId.".rdf";
     $is_chron_available = false;
-    //$xml = simplexml_load_file($link);
-   //Global variable to create the table of contents
+
     $GLOBALS['tree'] = ' ';
     $reader = new XMLReader();
     $reader->open($link);
-
     while ($reader -> read()) {
         if ($reader->nodeType == XMLReader::ELEMENT && $reader->name == 'ead') {
             $doc = new DOMDocument('1.0', 'UTF-8');
@@ -256,6 +256,7 @@
             }
         }
     } //while ends
+
     ?>
 
     <style>
