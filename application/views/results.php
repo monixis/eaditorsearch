@@ -13,7 +13,8 @@
 
 </style>
 
-<link rel="stylesheet" type="text/css" href="./styles/main.css" />
+
+<link href="<?php echo base_url("/styles/main.css"); ?>" rel="stylesheet">
 
 	<div class="row">
 		<div id="facets" class="page-sidebar col-md-3">
@@ -64,7 +65,7 @@
                     //$link = base_url('?c=eaditorsearch&m=viewEAD&collId='.$collId.'&eadId='.$row -> id);
                     $link = base_url("eaditorsearch/ead") . "/" . $collId . "/" . $fileId; ?>
 				<li class="results" style="height: auto; padding: 10px;">
-						<a href=<?php echo $link ?> target="_blank"><?php echo $title ?></a></br>
+						<a href=<?php echo $link ?>><?php echo $title ?></a></br>
 						<p class="labelInfo"><span class="labelName">Date: </span><?php echo $date ?></p>
 						<p class="labelInfo"><span class="labelName">Publisher: </span><?php echo $publisher ?></p>
 				</li>

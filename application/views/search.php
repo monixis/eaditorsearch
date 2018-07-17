@@ -140,6 +140,8 @@
 					var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
 				}
 			}
+			<!--zack work here on back button issue -->
+			history.replaceState(null, null, resultUrl);
 			$('#searchResults').load(resultUrl);
 			}
 		});
