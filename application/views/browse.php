@@ -8,11 +8,13 @@
 		<meta name="description" content="">
 		<meta name="author" content="">
 		<title>Empire Archival Discovery Cooperative | Finding Aids at Your Fingertips</title>
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1//jquery.min.js"></script>
-		<script src="<?php echo base_url("/js/empireadc.js"); ?>"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
 		<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 		<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
+		  <link rel="stylesheet" type="text/css" href="<?php echo base_url("/styles/main.css"); ?>"/>
 		<script src="<?php echo base_url("/js/isotope.pkgd.min.js"); ?>"></script>
+		<script src="<?php echo base_url("/js/empireadc.js"); ?>"></script>
 </head>
 	<body>
 
@@ -72,4 +74,68 @@
 
 		</div>
 </body>
+<script type="text/javascript">
+// init Isotope
+var $grid = $('.grid').isotope({
+  itemSelector: '.element-item',
+  layoutMode: 'fitRows',
+  getSortData: {
+    name: '.name',
+    symbol: '.symbol',
+    number: '.number parseInt',
+    category: '[data-category]',
+    weight: function( itemElem ) {
+      var weight = $( itemElem ).find('.weight').text();
+      return parseFloat( weight.replace( /[\(\)]/g, '') );
+    }
+  }
+});
+
+// filter functions
+var filterFns = {
+  // show if number is greater than 50
+  numberGreaterThan50: function() {
+    var number = $(this).find('.number').text();
+    return parseInt( number, 10 ) > 50;
+  },
+  // show if name ends with -ium
+  ium: function() {
+    var name = $(this).find('.name').text();
+    return name.match( /ium$/ );
+  }
+};
+
+// bind filter button click
+$('#filters').on( 'click', 'button', function() {
+  var filterValue = $( this ).attr('data-filter');
+  // use filterFn if matches value
+  filterValue = filterFns[ filterValue ] || filterValue;
+  $grid.isotope({ filter: filterValue });
+});
+
+// bind sort button click
+$('#sorts').on( 'click', 'button', function() {
+  var sortByValue = $(this).attr('data-sort-by');
+  $grid.isotope({ sortBy: sortByValue });
+});
+
+// change is-checked class on buttons
+$('.button-group').each( function( i, buttonGroup ) {
+  var $buttonGroup = $( buttonGroup );
+  $buttonGroup.on( 'click', 'button', function() {
+    $buttonGroup.find('.is-checked').removeClass('is-checked');
+    $( this ).addClass('is-checked');
+  });
+});
+$('.element-item').click(function(){
+        var searchTerm = $(this).children('h3').text();
+                        //var searchTerm = searchTerm.replace(/ /g,"%20");
+                        /*var searchTerm = searchTerm.trim();
+                        var searchTerm = searchTerm.replace(/ /g,"%20");                */
+        var searchTerm = encodeURIComponent(searchTerm);
+        var resultUrl = "<?php echo base_url("/eaditorsearch/agency")?>" + "/" + searchTerm;
+        window.open(resultUrl, '_self');
+});
+</script>
+
 </html>
