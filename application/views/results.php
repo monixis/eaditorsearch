@@ -182,7 +182,6 @@
 		$body.addClass("loading");
      	$('#searchResults').load(resultUrl);
     });
-
   	$('#tabs-1').easyPaginate({
         paginateElement: 'li',
         elementsPerPage: 50,
