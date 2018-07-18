@@ -1,3 +1,4 @@
+
 <!--script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script-->
 <meta charset="utf-8" xmlns="http://www.w3.org/1999/html">
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
@@ -6,48 +7,49 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/list.pagination.js/0.1.1/list.pagination.min.js"></script>
 <script src="<?php echo base_url("/js/jquery.easyPaginate.js"); ?>"></script>
 <style>
-	p.labelInfo {font-size: 10pt; margin-top: -10px;}
-	span.labelName {color: #b31b1b;font-weight:bold; }
-	.easyPaginateNav a {padding:5px;float: inherit}
-	.easyPaginateNav a.current {font-weight:bold;text-decoration:underline;}
+        p.labelInfo {font-size: 10pt; margin-top: -10px;}
+        span.labelName {color: #b31b1b;font-weight:bold; }
+        .easyPaginateNav a {padding:5px;float: inherit}
+        .easyPaginateNav a.current {font-weight:bold;text-decoration:underline;}
 
 </style>
 
 
 <link href="<?php echo base_url("/styles/main.css"); ?>" rel="stylesheet">
 
-	<div class="row">
-		<div id="facets" class="page-sidebar col-md-3">
-			<h4>Filter By:</h4>
-			<?php
+        <div class="row">
+                <div id="facets" class="page-sidebar col-md-3">
+                        <h4>Filter By:</h4>
+                        <?php
 
             for ($i=0; $i < 8; $i++) {
                 if (sizeof($facetsList[$i][0])>0) {
                     ?>
-					<button class="accordion" id="<?php echo $facetsOrgLabels[$i] ; ?>"><?php echo ucfirst($facetsLabels[$i]); ?></button>
-					<div class="panel" id="<?php $facetsOrgLabels[$i] ; ?>">
-						<form class="form-horizontal">
-							<div class="form-group has-feedback">
-	                      		<span class="input-group-btn">
-									<input id="<?php echo $facetsOrgLabels[$i] ; ?>" class="facetList form-control hasclear" type="text" placeholder="Search" >
-								</span>
-							</div>
-						</form>
+                                        <button class="accordion" id="<?php echo $facetsOrgLabels[$i] ; ?>"><?php echo ucfirst($facetsLabels[$i]); ?></button>
+                                        <div class="panel" id="<?php $facetsOrgLabels[$i] ; ?>">
+                                                <form class="form-horizontal">
+                                                        <div class="form-group has-feedback">
+                                        <span class="input-group-btn">
+                                                                        <input id="<?php echo $facetsOrgLabels[$i] ; ?>" class="facetList form-control hasclear" type="text" placeholder="Search" >
+                                                                </span>
+                                                        </div>
+                                                </form>
 
-						<ul id="<?php echo $facetsOrgLabels[$i] ; ?>" style="padding-left: 5px;">
+                                                <ul id="<?php echo $facetsOrgLabels[$i] ; ?>" style="padding-left: 5px;">
                         <?php
                             foreach ($facetsList[$i][0] as $row) {
                                 ?>
-								<li id="<?php echo $facetsOrgLabels[$i] ; ?>" style="margin-bottom:5px;"><a href="#" class='tags'><?php echo $row ; ?></a></li><?php
+                                                                <li id="<?php echo $facetsOrgLabels[$i] ; ?>" style="margin-bottom:5px;"><a href="#" class='tags'><?php echo $row ; ?></a></li><?php
                             } ?>
                         </ul>
-					</div>
+                                        </div>
 
-				<?php
+                                <?php
                 }
             }?>
 
-		</div> <!-- facets ends -->
+                </div> <!-- facets ends -->
+
 
 	<div class="col-md-9">
 

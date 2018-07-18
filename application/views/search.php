@@ -14,15 +14,8 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.css">
 
 		<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-
 		<link href="<?php echo base_url("/css/ie10-viewport-bug-workaround.css"); ?>" rel="stylesheet">
 		<link href="<?php echo base_url("/styles/main.css"); ?>" rel="stylesheet">
-
-		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-		<!--[if lt IE 9]>
-		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-		<![endif]-->
 
 		<script type="text/javascript" src="<?php echo base_url("/js/jquery-ui.js"); ?>"></script>
 		<link rel="stylesheet" href="<?php echo base_url("/font-awesome/css/font-awesome.min.css"); ?>" />
@@ -30,19 +23,6 @@
 		<script src="<?php echo base_url("/js/nprogress.js"); ?>"></script>
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url("/styles/nprogress.css"); ?>" />
 
-		<!--style>
-            @media all and (min-width:1000px) {
-
-
-            #searchResults{
-                width: 100%;
-                float: right;
-                clear: right;
-
-            }
-            }
-
-        </style-->
 
 	</head>
 	<body>
@@ -140,8 +120,9 @@
 					var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
 				}
 			}
+			var backUrl ="<?php echo base_url("/eaditorsearch/?key=")?>" + searchTerm +"&facet=NULL" ;
 			<!--zack work here on back button issue -->
-			history.replaceState(null, null, resultUrl);
+			history.replaceState(null, null, backUrl);
 			$('#searchResults').load(resultUrl);
 			}
 		});
