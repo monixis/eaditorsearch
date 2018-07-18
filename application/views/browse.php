@@ -8,9 +8,9 @@
 		<meta name="description" content="">
 		<meta name="author" content="">
 		<title>Empire Archival Discovery Cooperative | Finding Aids at Your Fingertips</title>
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1//jquery.min.js"></script>
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
 		<script src="<?php echo base_url("/js/isotope.pkgd.min.js"); ?>"></script>
 	<style>
 * { box-sizing: border-box; }
@@ -176,7 +176,7 @@ body {
                                             } else {
                                                 $facetList = $facetList;
                                                 //$facetList = trim($facetList);
-                                                //$link = base_url("eaditorsearch/agency") . "/" . rawurlencode($facetList); ?>
+                                                //$link = base_url("eaditorsearch/agency") . "/" . rawurlencode($facetList);?>
 											<div class="element-item"><h3 class='name'><a href='#' id='browseLink'><?php echo $facetList ; ?></a></h3><p class="number"><?php echo $row ; ?></p></div><?php
                                             }
                                             $i += 1;

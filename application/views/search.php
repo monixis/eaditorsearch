@@ -9,9 +9,9 @@
 		<meta name="author" content="">
 
 		<title>Empire Archival Discovery Cooperative | Finding Aids at Your Fingertips</title>
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<!-- Bootstrap core CSS -->
-		<link href="<?php echo base_url("/styles/bootstrap.css"); ?>" rel="stylesheet">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.css">
 
 		<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 
