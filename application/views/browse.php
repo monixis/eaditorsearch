@@ -160,8 +160,8 @@ body {
 							<!--input type="text" id="searchBox" placeholder="Search Honor's Thesis Repository" /-->
 							<h2>Sort by: </h2>
 							<div id="sorts" class="button-group">
-								<button class="button is-checked" data-sort-by="original-order">Total EADs</button>
-  								<button class="button" data-sort-by="name">Name</button>
+								<button class="button is-checked" data-sort-by="original-order">Total Finding Aids</button>
+  								<button class="button" data-sort-by="name">Orgizatio Name</button>
 								<!--button class="button" data-sort-by="number">Total EADs - Ascending</button-->
 							</div>
 
