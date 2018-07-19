@@ -64,13 +64,16 @@
                     $fileId = $row -> id ;
                     //$link = "https://www.empireadc.org/ead/". $collection ."/id/".$row -> id.".xml";
                     //$link = base_url('?c=eaditorsearch&m=viewEAD&collId='.$collId.'&eadId='.$row -> id);
-                    $link = base_url("eaditorsearch/ead") . "/" . $collId . "/" . $fileId; ?>
+                    $link = base_url("eaditorsearch/ead") . "/" . $collId . "/" . $fileId;
+                    if (strlen($title)>2) {
+                        ?>
 				<li class="results" style="height: auto; padding: 10px;">
 						<a href=<?php echo $link ?>><?php echo $title ?></a></br>
 						<p class="labelInfo"><span class="labelName">Date: </span><?php echo $date ?></p>
 						<p class="labelInfo"><span class="labelName">Publisher: </span><?php echo $publisher ?></p>
 				</li>
 			<?php
+                    }
                 }
             ?>
 		<!--/ol></br-->
