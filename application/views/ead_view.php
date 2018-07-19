@@ -437,7 +437,7 @@
        $add= strpos($rURL, 'http://') !== false ? '' : 'http://';
        $add .=$rURL;
        ?>
-       <h5><a href='<?php echo $add; ?>' style='font-size: 15px' target="_blank"><?php echo $rURL; ?></a></h5>
+       <h5><a href='<?php echo $add; ?>' style='font-size: 15px' ><?php echo $rURL; ?></a></h5>
 
        <label>Dates: </label>
        <?php
