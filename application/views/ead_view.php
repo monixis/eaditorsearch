@@ -387,27 +387,13 @@
 <?php
     }
 ?>
-<nav class="navbar navbar-inverse">
+<nav style="margin-top: 60px;" class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
+
       <!--a class="navbar-brand" href="/"><img src='https://www.empireadc.org/sites/www.empireadc.org/files/ead_logo.gif' /></a-->
     </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav">
-        <!--li class="active"><a href="#">Home</a></li-->
-       </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <!--li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li-->
-        <!--li><a href="#">About</a></li>
-        <li><a href="#">Contact</a></li-->
-        <li><a href='https://drive.google.com/open?id=1hsFy_xJ9uIP_wkRZjityXVdWVHSQF3X9eVALv2sMEo4' target='_blank'>Feedback/Issue</a></li>
-      </ul>
-    </div>
+
   </div>
 </nav>
 
@@ -481,7 +467,8 @@
       } ?>
 
   </div>
-
+  <button type="button" onclick="expand()">Expand All</button>&nbsp&nbsp&nbsp&nbsp
+  <button type="button" onclick="collapse()">Collapse All</button>
 <h4 data-toggle="collapse" data-target="#descId" class='infoAccordion accordion'>Collection Details<span class="glyphicon glyphicon-menu-right" style="float:right;"></span></h4>
 <div id="descId" class="collapse">
         <?php if ($processInfo != 'Unspecified') {
@@ -878,6 +865,7 @@
         <a href='<?php echo $rdf; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-custm" >RDF/XML</button> </a>
     </div>
      </br></br>
+     <li><a href='https://drive.google.com/open?id=1hsFy_xJ9uIP_wkRZjityXVdWVHSQF3X9eVALv2sMEo4' target='_blank'>Feedback/Issue</a></li>
     <!--div id="cart" style="visibility:hidden;">
           <div align="right">
           </div>
@@ -961,6 +949,14 @@
  $('button#tocbutton').toggle(function(){
     $('#tocResponsive').html('<label>Series in this Collection: </label><?php echo '<ul id="tree">' . $GLOBALS['tree'] . '</ul>'; ?>');
  });
+ function expand() {
+     $('.stuff').slideDown(400);
+     $('.collapse').slideDown(400);
+ }
 
+ function collapse() {
+     $('.stuff').slideUp(400);
+     $('.collapse').slideUp(400);
+ }
 </script>
 </html>
