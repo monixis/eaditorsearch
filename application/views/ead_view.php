@@ -539,7 +539,7 @@
           <?php for ($i=0 ; $i < sizeof($relatedMaterialLink) ; $i ++) {
                 if ($linksAvailable == true) {
                     ?>
-            <a href='<?php $relatedMaterialLink[$i][1]; ?>' target="_blank"><?php echo $relatedMaterialLink[$i][0]; ?></a></br>
+            <a href='<?php $relatedMaterialLink[$i][1]; ?>' ><?php echo $relatedMaterialLink[$i][0]; ?></a></br>
           <?php
                 } else {
                     ?>
