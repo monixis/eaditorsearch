@@ -48,7 +48,7 @@ class eaditorsearch extends CI_Controller
         } else {
             $resultsLink = "http://www.empireadc.org:8080/solr/eaditor-published/select?indent=on&q=". $key ."&wt=json&facet=true&facet.field=subject_facet&facet.field=agency_facet&facet.field=corpname_facet&facet.field=genreform_facet&facet.field=persname_facet&facet.field=language_facet&facet.field=century_num&facet.field=famname_facet&facet.field=geogname_facet&rows=1500";
         }
-        // echo $resultsLink;
+        //echo $resultsLink;
         $json = file_get_contents($resultsLink);
         $data['key'] = $key;
         $data['facet'] = $facet;

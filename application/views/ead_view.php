@@ -921,7 +921,7 @@
         var repositoryName = repositoryName.trim();
         var repositoryName = repositoryName.replace(/ /g,"%20");
         var repositoryName = encodeURIComponent(repositoryName);
-        resultUrl = "<?php echo base_url("?key=")?>"+ repositoryName +"&facet=agency_facet";
+        resultUrl = "<?php echo base_url("?key=")?>"+ repositoryName +"&facet=corpname_facet";
         window.open(resultUrl);
     });
     var acc = document.getElementsByClassName("accordion");
