@@ -118,8 +118,9 @@
 					var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
 				}
 			}
+
 			var backUrl ="<?php echo base_url("/eaditorsearch/?key=")?>" + searchTerm +"&facet=NULL" ;
-			<!--zack work here on back button issue -->
+			<!--allows backbutton to work -->
 			history.replaceState(null, null, backUrl);
 			$('#searchResults').load(resultUrl);
 			}
