@@ -146,7 +146,7 @@
 			var queryTag = $('input#queryTag').val();
         	searchTerm = searchTerm + queryTag;
        		var searchTerm = encodeURIComponent(searchTerm);
-       		var searchTerm = searchTerm.replace(/\(/g,"%28");
+        	var searchTerm = searchTerm.replace(/\(/g,"%28");
        		var searchTerm = searchTerm.replace(/\)/g,"%29");
 			var searchTerm = searchTerm.replace(/'/g,"%27");
         		// encoding string into UTF - 8 to carry all the required characters in the ajax request.
