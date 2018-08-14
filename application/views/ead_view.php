@@ -411,7 +411,7 @@
            <nav id="main-menu"  role="navigation">
              <a class="nav-toggle" href="#">Menu</a>
              <div class="menu-navigation-container">
-               <ul class="menu"><li class="first leaf"><a href="http://beta.empireadc.org/eaditorsearch/browse#" title="">Browse</a></li>
+               <ul class="menu"><li class="first leaf"><a href="http://beta.empireadc.org/eaditorsearch/browse" title="">Browse</a></li>
      <li class="leaf"><a href="http://beta.empireadc.org/" title="">Search</a></li>
      <li class="leaf"><a href="/participate">Participate</a></li>
      <li class="last leaf"><a href="/about">About</a></li>
