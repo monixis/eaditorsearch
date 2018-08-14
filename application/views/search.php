@@ -13,8 +13,8 @@
 		<!-- Bootstrap core CSS -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.css">
 		<!--EmpireADC Drupal CSS -->
-		<link href="http://empireadc.local/sites/empireadc.local/themes/esln_ead/css/style.css" rel="stylesheet">
-		<link href="http://empireadc.local/sites/empireadc.local/themes/esln_ead/css/media.css" rel="stylesheet">
+		<link href="http://empireadc.org/sites/empireadc.org/themes/esln_ead/css/style.css" rel="stylesheet">
+		<link href="http://empireadc.org/sites/empireadc.org/themes/esln_ead/css/media.css" rel="stylesheet">
 
 		<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 		<link href="<?php echo base_url("/css/ie10-viewport-bug-workaround.css"); ?>" rel="stylesheet">
@@ -38,7 +38,7 @@
 								<div class="senylrc_top_container">
 							     <div class="top_left">
 							               <div id="logo">
-							           <a href="/" title="Home"><img src="http://empireadc.local/sites\empireadc.org\files/ead_logo.gif"/></a>
+							           <a href="/" title="Home"><img src="http://empireadc.org/sites\empireadc.org\files/ead_logo.gif"/></a>
 							         </div>
 
 							       <h1 id="site-title">
@@ -52,8 +52,8 @@
 							       <nav id="main-menu"  role="navigation">
 							         <a class="nav-toggle" href="#">Menu</a>
 							         <div class="menu-navigation-container">
-							           <ul class="menu"><li class="first leaf"><a href="http://empireadc.local/empiresearch/eaditorsearch/browse" title="">Browse</a></li>
-							 <li class="leaf"><a href="http://empireadc.local/empiresearch/" title="">Search</a></li>
+							           <ul class="menu"><li class="first leaf"><a href="http://beta.empireadc.org/eaditorsearch/browse" title="">Browse</a></li>
+							 <li class="leaf"><a href="http://beta.empireadc.org" title="">Search</a></li>
 							 <li class="leaf"><a href="/participate">Participate</a></li>
 							 <li class="last leaf"><a href="/about">About</a></li>
 							 </ul>        </div>
