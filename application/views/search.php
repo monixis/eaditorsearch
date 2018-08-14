@@ -12,6 +12,9 @@
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<!-- Bootstrap core CSS -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.css">
+		<!--EmpireADC Drupal CSS -->
+		<link href="http://empireadc.local/sites/empireadc.local/themes/esln_ead/css/style.css" rel="stylesheet">
+		<link href="http://empireadc.local/sites/empireadc.local/themes/esln_ead/css/media.css" rel="stylesheet">
 
 		<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 		<link href="<?php echo base_url("/css/ie10-viewport-bug-workaround.css"); ?>" rel="stylesheet">
@@ -31,11 +34,40 @@
 		<!-- Main jumbotron for a primary marketing message or call to action -->
 		<div id="main-container" class="container">
 			<div class="jumbotron" style="background: #ffffff;">
+
+								<div class="senylrc_top_container">
+							     <div class="top_left">
+							               <div id="logo">
+							           <a href="/" title="Home"><img src="http://empireadc.local/sites\empireadc.org\files/ead_logo.gif"/></a>
+							         </div>
+
+							       <h1 id="site-title">
+							         <a href="/" title="Home"></a>
+
+							       </h1>
+							     </div>
+
+							     <div class="top_right">
+							 	<div id="site-description">Finding Aids at Your Fingertips</div>
+							       <nav id="main-menu"  role="navigation">
+							         <a class="nav-toggle" href="#">Menu</a>
+							         <div class="menu-navigation-container">
+							           <ul class="menu"><li class="first leaf"><a href="http://empireadc.local/empiresearch/eaditorsearch/browse" title="">Browse</a></li>
+							 <li class="leaf"><a href="http://empireadc.local/empiresearch/" title="">Search</a></li>
+							 <li class="leaf"><a href="/participate">Participate</a></li>
+							 <li class="last leaf"><a href="/about">About</a></li>
+							 </ul>        </div>
+							         <div class="clear"></div>
+							       </nav>
+							     </div>
+							 	</div>
+
+
 				<div class="container" style="margin-top: -36px;">
 					<!-- Example row of columns -->
 					<div class="row">
 						<div class="col-md-12">
-							<div id="logo" style="width: 300px; margin-left: auto; margin-right: auto;"><a href='/'><img src='https://www.empireadc.org/sites/www.empireadc.org/files/ead_logo.gif' style='width:300px;'/></div></a>
+
 							<!--input type="text" id="searchBox" placeholder="Search Honor's Thesis Repository" /-->
 							<div id="custom-search-input">
 								<div class="input-group col-md-12">
@@ -47,7 +79,7 @@
 										</button> </span>
 								</div>
 									<!--p id="message" style="display: none;color: #B31B1B"> Please enter any text or word to search</p-->
-									<a href='<?php echo base_url("/eaditorsearch/browse")?>' target='_self'><button class="btn btn-default btn-md" style='margin-top: 5px;'>Browse</button></a>
+
 									<a href='https://drive.google.com/open?id=1hsFy_xJ9uIP_wkRZjityXVdWVHSQF3X9eVALv2sMEo4' target='_self' style='float:right;'>Feedback/Issue</a>
 							</div>
 							<div id="selectedFacet" >

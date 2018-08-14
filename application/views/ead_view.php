@@ -8,6 +8,9 @@
   <!--link rel="stylesheet" href="styles/bootstrap.css"-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
+  <!--EmpireADC Drupal CSS -->
+  <link href="http://empireadc.local/sites/empireadc.local/themes/esln_ead/css/style.css" rel="stylesheet">
+  <link href="http://empireadc.local/sites/empireadc.local/themes/esln_ead/css/media.css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="<?php echo base_url("/styles/main.css"); ?>"/>
   <link rel="stylesheet" type="text/css" href="<?php echo base_url("/styles/chronlogy.css"); ?>"/>
   <link rel="stylesheet" type="text/css" href="<?php echo base_url("/styles/768.css"); ?>"/>
@@ -387,20 +390,47 @@
 <?php
     }
 ?>
-<nav style="margin-top: 60px;" class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
 
-      <!--a class="navbar-brand" href="/"><img src='https://www.empireadc.org/sites/www.empireadc.org/files/ead_logo.gif' /></a-->
-    </div>
 
-  </div>
-</nav>
+
+
+      <div class="senylrc_top_container" style="margin-left:16%;">
+         <div class="top_left">
+                   <div id="logo">
+               <a href="/" title="Home"><img src="http://empireadc.local/sites\empireadc.org\files/ead_logo.gif"/></a>
+             </div>
+
+           <h1 id="site-title">
+             <a href="/" title="Home"></a>
+
+           </h1>
+         </div>
+
+         <div class="top_right">
+      <div id="site-description">Finding Aids at Your Fingertips</div>
+           <nav id="main-menu"  role="navigation">
+             <a class="nav-toggle" href="#">Menu</a>
+             <div class="menu-navigation-container">
+               <ul class="menu"><li class="first leaf"><a href="http://empireadc.local/empiresearch/eaditorsearch/browse" title="">Browse</a></li>
+     <li class="leaf"><a href="http://empireadc.local/empiresearch/" title="">Search</a></li>
+     <li class="leaf"><a href="/participate">Participate</a></li>
+     <li class="last leaf"><a href="/about">About</a></li>
+     </ul>        </div>
+
+             <div class="clear"></div>
+           </nav>
+         </div>
+      </div>
+         <div class="clear"></div>
+
+
+
+
 
 <div class="container-fluid text-center">
   <div class="row content">
     <div class="col-sm-2 sidenav">
-		<a href='<?php echo base_url(); ?>'><img src='https://www.empireadc.org/sites/www.empireadc.org/files/ead_logo.gif' style='width:220px; margin-top: -75px'/></a>
+
     </div>
     <div class="col-sm-8 text-left">
     <div class="reptitle"><h1><span property="dcterms:title"><?php echo $title; ?></span></h1></div>
@@ -412,6 +442,7 @@
        <--?php } */?> -->
 
        <label>Repository:</label><a class="searchTerm" style="font-style: italic" href="#"><p style="width: 230px;"><?php echo $repository; ?></a><br><?php echo $subarea; ?></p>
+
        <?php if ($address == true) {
     foreach ($addressline as $a) {
         ?>
@@ -865,7 +896,7 @@
         <a href='<?php echo $rdf; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-custm" >RDF/XML</button> </a>
     </div>
      </br></br>
-     <li><a href='https://drive.google.com/open?id=1hsFy_xJ9uIP_wkRZjityXVdWVHSQF3X9eVALv2sMEo4' target='_blank'>Feedback/Issue</a></li>
+
     <!--div id="cart" style="visibility:hidden;">
           <div align="right">
           </div>
