@@ -1,52 +1,54 @@
 <!--script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script-->
 <meta charset="utf-8" xmlns="http://www.w3.org/1999/html">
-<script type="text/javascript" src="<?php echo base_url("/js/jquery-ui.js"); ?>"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/list.pagination.js/0.1.1/list.pagination.min.js"></script>
 <script src="<?php echo base_url("/js/jquery.easyPaginate.js"); ?>"></script>
 <style>
-	p.labelInfo {font-size: 10pt; margin-top: -10px;}
-	span.labelName {color: #b31b1b;font-weight:bold; }
-	.easyPaginateNav a {padding:5px;float: inherit}
-	.easyPaginateNav a.current {font-weight:bold;text-decoration:underline;}
+        p.labelInfo {font-size: 10pt; margin-top: -10px;}
+        span.labelName {color: #b31b1b;font-weight:bold; }
+        .easyPaginateNav a {padding:5px;float: inherit}
+        .easyPaginateNav a.current {font-weight:bold;text-decoration:underline;}
 
 </style>
 
-<link rel="stylesheet" type="text/css" href="./styles/main.css" />
 
-	<div class="row">
-		<div id="facets" class="page-sidebar col-md-3">
-			<h4>Filter By:</h4>
-			<?php
+<link href="<?php echo base_url("/styles/main.css"); ?>" rel="stylesheet">
+
+        <div class="row">
+                <div id="facets" class="page-sidebar col-md-3">
+                        <h4>Filter By:</h4>
+                        <?php
 
             for ($i=0; $i < 8; $i++) {
                 if (sizeof($facetsList[$i][0])>0) {
                     ?>
-					<button class="accordion" id="<?php echo $facetsOrgLabels[$i] ; ?>"><?php echo ucfirst($facetsLabels[$i]); ?></button>
-					<div class="panel" id="<?php $facetsOrgLabels[$i] ; ?>">
-						<form class="form-horizontal">
-							<div class="form-group has-feedback">
-	                      		<span class="input-group-btn">
-									<input id="<?php echo $facetsOrgLabels[$i] ; ?>" class="facetList form-control hasclear" type="text" placeholder="Search" >
-								</span>
-							</div>
-						</form>
+                                        <button class="accordion" id="<?php echo $facetsOrgLabels[$i] ; ?>"><?php echo ucfirst($facetsLabels[$i]); ?></button>
+                                        <div class="panel" id="<?php $facetsOrgLabels[$i] ; ?>">
+                                                <form class="form-horizontal">
+                                                        <div class="form-group has-feedback">
+                                        <span class="input-group-btn">
+                                                                        <input id="<?php echo $facetsOrgLabels[$i] ; ?>" class="facetList form-control hasclear" type="text" placeholder="Search" >
+                                                                </span>
+                                                        </div>
+                                                </form>
 
-						<ul id="<?php echo $facetsOrgLabels[$i] ; ?>" style="padding-left: 5px;">
+                                                <ul id="<?php echo $facetsOrgLabels[$i] ; ?>" style="padding-left: 5px;">
                         <?php
                             foreach ($facetsList[$i][0] as $row) {
                                 ?>
-								<li id="<?php echo $facetsOrgLabels[$i] ; ?>" style="margin-bottom:5px;"><a href="#" class='tags'><?php echo $row ; ?></a></li><?php
+                                                                <li id="<?php echo $facetsOrgLabels[$i] ; ?>" style="margin-bottom:5px;"><a href="#" class='tags'><?php echo $row ; ?></a></li><?php
                             } ?>
                         </ul>
-					</div>
+                                        </div>
 
-				<?php
+                                <?php
                 }
             }?>
 
-		</div> <!-- facets ends -->
+                </div> <!-- facets ends -->
+
 
 	<div class="col-md-9">
 
@@ -62,13 +64,16 @@
                     $fileId = $row -> id ;
                     //$link = "https://www.empireadc.org/ead/". $collection ."/id/".$row -> id.".xml";
                     //$link = base_url('?c=eaditorsearch&m=viewEAD&collId='.$collId.'&eadId='.$row -> id);
-                    $link = base_url("eaditorsearch/ead") . "/" . $collId . "/" . $fileId; ?>
+                    $link = base_url("eaditorsearch/ead") . "/" . $collId . "/" . $fileId;
+                    if (strlen($title)>2) {
+                        ?>
 				<li class="results" style="height: auto; padding: 10px;">
-						<a href=<?php echo $link ?> target="_blank"><?php echo $title ?></a></br>
+						<a href=<?php echo $link ?>><?php echo $title ?></a></br>
 						<p class="labelInfo"><span class="labelName">Date: </span><?php echo $date ?></p>
 						<p class="labelInfo"><span class="labelName">Publisher: </span><?php echo $publisher ?></p>
 				</li>
 			<?php
+                    }
                 }
             ?>
 		<!--/ol></br-->
@@ -141,7 +146,7 @@
 			var queryTag = $('input#queryTag').val();
         	searchTerm = searchTerm + queryTag;
        		var searchTerm = encodeURIComponent(searchTerm);
-       		var searchTerm = searchTerm.replace(/\(/g,"%28");
+        	var searchTerm = searchTerm.replace(/\(/g,"%28");
        		var searchTerm = searchTerm.replace(/\)/g,"%29");
 			var searchTerm = searchTerm.replace(/'/g,"%27");
         		// encoding string into UTF - 8 to carry all the required characters in the ajax request.
@@ -179,7 +184,6 @@
 		$body.addClass("loading");
      	$('#searchResults').load(resultUrl);
     });
-
   	$('#tabs-1').easyPaginate({
         paginateElement: 'li',
         elementsPerPage: 50,

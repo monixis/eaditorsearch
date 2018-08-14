@@ -4,10 +4,13 @@
   <title>EADitor EAD view</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
   <!--link rel="stylesheet" href="styles/bootstrap.css"-->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
+  <!--EmpireADC Drupal CSS -->
+  <link href="http://empireadc.org/sites/empireadc.org/themes/esln_ead/css/style.css" rel="stylesheet">
+  <link href="http://empireadc.org/sites/empireadc.org/themes/esln_ead/css/media.css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="<?php echo base_url("/styles/main.css"); ?>"/>
   <link rel="stylesheet" type="text/css" href="<?php echo base_url("/styles/chronlogy.css"); ?>"/>
   <link rel="stylesheet" type="text/css" href="<?php echo base_url("/styles/768.css"); ?>"/>
@@ -30,15 +33,15 @@
 
   <?php
     $this->load->helper('url');
-    $link = "https://www.empireadc.org/ead/". strtolower($collId) ."/id/".$eadId.".xml";
+    #$link = "https://www.empireadc.org/ead/". strtolower($collId) ."/id/".$eadId.".xml";
+    #Link directly to exist to help with large size xml
+    $link ="http://www.empireadc.org:8080/exist/rest/db/eaditor/". strtolower($collId) ."/guides/".$eadId.".xml";
     $rdf = "https://www.empireadc.org/ead/". $collId ."/id/".$eadId.".rdf";
     $is_chron_available = false;
-    //$xml = simplexml_load_file($link);
-   //Global variable to create the table of contents
+
     $GLOBALS['tree'] = ' ';
     $reader = new XMLReader();
     $reader->open($link);
-
     while ($reader -> read()) {
         if ($reader->nodeType == XMLReader::ELEMENT && $reader->name == 'ead') {
             $doc = new DOMDocument('1.0', 'UTF-8');
@@ -256,6 +259,7 @@
             }
         }
     } //while ends
+
     ?>
 
     <style>
@@ -386,34 +390,47 @@
 <?php
     }
 ?>
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <!--a class="navbar-brand" href="/"><img src='https://www.empireadc.org/sites/www.empireadc.org/files/ead_logo.gif' /></a-->
-    </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav">
-        <!--li class="active"><a href="#">Home</a></li-->
-       </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <!--li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li-->
-        <!--li><a href="#">About</a></li>
-        <li><a href="#">Contact</a></li-->
-        <li><a href='https://drive.google.com/open?id=1hsFy_xJ9uIP_wkRZjityXVdWVHSQF3X9eVALv2sMEo4' target='_blank'>Feedback/Issue</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
+
+
+
+
+      <div class="senylrc_top_container" style="margin-left:16%;">
+         <div class="top_left">
+                   <div id="logo">
+               <a href="/" title="Home"><img src="http://empireadc.org/sites\empireadc.org\files/ead_logo.gif"/></a>
+             </div>
+
+           <h1 id="site-title">
+             <a href="/" title="Home"></a>
+
+           </h1>
+         </div>
+
+         <div class="top_right">
+      <div id="site-description">Finding Aids at Your Fingertips</div>
+           <nav id="main-menu"  role="navigation">
+             <a class="nav-toggle" href="#">Menu</a>
+             <div class="menu-navigation-container">
+               <ul class="menu"><li class="first leaf"><a href="http://beta.empireadc.org/eaditorsearch/browse#" title="">Browse</a></li>
+     <li class="leaf"><a href="http://beta.empireadc.org/" title="">Search</a></li>
+     <li class="leaf"><a href="/participate">Participate</a></li>
+     <li class="last leaf"><a href="/about">About</a></li>
+     </ul>        </div>
+
+             <div class="clear"></div>
+           </nav>
+         </div>
+      </div>
+         <div class="clear"></div>
+
+
+
+
 
 <div class="container-fluid text-center">
   <div class="row content">
     <div class="col-sm-2 sidenav">
-		<a href='<?php echo base_url(); ?>'><img src='https://www.empireadc.org/sites/www.empireadc.org/files/ead_logo.gif' style='width:220px; margin-top: -75px'/></a>
+
     </div>
     <div class="col-sm-8 text-left">
     <div class="reptitle"><h1><span property="dcterms:title"><?php echo $title; ?></span></h1></div>
@@ -425,6 +442,7 @@
        <--?php } */?> -->
 
        <label>Repository:</label><a class="searchTerm" style="font-style: italic" href="#"><p style="width: 230px;"><?php echo $repository; ?></a><br><?php echo $subarea; ?></p>
+
        <?php if ($address == true) {
     foreach ($addressline as $a) {
         ?>
@@ -436,7 +454,7 @@
        $add= strpos($rURL, 'http://') !== false ? '' : 'http://';
        $add .=$rURL;
        ?>
-       <h5><a href='<?php echo $add; ?>' style='font-size: 15px' target="_blank"><?php echo $rURL; ?></a></h5>
+       <h5><a href='<?php echo $add; ?>' style='font-size: 15px' ><?php echo $rURL; ?></a></h5>
 
        <label>Dates: </label>
        <?php
@@ -480,7 +498,8 @@
       } ?>
 
   </div>
-
+  <button type="button" onclick="expand()">Expand All</button>&nbsp&nbsp&nbsp&nbsp
+  <button type="button" onclick="collapse()">Collapse All</button>
 <h4 data-toggle="collapse" data-target="#descId" class='infoAccordion accordion'>Collection Details<span class="glyphicon glyphicon-menu-right" style="float:right;"></span></h4>
 <div id="descId" class="collapse">
         <?php if ($processInfo != 'Unspecified') {
@@ -538,7 +557,7 @@
           <?php for ($i=0 ; $i < sizeof($relatedMaterialLink) ; $i ++) {
                 if ($linksAvailable == true) {
                     ?>
-            <a href='<?php $relatedMaterialLink[$i][1]; ?>' target="_blank"><?php echo $relatedMaterialLink[$i][0]; ?></a></br>
+            <a href='<?php $relatedMaterialLink[$i][1]; ?>' ><?php echo $relatedMaterialLink[$i][0]; ?></a></br>
           <?php
                 } else {
                     ?>
@@ -877,6 +896,7 @@
         <a href='<?php echo $rdf; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-custm" >RDF/XML</button> </a>
     </div>
      </br></br>
+
     <!--div id="cart" style="visibility:hidden;">
           <div align="right">
           </div>
@@ -932,7 +952,7 @@
         var repositoryName = repositoryName.trim();
         var repositoryName = repositoryName.replace(/ /g,"%20");
         var repositoryName = encodeURIComponent(repositoryName);
-        resultUrl = "<?php echo base_url("?key=")?>"+ repositoryName +"&facet=agency_facet";
+        resultUrl = "<?php echo base_url("?key=")?>"+ repositoryName +"&facet=corpname_facet";
         window.open(resultUrl);
     });
     var acc = document.getElementsByClassName("accordion");
@@ -960,6 +980,14 @@
  $('button#tocbutton').toggle(function(){
     $('#tocResponsive').html('<label>Series in this Collection: </label><?php echo '<ul id="tree">' . $GLOBALS['tree'] . '</ul>'; ?>');
  });
+ function expand() {
+     $('.stuff').slideDown(400);
+     $('.collapse').slideDown(400);
+ }
 
+ function collapse() {
+     $('.stuff').slideUp(400);
+     $('.collapse').slideUp(400);
+ }
 </script>
 </html>
