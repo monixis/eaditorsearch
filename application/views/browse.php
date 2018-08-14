@@ -9,8 +9,8 @@
 		<meta name="author" content="">
 		<title>Empire Archival Discovery Cooperative | Finding Aids at Your Fingertips</title>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-		<link href="http://empireadc.local/sites/empireadc.local/themes/esln_ead/css/style.css" rel="stylesheet">
-		<link href="http://empireadc.local/sites/empireadc.local/themes/esln_ead/css/media.css" rel="stylesheet">
+		<link href="http://empireadc.org/sites/empireadc.org/themes/esln_ead/css/style.css" rel="stylesheet">
+		<link href="http://empireadc.org/sites/empireadc.org/themes/esln_ead/css/media.css" rel="stylesheet">
 		<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 		<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
 		  <link rel="stylesheet" type="text/css" href="<?php echo base_url("/styles/main.css"); ?>"/>
@@ -31,7 +31,7 @@
 				<div class="senylrc_top_container">
 			     <div class="top_left">
 			               <div id="logo">
-			           <a href="/" title="Home"><img src="http://empireadc.local/sites\empireadc.org\files/ead_logo.gif"/></a>
+			           <a href="/" title="Home"><img src="http://empireadc.org/sites\empireadc.org\files/ead_logo.gif"/></a>
 			         </div>
 
 			       <h1 id="site-title">
@@ -45,8 +45,8 @@
 			       <nav id="main-menu"  role="navigation">
 			         <a class="nav-toggle" href="#">Menu</a>
 			         <div class="menu-navigation-container">
-			           <ul class="menu"><li class="first leaf"><a href="http://empireadc.local/empiresearch/eaditorsearch/browse" title="">Browse</a></li>
-			 <li class="leaf"><a href="http://empireadc.local/empiresearch/" title="">Search</a></li>
+			           <ul class="menu"><li class="first leaf"><a href="http://beta.empireadc.org/eaditorsearch/browse" title="">Browse</a></li>
+			 <li class="leaf"><a href="http://beta.empireadc.org/" title="">Search</a></li>
 			 <li class="leaf"><a href="/participate">Participate</a></li>
 			 <li class="last leaf"><a href="/about">About</a></li>
 			 </ul>        </div>
