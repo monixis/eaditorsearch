@@ -1,2 +1,2 @@
 
-# Eaditor search
+# Empire search
