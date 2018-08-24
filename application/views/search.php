@@ -9,12 +9,12 @@
 		<meta name="author" content="">
 
 		<title>Empire Archival Discovery Cooperative | Finding Aids at Your Fingertips</title>
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<!-- Bootstrap core CSS -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.css">
 		<!--EmpireADC Drupal CSS -->
-		<link href="http://empireadc.org/sites/empireadc.org/themes/esln_ead/css/style.css" rel="stylesheet">
-		<link href="http://empireadc.org/sites/empireadc.org/themes/esln_ead/css/media.css" rel="stylesheet">
+		<link href="https://empireadc.org/sites/empireadc.org/themes/esln_ead/css/style.css" rel="stylesheet">
+		<link href="https://empireadc.org/sites/empireadc.org/themes/esln_ead/css/media.css" rel="stylesheet">
 
 		<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 		<link href="<?php echo base_url("/css/ie10-viewport-bug-workaround.css"); ?>" rel="stylesheet">
@@ -22,7 +22,7 @@
 
 		<script type="text/javascript" src="<?php echo base_url("/js/jquery-ui.js"); ?>"></script>
 		<link rel="stylesheet" href="<?php echo base_url("/font-awesome/css/font-awesome.min.css"); ?>" />
-		<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+		<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 		<script src="<?php echo base_url("/js/nprogress.js"); ?>"></script>
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url("/styles/nprogress.css"); ?>" />
 	</head>
@@ -38,7 +38,7 @@
 								<div class="senylrc_top_container">
 							     <div class="top_left">
 							               <div id="logo">
-							           <a href="/" title="Home"><img src="http://empireadc.org/sites\empireadc.org\files/ead_logo.gif"/></a>
+							           <a href="/" title="Home"><img src="https://empireadc.org/sites\empireadc.org\files/ead_logo.gif"/></a>
 							         </div>
 
 							       <h1 id="site-title">
@@ -72,10 +72,23 @@
 							<div id="custom-search-input">
 								<div class="input-group col-md-12">
 									<input type="text" class="form-control input-lg" id="searchBox" placeholder="Finding Aids at Your Fingertips" />
+
+									<!--Zack this is for advasea search facet
+									<select id="facet" class="form-control input-lg">
+  <option value="keyword">Keyword</option>
+  <option value="corp_facet">Corporate Name</option>
+  <option value="famname_facet">Family Name</option>
+  <option value="findid_facet">Finding Aid ID</option>
+	<option value="genreform_facet">Genre/Format</option>
+	<option value="geo_facet">Geographical Location</option>
+	<option value="persname_facet">Personal Name</option>
+	<option value="subject_facet">Subject</option>
+</select>
+-->
 									<input type="hidden" class="form-control input-lg" id="queryTag" />
 									<span class="input-group-btn">
 										<button id="initiateSearch" class="btn btn-info btn-lg" type="button" style="background: #ffffff; border-color: #ccc;">
-											<img src="<?php echo base_url("/icons/search.png"); ?>" style="height: 25px;"/>
+											<img src="<?php echo base_url("/empiresearch/icons/search.png"); ?>" style="height: 25px;"/>
 										</button> </span>
 								</div>
 									<!--p id="message" style="display: none;color: #B31B1B"> Please enter any text or word to search</p-->
