@@ -29,7 +29,7 @@
 	<body>
 
 		<div id="headerContainer">
-			<a href="https://beta.empireadc.org/" target="_self"> <div id="header"></div> </a>
+			<a href="https://www.empireadc.org/" target="_self"> <div id="header"></div> </a>
 		</div>
 		<!-- Main jumbotron for a primary marketing message or call to action -->
 		<div id="main-container" class="container">
@@ -52,8 +52,8 @@
 							       <nav id="main-menu"  role="navigation">
 							         <a class="nav-toggle" href="#">Menu</a>
 							         <div class="menu-navigation-container">
-							           <ul class="menu"><li class="first leaf"><a href="http://beta.empireadc.org/eaditorsearch/browse" title="">Browse</a></li>
-							 <li class="leaf"><a href="http://beta.empireadc.org" title="">Search</a></li>
+							           <ul class="menu"><li class="first leaf"><a href="http://www.empireadc.org/empiresearch/browse" title="">Browse</a></li>
+							 <li class="leaf"><a href="http://www.empireadc.org/empiresearch" title="">Search</a></li>
 							 <li class="leaf"><a href="/participate">Participate</a></li>
 							 <li class="last leaf"><a href="/about">About</a></li>
 							 </ul>        </div>
@@ -88,7 +88,7 @@
 									<input type="hidden" class="form-control input-lg" id="queryTag" />
 									<span class="input-group-btn">
 										<button id="initiateSearch" class="btn btn-info btn-lg" type="button" style="background: #ffffff; border-color: #ccc;">
-											<img src="<?php echo base_url("/empiresearch/icons/search.png"); ?>" style="height: 25px;"/>
+											<img src="<?php echo base_url("/icons/search.png"); ?>" style="height: 25px;"/>
 										</button> </span>
 								</div>
 									<!--p id="message" style="display: none;color: #B31B1B"> Please enter any text or word to search</p-->
@@ -135,9 +135,9 @@
 
 			if(searchTerm != "" ) {
 				if(searchTerm == "*"){
-					var resultUrl = "<?php echo base_url("/eaditorsearch/searchAll")?>";
+					var resultUrl = "<?php echo base_url("/searchAll")?>";
 				}else{
-					var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
+					var resultUrl = "<?php echo base_url("/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
 				}
 			}
 			$('#searchResults').load(resultUrl);
@@ -158,13 +158,13 @@
 
 			if(searchTerm != "" ) {
 				if(searchTerm == "*"){
-					var resultUrl = "<?php echo base_url("/eaditorsearch/searchAll")?>";
+					var resultUrl = "<?php echo base_url("/searchAll")?>";
 				}else{
-					var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
+					var resultUrl = "<?php echo base_url("/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
 				}
 			}
 
-			var backUrl ="<?php echo base_url("/eaditorsearch/?key=")?>" + searchTerm +"&facet=NULL" ;
+			var backUrl ="<?php echo base_url("/?key=")?>" + searchTerm +"&facet=NULL" ;
 			<!--allows backbutton to work -->
 			history.replaceState(null, null, backUrl);
 			$('#searchResults').load(resultUrl);
@@ -183,7 +183,7 @@
 
 					var searchTerm = encodeURIComponent(searchTerm);
 					var facet = "<?php echo $facet; ?>";
-					var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
+					var resultUrl = "<?php echo base_url("/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
 					$('#searchResults').load(resultUrl);
 			}
 		});
