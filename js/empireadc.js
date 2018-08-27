@@ -13,9 +13,9 @@
 
 			if(searchTerm != "" ) {
 				if(searchTerm == "*"){
-					var resultUrl = "http://empireadc.local/empiresearch/searchAll";
+					var resultUrl = "http://www.empireadc.org/search/searchAll";
 				}else{
-					var resultUrl = "http://empireadc.local/empiresearch/searchKeyWords" + "/" + searchTerm + "/" + facet ;
+					var resultUrl = "http://www.empireadc.org/search/searchKeyWords" + "/" + searchTerm + "/" + facet ;
 				}
 			}
 			$('#searchResults').load(resultUrl);
