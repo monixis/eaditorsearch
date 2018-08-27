@@ -62,9 +62,7 @@
                     $publisher = (isset($row -> publisher_display) ? $row -> publisher_display : false) ;
                     $collId = (isset($row -> agencycode_facet[0]) ? str_replace('US-', '', $row -> agencycode_facet[0]) : false);
                     $fileId = $row -> id ;
-                    //$link = "https://www.empireadc.org/ead/". $collection ."/id/".$row -> id.".xml";
-                    //$link = base_url('?c=eaditorsearch&m=viewEAD&collId='.$collId.'&eadId='.$row -> id);
-                    $link = base_url("eaditorsearch/ead") . "/" . $collId . "/" . $fileId;
+                    $link = base_url("ead") . "/" . $collId . "/" . $fileId;
                     if (strlen($title)>2) {
                         ?>
 				<li class="results" style="height: auto; padding: 10px;">
@@ -154,7 +152,7 @@
 			var facet = 'NULL';
 		}
 
-		var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
+		var resultUrl = "<?php echo base_url("/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
 		$body.addClass("loading");
         $('#searchResults').load(resultUrl);
 	});
@@ -175,11 +173,11 @@
 		$(this).closest('button.taglist').remove();
 
 		if(searchTerm == ' '){
-			var resultUrl = "<?php echo base_url("/eaditorsearch/searchAll")?>";
+			var resultUrl = "<?php echo base_url("/searchAll")?>";
 		}else{
 			searchTerm = encodeURIComponent(searchTerm);
 			var facet = 'NULL';
-			var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
+			var resultUrl = "<?php echo base_url("/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
 		}
 		$body.addClass("loading");
      	$('#searchResults').load(resultUrl);

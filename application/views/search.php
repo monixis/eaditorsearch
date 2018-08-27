@@ -52,8 +52,8 @@
 							       <nav id="main-menu"  role="navigation">
 							         <a class="nav-toggle" href="#">Menu</a>
 							         <div class="menu-navigation-container">
-							           <ul class="menu"><li class="first leaf"><a href="http://www.empireadc.org/search/browse" title="">Browse</a></li>
-							 <li class="leaf"><a href="http://www.empireadc.org/search" title="">Search</a></li>
+							           <ul class="menu"><li class="first leaf"><a href="http://www.empireadc.org/empiresearch/browse" title="">Browse</a></li>
+							 <li class="leaf"><a href="http://www.empireadc.org/empiresearch" title="">Search</a></li>
 							 <li class="leaf"><a href="/participate">Participate</a></li>
 							 <li class="last leaf"><a href="/about">About</a></li>
 							 </ul>        </div>
@@ -135,9 +135,9 @@
 
 			if(searchTerm != "" ) {
 				if(searchTerm == "*"){
-					var resultUrl = "<?php echo base_url("/eaditorsearch/searchAll")?>";
+					var resultUrl = "<?php echo base_url("/searchAll")?>";
 				}else{
-					var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
+					var resultUrl = "<?php echo base_url("/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
 				}
 			}
 			$('#searchResults').load(resultUrl);
@@ -158,13 +158,13 @@
 
 			if(searchTerm != "" ) {
 				if(searchTerm == "*"){
-					var resultUrl = "<?php echo base_url("/eaditorsearch/searchAll")?>";
+					var resultUrl = "<?php echo base_url("/searchAll")?>";
 				}else{
-					var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
+					var resultUrl = "<?php echo base_url("/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
 				}
 			}
 
-			var backUrl ="<?php echo base_url("/eaditorsearch/?key=")?>" + searchTerm +"&facet=NULL" ;
+			var backUrl ="<?php echo base_url("/?key=")?>" + searchTerm +"&facet=NULL" ;
 			<!--allows backbutton to work -->
 			history.replaceState(null, null, backUrl);
 			$('#searchResults').load(resultUrl);
@@ -183,7 +183,7 @@
 
 					var searchTerm = encodeURIComponent(searchTerm);
 					var facet = "<?php echo $facet; ?>";
-					var resultUrl = "<?php echo base_url("/eaditorsearch/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
+					var resultUrl = "<?php echo base_url("/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
 					$('#searchResults').load(resultUrl);
 			}
 		});

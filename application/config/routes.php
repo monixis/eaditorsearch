@@ -38,9 +38,9 @@
 |
 */
 
-$route['default_controller'] = "eaditorsearch";
+$route['default_controller'] = "empiresearch";
+$route['^(searchKeyWords|ead|searchAll|agency|browse)(/:any)?$'] = "empiresearch/$0";
 $route['404_override'] = '';
-
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

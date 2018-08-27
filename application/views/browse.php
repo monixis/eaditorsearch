@@ -45,8 +45,8 @@
 			       <nav id="main-menu"  role="navigation">
 			         <a class="nav-toggle" href="#">Menu</a>
 			         <div class="menu-navigation-container">
-			           <ul class="menu"><li class="first leaf"><a href="http://www.empireadc.org/eaditorsearch/browse" title="">Browse</a></li>
-			 <li class="leaf"><a href="http://www.empireadc.org/search" title="">Search</a></li>
+			           <ul class="menu"><li class="first leaf"><a href="http://www.empireadc.org/empiresearch/browse" title="">Browse</a></li>
+			 <li class="leaf"><a href="http://www.empireadc.org/empiresearch" title="">Search</a></li>
 			 <li class="leaf"><a href="/participate">Participate</a></li>
 			 <li class="last leaf"><a href="/about">About</a></li>
 			 </ul>        </div>
@@ -84,7 +84,7 @@
                                             } else {
                                                 $facetList = $facetList;
                                                 //$facetList = trim($facetList);
-                                                //$link = base_url("eaditorsearch/agency") . "/" . rawurlencode($facetList);?>
+                                                //$link = base_url("agency") . "/" . rawurlencode($facetList);?>
 											<div class="element-item"><h3 class='name'><a href='#' id='browseLink'><?php echo $facetList ; ?></a></h3><p class="number"><?php echo $row ; ?></p></div><?php
                                             }
                                             $i += 1;
@@ -168,7 +168,7 @@ $('.element-item').click(function(){
                         /*var searchTerm = searchTerm.trim();
                         var searchTerm = searchTerm.replace(/ /g,"%20");                */
         var searchTerm = encodeURIComponent(searchTerm);
-        var resultUrl = "<?php echo base_url("/eaditorsearch/agency")?>" + "/" + searchTerm;
+        var resultUrl = "<?php echo base_url("/agency")?>" + "/" + searchTerm;
         window.open(resultUrl, '_self');
 });
 </script>

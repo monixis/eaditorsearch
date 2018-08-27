@@ -411,7 +411,7 @@
            <nav id="main-menu"  role="navigation">
              <a class="nav-toggle" href="#">Menu</a>
              <div class="menu-navigation-container">
-               <ul class="menu"><li class="first leaf"><a href="http://www.empireadc.org/eaditorsearch/browse" title="">Browse</a></li>
+               <ul class="menu"><li class="first leaf"><a href="http://www.empireadc.org/empiresearch/browse" title="">Browse</a></li>
      <li class="leaf"><a href="http://www.empireadc.org/search" title="">Search</a></li>
      <li class="leaf"><a href="/participate">Participate</a></li>
      <li class="last leaf"><a href="/about">About</a></li>
@@ -905,8 +905,8 @@
       <thead>
       <tr>
 
-          <th> <button class="btn" id="reserve"><a href="<?php echo base_url("?c=eaditorsearch&m=help");?>">Help</a></button><h4>Your Research Cart</h4></th>
-          <th><button class="btn" id="reserve"><a href="<?php echo base_url("?c=eaditorsearch&m=reserve");?>">Reserve</a></button></th>
+          <th> <button class="btn" id="reserve"><a href="<?php echo base_url("?c=empiresearch&m=help");?>">Help</a></button><h4>Your Research Cart</h4></th>
+          <th><button class="btn" id="reserve"><a href="<?php echo base_url("?c=empiresearch&m=reserve");?>">Reserve</a></button></th>
       </tr>
       <tr>
           <th>Item</th>
