@@ -253,7 +253,7 @@
                 $otherfindaidsAttr = $otherfindaids -> attributes('http://www.w3.org/1999/xlink');
                 $filename = $otherfindaidsAttr['href'];
                 $ext = pathinfo($filename, PATHINFO_EXTENSION);
-                $iconLink = 'https://www.empireadc.org/ead/ui/images/';
+                $iconLink = '/empiresearch/icons/';
                 if ($ext == 'docx') {
                     $iconLink = $iconLink . 'word.png';
                 } elseif ($ext == 'pdf') {
