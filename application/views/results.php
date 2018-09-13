@@ -105,7 +105,7 @@
     }
 
     $('a.tags').click(function(){
-        var searchTerm = $('input#searchBox').val();
+    var searchTerm = $('input#searchBox').val();
 		var selectedTag = ($(this).parents().attr('id')) + ':"' + ($(this).text()) + '"';
 		var selectedTagId = selectedTag.replace(/"/g, '');
 		var selectedFacet = $(this).parents().attr('id');

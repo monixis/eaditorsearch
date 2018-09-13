@@ -45,8 +45,8 @@
 			       <nav id="main-menu"  role="navigation">
 			         <a class="nav-toggle" href="#">Menu</a>
 			         <div class="menu-navigation-container">
-			           <ul class="menu"><li class="first leaf"><a href="http://www.empireadc.org/empiresearch/browse" title="">Browse</a></li>
-			 <li class="leaf"><a href="http://www.empireadc.org/empiresearch" title="">Search</a></li>
+			           <ul class="menu"><li class="first leaf"><a href="/empiresearch/browse" title="">Browse</a></li>
+			 <li class="leaf"><a href="/empiresearch/advsearch" title="">Search</a></li>
 			 <li class="leaf"><a href="/participate">Participate</a></li>
 			 <li class="last leaf"><a href="/about">About</a></li>
 			 </ul>        </div>

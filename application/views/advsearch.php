@@ -73,9 +73,9 @@
 								<div class="input-group col-md-12">
 									<input type="text" class="form-control input-lg" id="searchBox" placeholder="Finding Aids at Your Fingertips" />
 
-									<!--Zack this is for advasea search facet
+									<!--Zack this is for advasea search facet-->
 									<select id="facet" class="form-control input-lg">
-  <option value="keyword">Keyword</option>
+  <option value="NULL">Keyword</option>
   <option value="corp_facet">Corporate Name</option>
   <option value="famname_facet">Family Name</option>
   <option value="findid_facet">Finding Aid ID</option>
@@ -84,8 +84,8 @@
 	<option value="persname_facet">Personal Name</option>
 	<option value="subject_facet">Subject</option>
 </select>
--->
-									<input type="hidden" class="form-control input-lg" id="queryTag" />
+								  <input type="hidden" class="form-control input-lg" id="queryTag" />
+
 									<span class="input-group-btn">
 										<button id="initiateSearch" class="btn btn-info btn-lg" type="button" style="background: #ffffff; border-color: #ccc;">
 											<img src="<?php echo base_url("/icons/search.png"); ?>" style="height: 25px;"/>
@@ -127,22 +127,28 @@
 			$("#selectedFacet").empty();
 			$('input#queryTag').val('');
 			var searchTerm = $('input#searchBox').val();
+			var searchTermFacet = $('#facet').val();
 			var searchTerm = searchTerm.trim();
 			var searchTerm = searchTerm.replace(/ /g,"%20");
 			var searchTerm = searchTerm.replace(/'/g,"%27");
+	     var searchTerm = "\""+ searchTerm+  "\"";
 			var searchTerm = encodeURIComponent(searchTerm);
-			var facet = 'NULL';
 
+			if(searchTermFacet != "" ) {
+
+				var facet = searchTermFacet;
+			}else{
+				var facet = 'NULL';
+			}
 			if(searchTerm != "" ) {
 				if(searchTerm == "*"){
 					var resultUrl = "<?php echo base_url("/searchAll")?>";
 				}else{
-					var resultUrl = "<?php echo base_url("/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
+					var resultUrl = "<?php echo base_url("/AdvSearchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
 				}
 			}
-			var backUrl ="<?php echo base_url("/?key=")?>" + searchTerm +"&facet=NULL" ;
-			<!--allows backbutton to work -->
-			history.replaceState(null, null, backUrl);
+			//alert(searchTerm);
+			//alert(searchTermFacet);
 			$('#searchResults').load(resultUrl);
 		});
 
@@ -153,24 +159,33 @@
 				$("#selectedFacet").empty();
 				$('input#queryTag').val('');
 				var searchTerm = $('input#searchBox').val();
+				var searchTermFacet = $('#facet').val();
 				var searchTerm = searchTerm.trim();
 				var searchTerm = searchTerm.replace(/ /g,"%20");
 				var searchTerm = searchTerm.replace(/'/g,"%27");
+		     var searchTerm = "\""+ searchTerm+  "\"";
 				var searchTerm = encodeURIComponent(searchTerm);
-				var facet = 'NULL';
 
-			if(searchTerm != "" ) {
-				if(searchTerm == "*"){
-					var resultUrl = "<?php echo base_url("/searchAll")?>";
+				if(searchTermFacet != "" ) {
+
+					var facet = searchTermFacet;
 				}else{
-					var resultUrl = "<?php echo base_url("/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
+					var facet = 'NULL';
 				}
-			}
+				if(searchTerm != "" ) {
+					if(searchTerm == "*"){
+						var resultUrl = "<?php echo base_url("/searchAll")?>";
+					}else{
+						var resultUrl = "<?php echo base_url("/AdvSearchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
+					}
+				}
+				//alert(searchTerm);
+				//alert(searchTermFacet);
+					var backUrl ="<?php echo base_url("/?key=")?>" + searchTerm +"&facet="+facet ;
 
-			var backUrl ="<?php echo base_url("/?key=")?>" + searchTerm +"&facet=NULL" ;
-			<!--allows backbutton to work -->
-			history.replaceState(null, null, backUrl);
-			$('#searchResults').load(resultUrl);
+				<!--allows backbutton to work -->
+				history.replaceState(null, null, backUrl);
+				$('#searchResults').load(resultUrl);
 			}
 		});
 
@@ -183,10 +198,10 @@
 					var searchTerm = searchTerm.trim();
 					var searchTerm = searchTerm.replace(/ /g,"%20");
 					var searchTerm = searchTerm.replace(/'/g,"%27");
-
+					var searchTerm = "\""+ searchTerm+  "\"";
 					var searchTerm = encodeURIComponent(searchTerm);
 					var facet = "<?php echo $facet; ?>";
-					var resultUrl = "<?php echo base_url("/searchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
+					var resultUrl = "<?php echo base_url("/AdvSearchKeyWords")?>" + "/" + searchTerm + "/" + facet ;
 					$('#searchResults').load(resultUrl);
 			}
 		});
