@@ -14,6 +14,17 @@
   <link rel="stylesheet" type="text/css" href="<?php echo base_url("/styles/main.css"); ?>"/>
   <link rel="stylesheet" type="text/css" href="<?php echo base_url("/styles/chronlogy.css"); ?>"/>
   <link rel="stylesheet" type="text/css" href="<?php echo base_url("/styles/768.css"); ?>"/>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-74987537-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-74987537-1');
+</script>
+
   <style>
     ul{list-style-type:none;}
     li.Subseries{margin-left: 20px;}
@@ -242,7 +253,7 @@
                 $otherfindaidsAttr = $otherfindaids -> attributes('http://www.w3.org/1999/xlink');
                 $filename = $otherfindaidsAttr['href'];
                 $ext = pathinfo($filename, PATHINFO_EXTENSION);
-                $iconLink = 'https://www.empireadc.org/ead/ui/images/';
+                $iconLink = '/empiresearch/icons/';
                 if ($ext == 'docx') {
                     $iconLink = $iconLink . 'word.png';
                 } elseif ($ext == 'pdf') {
