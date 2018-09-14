@@ -25,6 +25,15 @@
 		<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 		<script src="<?php echo base_url("/js/nprogress.js"); ?>"></script>
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url("/styles/nprogress.css"); ?>" />
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-74987537-1"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-74987537-1');
+</script>
 	</head>
 	<body>
 
@@ -53,9 +62,9 @@
 							         <a class="nav-toggle" href="#">Menu</a>
 							         <div class="menu-navigation-container">
 							           <ul class="menu"><li class="first leaf"><a href="/empiresearch/browse" title="">Browse</a></li>
-							 <li class="leaf"><a href="/empiresearch/advsearch" title="">Search</a></li>
-							 <li class="leaf"><a href="/participate">Participate</a></li>
-							 <li class="last leaf"><a href="/about">About</a></li>
+							 					 <li class="leaf"><a href="/empiresearch/advsearch" title="">Search</a></li>
+							 				 	<li class="leaf"><a href="/participate">Participate</a></li>
+							 				<li class="last leaf"><a href="/about">About</a></li>
 							 </ul>        </div>
 							         <div class="clear"></div>
 							       </nav>
@@ -149,6 +158,10 @@
 			}
 			//alert(searchTerm);
 			//alert(searchTermFacet);
+			var backUrl ="<?php echo base_url("/?key=")?>" + searchTerm +"&facet="+facet ;
+
+		<!--allows backbutton to work -->
+		history.replaceState(null, null, backUrl);
 			$('#searchResults').load(resultUrl);
 		});
 

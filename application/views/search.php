@@ -34,7 +34,6 @@
 
   gtag('config', 'UA-74987537-1');
 </script>
-
 	</head>
 	<body>
 
@@ -185,7 +184,9 @@
 		});
 
         $(document).ready(function(){
-  	   var searchTerm = "<?php echo $key; ?>";
+  	   var searchTerm = "<?php echo htmlspecialchars($key); ?>";
+			 var searchTerm = searchTerm.replace(/&quot;/g, '"');
+			 var searchTerm = searchTerm.replace(/""/g, '"');
 		  	if(searchTerm == "" || searchTerm == null){
 				$("p#message").show().delay(3000).fadeOut();
 		  	}else{
