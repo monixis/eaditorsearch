@@ -319,10 +319,11 @@
                 <?php
                   if ($obj->did->unittitle != '') {
                       $titleInfo = $obj->did->unittitle;
-                  } else {
-                      $titleInfo = $obj->did->unittitle->emph;
                   }
-        $GLOBALS['tree'] = $GLOBALS['tree'] . '<li class="'. ucfirst($level) . '"><a href="' . '#' . ucfirst($level) . $obj->did->unitid . '"' . ' class="tocLink">' .  ucfirst($level) . " " . $obj->did->unitid . ": " . $obj->did->unittitle . $obj->did->unittitle->emph . '</a></li>';
+        if ($obj->did->unittitle->emph != '') {
+            $titleInfo = $obj->did->unittitle->emph;
+        }
+        $GLOBALS['tree'] = $GLOBALS['tree'] . '<li class="'. ucfirst($level) . '"><a href="' . '#' . ucfirst($level) . $obj->did->unitid . '"' . ' class="tocLink">' .  ucfirst($level) . " " . $obj->did->unitid . ": " . $titleInfo . '</a></li>';
         $GLOBALS['tree'] = str_replace("'", "&#039;", $GLOBALS['tree']); ?>
 
           			<!-- Check if this series has children levels -->
@@ -347,7 +348,7 @@
             if ($fileLevel == 1) {
                 ?>
 
-              	<button type="button" class="btn btn-custm" data-toggle="collapse" data-target="#<?php echo $obj['id']; ?>" style="margin-bottom: 5px; text-decoration: none; color: #fff;">View the files.</button>
+              	<button type="button"  class="btn btn-custm" data-toggle="collapse" data-target="#<?php echo $obj['id']; ?>" style="margin-bottom: 5px; text-decoration: none; color: #fff;">View the files.</button>
                 <div id="<?php echo $obj['id']; ?>" class="collapse" style="width: 75%; border-left: 1px solid #ccc; border-right: 1px solid #ccc; margin-left:auto; margin-right: auto;">
 								<?php
                                     foreach ($obj->c as $fileObj) {
@@ -511,6 +512,7 @@
   </div>
   <button type="button" onclick="expand()">Expand All</button>&nbsp&nbsp&nbsp&nbsp
   <button type="button" onclick="collapse()">Collapse All</button>
+  
 <h4 data-toggle="collapse" data-target="#descId" class='infoAccordion accordion'>Collection Details<span class="glyphicon glyphicon-menu-right" style="float:right;"></span></h4>
 <div id="descId" class="collapse">
         <?php if ($processInfo != 'Unspecified') {
