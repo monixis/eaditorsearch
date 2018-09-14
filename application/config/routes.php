@@ -1,4 +1,6 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php  if (! defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 /*
 | -------------------------------------------------------------------------
 | URI ROUTING
@@ -39,7 +41,7 @@
 */
 
 $route['default_controller'] = "empiresearch";
-$route['^(searchKeyWords|ead|searchAll|agency|browse)(/:any)?$'] = "empiresearch/$0";
+$route['^(AdvSearchKeyWords|searchKeyWords|advsearch|ead|searchAll|agency|browse)(/:any)?$'] = "empiresearch/$0";
 $route['404_override'] = '';
 
 /* End of file routes.php */

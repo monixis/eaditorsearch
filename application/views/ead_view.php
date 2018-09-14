@@ -422,8 +422,8 @@
            <nav id="main-menu"  role="navigation">
              <a class="nav-toggle" href="#">Menu</a>
              <div class="menu-navigation-container">
-               <ul class="menu"><li class="first leaf"><a href="http://www.empireadc.org/empiresearch/browse" title="">Browse</a></li>
-     <li class="leaf"><a href="http://www.empireadc.org/search" title="">Search</a></li>
+               <ul class="menu"><li class="first leaf"><a href="/empiresearch/browse" title="">Browse</a></li>
+     <li class="leaf"><a href="/empiresearch/advsearch" title="">Search</a></li>
      <li class="leaf"><a href="/participate">Participate</a></li>
      <li class="last leaf"><a href="/about">About</a></li>
      </ul>        </div>
@@ -904,7 +904,8 @@
 
     <h4><label>Output formats:</label></h4>
 		    <a href='<?php echo $link; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-custm" >XML</button></a>
-        <a href='<?php echo $rdf; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-custm" >RDF/XML</button> </a>
+        <!--disable for now -->
+    <!--    <a href='<?php echo $rdf; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-custm" >RDF/XML</button> </a> -->
     </div>
      </br></br>
 
@@ -942,6 +943,15 @@
 </footer-->
 </body>
 <script>
+function expand() {
+    $('.stuff').slideDown(400);
+    $('.collapse').slideDown(400);
+}
+
+function collapse() {
+    $('.stuff').slideUp(400);
+    $('.collapse').slideUp(400);
+}
 	$('a.controlledHeader').click(function(){
       var selectedHeader = $(this).text();
       var selectedFacet = $(this).attr('id');
@@ -991,14 +1001,6 @@
  $('button#tocbutton').toggle(function(){
     $('#tocResponsive').html('<label>Series in this Collection: </label><?php echo '<ul id="tree">' . $GLOBALS['tree'] . '</ul>'; ?>');
  });
- function expand() {
-     $('.stuff').slideDown(400);
-     $('.collapse').slideDown(400);
- }
 
- function collapse() {
-     $('.stuff').slideUp(400);
-     $('.collapse').slideUp(400);
- }
 </script>
 </html>

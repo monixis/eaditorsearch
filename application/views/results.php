@@ -105,7 +105,7 @@
     }
 
     $('a.tags').click(function(){
-        var searchTerm = $('input#searchBox').val();
+    var searchTerm = $('input#searchBox').val();
 		var selectedTag = ($(this).parents().attr('id')) + ':"' + ($(this).text()) + '"';
 		var selectedTagId = selectedTag.replace(/"/g, '');
 		var selectedFacet = $(this).parents().attr('id');
@@ -130,7 +130,7 @@
 		}else if(selectedFacet == "language_facet"){
 			selectedFacetDisplay = selectedTag.replace("language_facet", "Language");
 		}
-        $('#selectedFacet').append('<a href="#" class="remove" style="margin-left:10px;"><button class="taglist" id="'+ selectedTagId +'" style="border: 1px solid #cccccc; background: #eeeeee; padding: 5px; margin-right: 10px; margin-top: 5px;">'+ selectedFacetDisplay +' X</button></a>');
+        $('#selectedFacet').append('<a href="#" class="remove" style="margin-left:10px;"><button class="taglist" id="'+ selectedTagId +'" style="border: 1px solid #cccccc; color:#000; background: #eeeeee; padding: 5px; margin-right: 10px; margin-top: 5px;">'+ selectedFacetDisplay +' X</button></a>');
         $('input#queryTag').val($('input#queryTag').val() + "fq=" + selectedTag);
 
 	   	if (searchTerm == '*'){
