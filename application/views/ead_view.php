@@ -510,9 +510,10 @@
       } ?>
 
   </div>
-  <button type="button" onclick="expand()">Expand All</button>&nbsp&nbsp&nbsp&nbsp
-  <button type="button" onclick="collapse()">Collapse All</button>
-  
+  <a class="btn btn-primary openall" href="#">Expand All</a>&nbsp&nbsp&nbsp
+  <a class="btn btn-danger closeall" href="#">Collapse All</a><br><br>
+
+
 <h4 data-toggle="collapse" data-target="#descId" class='infoAccordion accordion'>Collection Details<span class="glyphicon glyphicon-menu-right" style="float:right;"></span></h4>
 <div id="descId" class="collapse">
         <?php if ($processInfo != 'Unspecified') {
@@ -999,7 +1000,14 @@ function collapse() {
  $('h4.infoAccordion').click(function(){
   $(this).find('span').toggleClass('glyphicon-menu-right').toggleClass('glyphicon-menu-down');
  });
+ $('.closeall').click(function () {
+           $('.collapse').collapse('hide');
+ });
 
+
+   $('.openall').click(function () {
+         $('.collapse').collapse('show');
+   });
  $('button#tocbutton').toggle(function(){
     $('#tocResponsive').html('<label>Series in this Collection: </label><?php echo '<ul id="tree">' . $GLOBALS['tree'] . '</ul>'; ?>');
  });
