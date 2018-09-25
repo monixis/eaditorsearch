@@ -44,6 +44,8 @@
 
   <?php
     $this->load->helper('url');
+     #make sure it does not have  an extension
+    $eadId = preg_replace('/\\.[^.\\s]{3,4}$/', '', $eadId);
     #$link = "https://www.empireadc.org/ead/". strtolower($collId) ."/id/".$eadId.".xml";
     #Link directly to exist to help with large size xml
     $link ="http://www.empireadc.org:8080/exist/rest/db/eaditor/". strtolower($collId) ."/guides/".$eadId.".xml";
