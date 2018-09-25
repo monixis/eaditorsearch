@@ -130,7 +130,7 @@
             if ($prefercite != 'Unspecified') {
                 foreach ($xml->archdesc->prefercite->children() as $p) {
                     if ($p->getname() == 'p') {
-                        $prefercite = $prefercite . $p . "<br />\n" ;
+                        $prefercite =  $p . "<br />\n" ;
                     }
                 }
             }
