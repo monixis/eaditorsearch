@@ -200,11 +200,12 @@
                 foreach ($xml->archdesc->arrangement->children() as $p) {
                     if ($p->getname() == 'p') {
                         $arrangement = $arrangement . $p . "<br />\n" ;
-                        $arrangementlist = (isset($p->list)? $p->list : 'Unspecified');
-                        if ($arrangementlist != 'Unspecified') {
-                            $arrangementlist = array();
-                            foreach ($p->list->item as $child) {
-                                array_push($arrangementlist, $child->ref);
+                    } elseif ($p->getname() == 'list') {
+                        foreach ($xml->archdesc->arrangement->list->children() as $c) {
+                            if ($c -> getname() == 'head') {
+                                $arrangement = $arrangement . "<h4>" . $c . "</h4>";
+                            } else {
+                                $arrangement = $arrangement . $c . "<br />";
                             }
                         }
                     }
@@ -548,14 +549,7 @@
 
         if ($arrangement != 'Unspecified') {
             ?>
-          <label>Arrangement: </label><p><?php echo auto_link($arrangement, 'both', true); ?></p>
-          <ul>
-            <?php  if ($arrangementlist != 'Unspecified') {
-                foreach ($arrangementlist as $listitem) {
-                    echo "<li>$listitem</li>";
-                }
-            } ?>
-            </ul>
+  <label>Arrangement: </label><p><?php echo auto_link($arrangement, 'both', true); ?></p>
         <?php
         }
 
