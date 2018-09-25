@@ -200,6 +200,8 @@
                 foreach ($xml->archdesc->arrangement->children() as $p) {
                     if ($p->getname() == 'p') {
                         $arrangement = $arrangement . $p . "<br />\n" ;
+                    } elseif ($p->getname() == 'note') {
+                        $arrangement = $arrangement . $p . "<br />\n" ;
                     } elseif ($p->getname() == 'list') {
                         foreach ($xml->archdesc->arrangement->list->children() as $c) {
                             if ($c -> getname() == 'head') {
@@ -569,7 +571,7 @@
           <?php
                 } else {
                     ?>
-            <a style='pointer-events: none; color: #000000;'><?php echo $relatedMaterialLink[$i][0]; ?></a></br>
+            <a style='pointer-events: none; '><?php echo $relatedMaterialLink[$i][0]; ?></a></br>
           <?php
                 }
             }
