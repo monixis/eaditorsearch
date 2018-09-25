@@ -202,6 +202,11 @@
                 foreach ($xml->archdesc->arrangement->children() as $p) {
                     if ($p->getname() == 'p') {
                         $arrangement = $arrangement . $p . "<br />\n" ;
+                        if (isset($p->list->item)) {
+                            foreach ($p->list->children() as $c) {
+                                $arrangement = $arrangement . $c->ref . "<br />\n" ;
+                            }
+                        }
                     } elseif ($p->getname() == 'note') {
                         $arrangement = $arrangement . $p . "<br />\n" ;
                     } elseif ($p->getname() == 'list') {
