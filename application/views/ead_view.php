@@ -273,10 +273,18 @@
                 }
                 $downloadLink = "https://www.empireadc.org/ead/uploads/". $collId ."/".$otherfindaidsAttr['href'];
             }
+
             $dateRange = array();
-            foreach ($xml->archdesc->did->unitdate as $x) {
-                $dateValue = ucfirst($x['type']). ' Date: '.$x ;
-                array_push($dateRange, $dateValue);
+            if (isset($xml->archdesc->did->unitdate)) {
+                foreach ($xml->archdesc->did->unitdate as $x) {
+                    $dateValue = ucfirst($x['type']). ' Date: '.$x ;
+                    array_push($dateRange, $dateValue);
+                }
+            } elseif (isset($xml->archdesc->did->unittitle->unitdate)) {
+                foreach ($xml->archdesc->did->unittitle->unitdate as $x) {
+                    $dateValue = ucfirst($x['type']). ' Date: '.$x ;
+                    array_push($dateRange, $dateValue);
+                }
             }
         }
     } //while ends
