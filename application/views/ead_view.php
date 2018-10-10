@@ -41,7 +41,7 @@
       }
     }
   </style>
-
+  
   <?php
     $this->load->helper('url');
      #make sure it does not have  an extension
