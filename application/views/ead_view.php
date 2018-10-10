@@ -41,7 +41,7 @@
       }
     }
   </style>
-
+  
   <?php
     $this->load->helper('url');
      #make sure it does not have  an extension
@@ -202,6 +202,13 @@
                 foreach ($xml->archdesc->arrangement->children() as $p) {
                     if ($p->getname() == 'p') {
                         $arrangement = $arrangement . $p . "<br />\n" ;
+                        if (isset($p->list->item)) {
+                            foreach ($p->list->children() as $c) {
+                                $arrangement = $arrangement . $c->ref . "<br />\n" ;
+                            }
+                        }
+                    } elseif ($p->getname() == 'note') {
+                        $arrangement = $arrangement . $p . "<br />\n" ;
                     } elseif ($p->getname() == 'list') {
                         foreach ($xml->archdesc->arrangement->list->children() as $c) {
                             if ($c -> getname() == 'head') {
@@ -266,10 +273,18 @@
                 }
                 $downloadLink = "https://www.empireadc.org/ead/uploads/". $collId ."/".$otherfindaidsAttr['href'];
             }
+
             $dateRange = array();
-            foreach ($xml->archdesc->did->unitdate as $x) {
-                $dateValue = ucfirst($x['type']). ' Date: '.$x ;
-                array_push($dateRange, $dateValue);
+            if (isset($xml->archdesc->did->unitdate)) {
+                foreach ($xml->archdesc->did->unitdate as $x) {
+                    $dateValue = ucfirst($x['type']). ' Date: '.$x ;
+                    array_push($dateRange, $dateValue);
+                }
+            } elseif (isset($xml->archdesc->did->unittitle->unitdate)) {
+                foreach ($xml->archdesc->did->unittitle->unitdate as $x) {
+                    $dateValue = ucfirst($x['type']). ' Date: '.$x ;
+                    array_push($dateRange, $dateValue);
+                }
             }
         }
     } //while ends
@@ -571,7 +586,7 @@
           <?php
                 } else {
                     ?>
-            <a style='pointer-events: none; color: #000000;'><?php echo $relatedMaterialLink[$i][0]; ?></a></br>
+            <a style='pointer-events: none; '><?php echo $relatedMaterialLink[$i][0]; ?></a></br>
           <?php
                 }
             }
@@ -606,104 +621,100 @@
 
 <h4 data-toggle="collapse" data-target="#controlHeadings" class='infoAccordion accordion'>Collection Subjects &amp; Formats<span class="glyphicon glyphicon-menu-right" style="float:right;"></span></h4>
 <div id="controlHeadings" class="collapse">
-         <?php
-         $controlledAccess = (isset($xml->archdesc->controlaccess)? true : false);
+<?php
+$controlledAccess = (isset($xml->archdesc->controlaccess)? true : false);
+if ($controlledAccess == true) {
+    $persnameArray =array();
+    $subjectArray=array();
+    $corpnameArray=array();
+    $genreformArray=array();
+    $geognameArray=array();
+    foreach ($xml->archdesc->controlaccess as $controlaccess) {
+        $empirecsf = $controlaccess;
 
-         if ($controlledAccess == true) {
-             $controlHeading = array();
-             foreach ($xml->archdesc->controlaccess->children() as $list) {
-                 $included = false;
-                 foreach ($controlHeading as $value) {
-                     if ($value == $list->getname()) {
-                         $included = true;
-                     }
-                 }
-                 if ($included == false) {
-                     array_push($controlHeading, $list->getname());
-                 }
-             }
-             foreach ($controlHeading as $value) {
-                 $headValue = $value;
-                 if ($value == 'subject') {
-                     $headValue = 'Subject:';
-                 } elseif ($value == 'persname') {
-                     $headValue = 'Person:';
-                 } elseif ($value == 'genreform') {
-                     $headValue = 'Genre/Format:';
-                 } elseif ($value == 'corpname') {
-                     $headValue = 'Corporation:';
-                 } elseif ($value == 'geogname') {
-                     $headValue = 'Place:';
-                 } ?>
-           <?php
-            if ($value == 'geogname') {  #Get the list of locations so we can add a coverage filed?>
-             <h5><?php echo $headValue; ?></h5>
-            <?php  foreach ($xml->archdesc->controlaccess->children() as $list) {
-                if ($value == $list->getname()) {
-                    ?>
-                    <ul style='font-size:15px;'><li><a href="#" id="geogname_facet"class='controlledHeader' ><span property="dcterms:coverage"><?php echo $list; ?></span></a></li></ul>
-            <?php
-                } #End if statement
-            }  #End Foreach loop
-            } elseif ($value == 'subject') { #Output rest of control Headings
-                ?>
-                <h5><?php echo $headValue; ?></h5>
-                <?php  foreach ($xml->archdesc->controlaccess->children() as $list) {
-                    if ($value == $list->getname()) {
-                        ?>
-                        <ul><li><a href="#" id="subject_facet" class='controlledHeader' <span property="dcterms:subject"><?php echo $list; ?></span></a></li></ul>
-                    <?php
-                    }#End of statment
-                } #End foreach loop
-            } elseif ($value == 'persname') { #Output rest of control Headings
-                ?>
-                <h5><?php echo $headValue; ?></h5>
-                <?php  foreach ($xml->archdesc->controlaccess->children() as $list) {
-                    if ($value == $list->getname()) {
-                        ?>
-                        <ul><li><a href="#" id="persname_facet" class='controlledHeader' <span property="dcterms:subject"><?php echo $list; ?></span></a></li></ul>
-                    <?php
-                    }#End of statment
-                } #End foreach loop
-            } elseif ($value == 'genreform') { #Output rest of control Headings
-                ?>
-                <h5><?php echo $headValue; ?></h5>
-                <?php  foreach ($xml->archdesc->controlaccess->children() as $list) {
-                    if ($value == $list->getname()) {
-                        ?>
-                        <ul><li><a href="#" id="genreform_facet" class='controlledHeader' <span property="dcterms:subject"><?php echo $list; ?></span></a></li></ul>
-                    <?php
-                    }#End of statment
-                } #End foreach loop
-            } elseif ($value == 'corpname') { #Output rest of control Headings
-                ?>
-                <h5><?php echo $headValue; ?></h5>
-                <?php  foreach ($xml->archdesc->controlaccess->children() as $list) {
-                    if ($value == $list->getname()) {
-                        ?>
-                        <ul><li><a href="#" id="corpname_facet" class='controlledHeader' <span property="dcterms:subject"><?php echo $list; ?></span></a></li></ul>
-                    <?php
-                    }#End of statment
-                } #End foreach loop
+        if (isset($xml->archdesc->controlaccess->controlaccess)) {
+            $empirecsf=$controlaccess->controlaccess;
+            foreach ($xml->archdesc->controlaccess->controlaccess as $controlaccessnest) {
+                foreach ($controlaccessnest->children() as $list) {
+                    #store the values in an arrary to be called later when we dispaly those sections
+                    $value=$list->getname();
+                    if ($value=='persname') {
+                        $persnameArray[] = $list;
+                    } elseif ($value=='subject') {
+                        $subjectArray[] = $list;
+                    } elseif ($value=='corpname') {
+                        $corpnameArray[] = $list;
+                    } elseif ($value=='genreform') {
+                        $genreformArray[] = $list;
+                    } elseif ($value=='geogname') {
+                        $geognameArray[] = $list;
+                    }
+                }
             }
+        } else {
+            foreach ($xml->archdesc->controlaccess->children() as $list) {
+                #store the values in an arrary to be called later when we dispaly those sections
+                $value=$list->getname();
+                if ($value=='persname') {
+                    $persnameArray[] = $list;
+                } elseif ($value=='subject') {
+                    $subjectArray[] = $list;
+                } elseif ($value=='corpname') {
+                    $corpnameArray[] = $list;
+                } elseif ($value=='genreform') {
+                    $genreformArray[] = $list;
+                } elseif ($value=='geogname') {
+                    $geognameArray[] = $list;
+                }
+            }
+        }
+    }
+    #This is for development
+    //var_dump($controlledAccessArray);
+    #Dispaly the values for controllAccess
+    if (empty(!$geognameArray)) {
+        echo "<h5>Place:</h5>";
+        foreach ($geognameArray as $value) {
+            echo "<ul style='font-size:15px;'><li><a href='#' id='geogname_facet' class='controlledHeader' ><span property='dcterms:coverage'>". $value."</span></a></li></ul>";
+        }
+    }
+    if (empty(!$subjectArray)) {
+        echo "<h5>Subject:</h5>";
+        foreach ($subjectArray as $value) {
+            echo "<ul><li><a href='#' id='subject_facet' class='controlledHeader' <span property='dcterms:subject'>". $value."</span></a></li></ul>";
+        }
+    }
+    if (empty(!$persnameArray)) {
+        echo "<h5>Person:</h5>";
+        foreach ($persnameArray as $value) {
+            echo "<ul><li><a href='#' id='persname_facet' class='controlledHeader' <span property='dcterms:subject'>".$value."</span></a></li></ul>";
+        }
+    }
+    if (empty(!$genreformArray)) {
+        echo "<h5>Genre/Format:</h5>";
+        foreach ($genreformArray as $value) {
+            echo "<ul><li><a href='#' id='genreform_facet' class='controlledHeader' <span property='dcterms:subject'>".$value."</span></a></li></ul>";
+        }
+    }
+    if (empty(!$corpnameArray)) {
+        echo "<h5>Corporation:</h5>";
+        foreach ($corpnameArray as $value) {
+            echo "<ul><li><a href='#' id='corpname_facet' class='controlledHeader' <span property='dcterms:subject'>".$value."</span></a></li></ul>";
+        }
+    }
+} else {
+    echo"  <h4 style='font-style: italic'>Not available</h4>";
+}
+?>
 
 
-                 # End the if statement looking for geogname
-             }# End the foreach loop of controlheadings
-         } else {
-             ?>
-            <h4 style="font-style: italic">Not available</h4>
-      <?php
-         }
-
-      ?>
       </div>
 <?php if ($is_chron_available) {
-          ?>
+    ?>
   <!--button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#chronology" style="font-size: 14px;">Chronology</button-->
   <h4 data-target="#chronology" data-toggle="modal" class='infoAccordion accordion'>Chronology</h4>
 <?php
-      } ?>
+} ?>
 
 <div id="chronology" class="modal fade" role="dialog">
   <div class="modal-dialog">
@@ -714,92 +725,92 @@
       </div>
       <div class="modal-body">
       <?php if (isset($xml->archdesc->bioghist)) {
-          $chronolist = 0;
-          foreach ($xml->archdesc->bioghist->children() as $chron) {
-              if ($chron ->getname() == 'chronlist') {
-                  if ($chronolist == 0) {
-                      ?>
+        $chronolist = 0;
+        foreach ($xml->archdesc->bioghist->children() as $chron) {
+            if ($chron ->getname() == 'chronlist') {
+                if ($chronolist == 0) {
+                    ?>
              <button class="accordion active" id='<?php echo $chron ->head; ?>'><?php echo $chron ->head; ?></button>
                <div class="panel" style="display: block" id="<?php echo $chron ->head ; ?>">
 
              <?php
-                  } else {
-                      ?>
+                } else {
+                    ?>
                <button class="accordion" id='<?php echo $chron ->head; ?>'><?php echo $chron ->head; ?></button>
                  <div class="panel" id="<?php echo $chron ->head ; ?>">
 
               <?php
-                  } ?>
+                } ?>
 
              <ul class="tl" id="<?php echo $chron ->head ; ?>">
            <?php $i= 0;
-                  foreach ($xml->archdesc->bioghist->chronlist -> children() as $chronChild) {
-                      if ($chronChild -> getname() =='chronitem') {
-                          if ($i % 2 == 0) {
-                              ?>
+                foreach ($xml->archdesc->bioghist->chronlist -> children() as $chronChild) {
+                    if ($chronChild -> getname() =='chronitem') {
+                        if ($i % 2 == 0) {
+                            ?>
 
                    <li class='tl-inverted' id="<?php echo $chron ->head ; ?>">
                   <div class="tl-badge info"><?php echo $chronChild -> date ; ?>
                   </div><div class="tl-panel">
                   <div class="tl-body">
                                <?php if ($chronChild -> eventgrp) {
-                                  foreach ($chronChild-> eventgrp -> children()  as $chronEventChild) {
-                                      ?>
+                                foreach ($chronChild-> eventgrp -> children()  as $chronEventChild) {
+                                    ?>
 
                                   <p class="p-list"><?php echo $chronEventChild ; ?> </p>
                           <?php
-                                  } ?>
+                                } ?>
                      </div></div>
 
                    <?php
-                              } else {
-                                  ?>
+                            } else {
+                                ?>
 
                     <p><?php echo $chronChild -> event ; ?></p>
                    <?php
-                              } ?>
+                            } ?>
               </li>
 
 
            <?php
-                          } else {
-                              ?>
+                        } else {
+                            ?>
 
                    <li class='tl' id="<?php echo $chron ->head ; ?>"><div class="tl-badge info">
                  <?php echo $chronChild -> date  ; ?></div><div class="tl-panel">
                <div class="tl-body">
                <?php if ($chronChild -> eventgrp) {
-                                  foreach ($chronChild-> eventgrp -> children()  as $chronEvenChild) {
-                                      ?>
+                                foreach ($chronChild-> eventgrp -> children()  as $chronEvenChild) {
+                                    ?>
 
                        <p class="p-list"><?php echo $chronEvenChild ; ?></p>
                     <?php
-                                  } ?>
+                                } ?>
                    </div></div>
 
                <?php
-                              } else {
-                                  ?>
+                            } else {
+                                ?>
 
                    <p><?php echo $chronChild -> event ; ?></p>
 
                    <?php
-                              } ?>
+                            } ?>
                    </li>
 
 
            <?php
-                          }
-                          $i++;
-                      }
-                  } ?>
+                        }
+                        $i++;
+                    }
+                } ?>
              </ul>
            </div>
 
             <?php  $chronolist++ ;
-              }
-          }
-      }?>
+            }
+        }
+    }?>
 
       </div>
       <div class="modal-footer">
@@ -812,81 +823,81 @@
 
 <div id="componentList">
 <?php if ($componentList == true) {
-          /* For cases where high level series list exists but a more detailed container list is available for download*/
-          if ($otherfindaids != false) {
-              ?>
+        /* For cases where high level series list exists but a more detailed container list is available for download*/
+        if ($otherfindaids != false) {
+            ?>
     <h4 style="margin-left:17px;">Download Container List:</h4>
     <a href='<?php echo $downloadLink; ?>' itemprop="url" style="margin-left: 17px;"><img src='<?php echo $iconLink; ?>' class="doc-icon"></a></br></br>
   <?php
-          }
-          $component = 0;
-          foreach ($xml->archdesc->dsc->c as $c) {
-              $cAttr = $c->attributes();
-              $cLevel = $cAttr["level"];
-              if ($cLevel == 'file' || $cLevel == 'item' || $cLevel == 'otherlevel') {
-                  ?>
+        }
+        $component = 0;
+        foreach ($xml->archdesc->dsc->c as $c) {
+            $cAttr = $c->attributes();
+            $cLevel = $cAttr["level"];
+            if ($cLevel == 'file' || $cLevel == 'item' || $cLevel == 'otherlevel') {
+                ?>
 				<div class="fileRow">
 					<?php foreach ($c->did->children() as $child) {
-                      ?>
+                    ?>
 
 	       					<?php if ($child->getname() == 'unittitle') {
-                          ?>
+                        ?>
             					<?php if (count($child) > 0) {
-                              ?>
+                            ?>
                               <?php if (isset($child->title->emph)) {
-                                  ?>
+                                ?>
 
                                  <div class="fileTitle"><h4><?php echo ucfirst($cLevel).": ";
-                                  $component = $child->title->emph;
-                                  echo $component;
-                                  $component = str_replace(" ", "", $component) ?></h4> </div>
+                                $component = $child->title->emph;
+                                echo $component;
+                                $component = str_replace(" ", "", $component) ?></h4> </div>
                               <?php
-                              } else {
-                                  ?>
+                            } else {
+                                ?>
                                  <div class="fileTitle"><h4><?php echo ucfirst($cLevel).": ";
-                                  $component = $child->title;
-                                  echo $component;
-                                  $component = str_replace(" ", "", $component)?></h4></div>
+                                $component = $child->title;
+                                echo $component;
+                                $component = str_replace(" ", "", $component)?></h4></div>
                               <?php
-                              }
-                          } else {
-                              ?>
+                            }
+                        } else {
+                            ?>
            							<div class="fileTitle"><h4><?php echo ucfirst($cLevel).": ";
-                              $component =  $child;
-                              echo $component;
-                              $component = str_replace(" ", "", $component) ?></h4></div>
+                            $component =  $child;
+                            echo $component;
+                            $component = str_replace(" ", "", $component) ?></h4></div>
            						<?php
-                          }
-                      } elseif ($child->getname() == 'unitdate') {
-                          ?>
+                        }
+                    } elseif ($child->getname() == 'unitdate') {
+                        ?>
           						<div class="fileDate"><p><?php echo ucfirst($child['type']).' Date: '.$child; ?></p></div>
                               <?php
-                      } elseif ($child->getname() == 'container') {
-                          ?>
+                    } elseif ($child->getname() == 'container') {
+                        ?>
           						<div class="fileContainer"><p><?php echo ucfirst($child['type']).": ". $child;
-                          $arr = explode(' ', ucfirst($child['type'])."-". $child);
-                          $component = $component."-". $arr[0]; ?></p></div>
+                        $arr = explode(' ', ucfirst($child['type'])."-". $child);
+                        $component = $component."-". $arr[0]; ?></p></div>
                               <?php
-                      }
-                  } ?>
+                    }
+                } ?>
                 <!--    <input type="checkbox" class="big-checkbox" id="<?php echo  "crtitm"."-".$collId."-".$component; ?>" value="<?php echo  $repository.substr(0, 13)."..."."-".$collId."-".$component; ?>">
                 -->
                 </div>
 			<?php
-              } elseif ($cLevel == 'series' || $cLevel == 'collection' || $cLevel == 'recordgrp') {
-                  seriesLevel($cLevel, $c, $collId, $repository);
-              }
-          } /* for each */
-      } elseif ($otherfindaids != false) {
-          ?>
+            } elseif ($cLevel == 'series' || $cLevel == 'collection' || $cLevel == 'recordgrp') {
+                seriesLevel($cLevel, $c, $collId, $repository);
+            }
+        } /* for each */
+    } elseif ($otherfindaids != false) {
+        ?>
   <h4>Download Container List:</h4>
   <a href='<?php echo $downloadLink; ?>' itemprop="url"><img src='<?php echo $iconLink; ?>' class="doc-icon"></a>
 <?php
-      } else {
-          ?>
+    } else {
+        ?>
 		<h4 style="font-style: italic; margin-left: 17px;">Container List Not Available</h4>
 	<?php
-      }
+    }
 ?>
 		</div><!-- componentList -->
 
