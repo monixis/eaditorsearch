@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head prefix="dcterms: http://purl.org/dc/terms/">
-  <title>EADitor EAD view</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
@@ -297,6 +296,7 @@
             display:list-item;
         }
     </style>
+  <title><?php echo $title." -- ".$repository;?></title>
 </head>
 <body>
 
