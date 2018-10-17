@@ -40,7 +40,7 @@
       }
     }
   </style>
-  
+
   <?php
     $this->load->helper('url');
      #make sure it does not have  an extension
@@ -124,29 +124,54 @@
                     }
                 }
             }
-
-            $processInfo = (isset($xml->archdesc->processinfo->p)? $xml->archdesc->processinfo->p : 'Unspecified');
-
-            $prefercite = (isset($xml->archdesc->prefercite->p)?  $xml->archdesc->prefercite->p : 'Unspecified');
-            if ($prefercite != 'Unspecified') {
-                foreach ($xml->archdesc->prefercite->children() as $p) {
-                    if ($p->getname() == 'p') {
-                        $prefercite =  $p . "<br />\n" ;
+            if (isset($xml->archdesc->descgrp->processinfo->p)) {
+              $processInfo = (isset($xml->archdesc->descgrp->processinfo->p)? $xml->archdesc->descgrp->processinfo->p : 'Unspecified');
+            } else {
+                $processInfo = (isset($xml->archdesc->processinfo->p)? $xml->archdesc->processinfo->p : 'Unspecified');
+            }
+            if (isset($xml->archdesc->descgrp->prefercite->p)) {
+                $prefercite = (isset($xml->archdesc->descgrp->prefercite->p)?  $xml->archdesc->descgrp->prefercite->p : 'Unspecified');
+                if ($prefercite != 'Unspecified') {
+                    foreach ($xml->archdesc->descgrp->prefercite->children() as $p) {
+                        if ($p->getname() == 'p') {
+                            $prefercite =  $p . "<br />\n" ;
+                        }
+                    }
+                }
+            } else {
+                $prefercite = (isset($xml->archdesc->prefercite->p)?  $xml->archdesc->prefercite->p : 'Unspecified');
+                if ($prefercite != 'Unspecified') {
+                    foreach ($xml->archdesc->prefercite->children() as $p) {
+                        if ($p->getname() == 'p') {
+                            $prefercite =  $p . "<br />\n" ;
+                        }
                     }
                 }
             }
-
-            $access = (isset($xml->archdesc->accessrestrict)? $xml->archdesc->accessrestrict : 'Unspecified');
-            if ($access != 'Unspecified') {
-                foreach ($xml->archdesc->accessrestrict->children() as $p) {
-                    if ($p->getname() == 'p') {
-                        $access = $access . $p . "<br />\n" ;
+            if (isset($xml->archdesc->descgrp->accessrestrict)) {
+                $access = (isset($xml->archdesc->descgrp->accessrestrict)? $xml->archdesc->descgrp->accessrestrict : 'Unspecified');
+                if ($access != 'Unspecified') {
+                    foreach ($xml->archdesc->descgrp->accessrestrict->children() as $p) {
+                        if ($p->getname() == 'p') {
+                            $access = $access . $p . "<br />\n" ;
+                        }
+                    }
+                }
+            } else {
+                $access = (isset($xml->archdesc->accessrestrict)? $xml->archdesc->accessrestrict : 'Unspecified');
+                if ($access != 'Unspecified') {
+                    foreach ($xml->archdesc->accessrestrict->children() as $p) {
+                        if ($p->getname() == 'p') {
+                            $access = $access . $p . "<br />\n" ;
+                        }
                     }
                 }
             }
-
-            $copyright = (isset($xml->archdesc->userestrict->p)? $xml->archdesc->userestrict->p : 'Unspecified');
-
+            if (isset($xml->archdesc->descgrp->userestrict->p)) {
+                $copyright = (isset($xml->archdesc->descgrp->userestrict->p)? $xml->archdesc->descgrp->userestrict->p : 'Unspecified');
+            } else {
+                $copyright = (isset($xml->archdesc->userestrict->p)? $xml->archdesc->userestrict->p : 'Unspecified');
+            }
             $acqInfo = (isset($xml->archdesc->descgrp->acqinfo)? $xml->archdesc->descgrp->acqinfo : 'Unspecified');
             if ($acqInfo != 'Unspecified') {
                 foreach ($xml->archdesc->descgrp->acqinfo->children() as $p) {
