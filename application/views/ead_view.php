@@ -125,7 +125,7 @@
                 }
             }
             if (isset($xml->archdesc->descgrp->processinfo->p)) {
-              $processInfo = (isset($xml->archdesc->descgrp->processinfo->p)? $xml->archdesc->descgrp->processinfo->p : 'Unspecified');
+                $processInfo = (isset($xml->archdesc->descgrp->processinfo->p)? $xml->archdesc->descgrp->processinfo->p : 'Unspecified');
             } else {
                 $processInfo = (isset($xml->archdesc->processinfo->p)? $xml->archdesc->processinfo->p : 'Unspecified');
             }
@@ -342,10 +342,11 @@
             						<!--h4><?php echo $childObj->title; ?></h4>
                 				<h4><?php echo $childObj->title->emph; ?></h4-->
                         <h4 id = <?php echo ucfirst($level) . $obj->did->unitid; ?> ><?php echo ucfirst($level) . " " . $obj->did->unitid . ": " . $childObj->title . $childObj->title->emph . $childObj->emph; ?></h4>
-           						<?php
+                          <?php
                       } else {
                           ?>
            							<h4 id = <?php echo ucfirst($level) . $obj->did->unitid; ?> ><?php echo ucfirst($level) . " " . $obj->did->unitid . ": " . $childObj; ?></h4>
+                        <h4><b>Abstract</b> <?php echo $obj->did->abstract ?></h4>
            						<?php
                       }
                   } elseif ($childObj->getname() == 'unitdate') {
