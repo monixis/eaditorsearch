@@ -338,32 +338,44 @@
               foreach ($obj->did->children() as $childObj) {
                   if ($childObj->getname() == 'unittitle') {
                       if (count($childObj) > 0) {
-                          ?>
-            						<!--h4><?php echo $childObj->title; ?></h4>
-                				<h4><?php echo $childObj->title->emph; ?></h4-->
-                        <h4 id = <?php echo ucfirst($level) . $obj->did->unitid; ?> ><?php echo ucfirst($level) . " " . $obj->did->unitid . ": " . $childObj->title . $childObj->title->emph . $childObj->emph; ?></h4>
-                          <?php
+                          echo "<h4 id = '". ucfirst($level) . $obj->did->unitid."'>";
+                          if (isset($obj->did->unittitle)) {
+                              echo ucfirst($level) . " " . $obj->did->unitid . ": " . $obj->did->unittitle."</h4>";
+                          } else {
+                              echo ucfirst($level) . " " . $obj->did->unitid . ": " . $childObj->title . $childObj->title->emph . $childObj->emph."</h4>";
+                          }
                       } else {
-                          ?>
-           							<h4 id = <?php echo ucfirst($level) . $obj->did->unitid; ?> ><?php echo ucfirst($level) . " " . $obj->did->unitid . ": " . $childObj; ?></h4>
-                        <h4><b>Abstract</b> <?php echo $obj->did->abstract ?></h4>
-           						<?php
+                          echo "<h4 id = '". ucfirst($level) . $obj->did->unitid."'>";
+                          echo ucfirst($level) . " " . $obj->did->unitid . ": " . $childObj ."</h4>";
+                          if (isset($obj->did->abstract)) {
+                              echo "<h4>Abstract: ". $obj->did->abstract."</h4>";
+                          }
+
+                          if (isset($obj->phystech->note->p)) {
+                              echo "<h4>Physical Characteristics: ". $obj->phystech->note->p."</h4>";
+                          }
+                      }
+                      if (isset($obj->arrangement->p)) {
+                          echo "<h4>Arrangement: ". $obj->arrangement->p."</h4>";
+                      }
+                      if (isset($obj->did->physdesc->extent)) {
+                          echo "<h4>Size: ". $obj->did->physdesc->extent."</h4>";
                       }
                   } elseif ($childObj->getname() == 'unitdate') {
-                      ?>
-          						<p><?php echo ucfirst($childObj['type']).' Date: '.$childObj; ?></p><?php
+                      echo "<p>". ucfirst($childObj['type'])." Date: ".$childObj."</p>";
                   } elseif ($childObj->getname() == 'container') {
-                      ?>
-          						<p><?php echo ucfirst($childObj['type']).": ". $childObj; ?></p><?php
-                  } ?>
-          			<?php
-              } ?>
-          			<p style="line-height: 24px;"><?php echo isset($obj->scopecontent->p)?$obj->scopecontent->p : '' ; ?></p>
-
-                <?php
-                  if ($obj->did->unittitle != '') {
-                      $titleInfo = $obj->did->unittitle;
+                      echo "<p>". ucfirst($childObj['type']).": ". $childObj."</p>";
                   }
+              }
+        if (isset($obj->scopecontent->p)) {
+            echo "<p style='line-height: 24px;'>";
+            echo $obj->scopecontent->p;
+            echo "</p>";
+        }
+        if ($obj->did->unittitle != '') {
+            $titleInfo = $obj->did->unittitle;
+        }
+
         if ($obj->did->unittitle->emph != '') {
             $titleInfo = $obj->did->unittitle->emph;
         }
@@ -391,59 +403,54 @@
         if ($flag == 0) { // if no other level exists, display the files
             if ($fileLevel == 1) {
                 ?>
-
               	<button type="button"  class="btn btn-custm" data-toggle="collapse" data-target="#<?php echo $obj['id']; ?>" style="margin-bottom: 5px; text-decoration: none; color: #fff;">View the files.</button>
                 <div id="<?php echo $obj['id']; ?>" class="collapse" style="width: 75%; border-left: 1px solid #ccc; border-right: 1px solid #ccc; margin-left:auto; margin-right: auto;">
 								<?php
                                     foreach ($obj->c as $fileObj) {
-                                        ?>
-										<div class="fileRow">
-											<?php
-                                                foreach ($fileObj->children() as $c) {
-                                                    if ($c->getname() == 'did') {
-                                                        foreach ($fileObj->did->children() as $file) {
-                                                            if ($file->getname() == 'unittitle') {
-                                                                if (count($file) > 0) {
-                                                                    ?>
-                                     <h4><?php echo $file->title;
-                                                                    $component = $file->title; ?></h4>
-                                     <h4><?php echo $file->emph; ?><?php	echo $file; ?></h4>
-                                    <?php
-                                                                } else {
-                                                                    ?>
-                                      <h4><?php	echo $file;
-                                                                    $component = $file; ?></h4>
-                                    <?php
-                                                                }
-                                                            } elseif ($file->getname() == 'unitdate') {
-                                                                ?>
-                                   <p><?php echo ucfirst($file['type']).' Date: '.$file; ?></p><?php
-                                                            } elseif ($file->getname() == 'container') {
-                                                                ?>
-                                  <p><?php echo ucfirst($file['type']).": ". $file;
-                                                                $arr = explode(' ', ucfirst($file['type'])."-". $file);
-                                                                $component = $component."-". $arr[0]; ?></p><?php
-                                                            } ?><!--   <input type="checkbox" class="big-checkbox" id="<?php echo  "crtitm"."-".$collId."-".$component; ?>" value="<?php echo  $repository.substr(0, 13)."..."."-".$collId."-".$component; ?>">--><?php
+                                        echo "<div class='fileRow'>";
+                                        foreach ($fileObj->children() as $c) {
+                                            if ($c->getname() == 'did') {
+                                                foreach ($fileObj->did->children() as $file) {
+                                                    if ($file->getname() == 'unittitle') {
+                                                        if (count($file) > 0) {
+                                                            echo "<h4>". $file->title."</h4>";
+                                                            $component = $file->title;
+                                                            echo "<h4>". $file->emph;
+                                                            echo $file ."</h4>";
+                                                        } else {
+                                                            echo "<h4>". $file;
+                                                            echo  $component = $file."</h4>";
                                                         }
-                                                    } elseif ($c->getname() == 'scopecontent') {
-                                                        ?><h4>Scope and Content</h4><?php
-                              foreach ($fileObj->scopecontent->p as $p) {
-                                  ?>
-                                  <p style="line-height: 1.6"><?php echo $p; ?></p>
-                          <?php
-                              }
+                                                    } elseif ($file->getname() == 'unitdate') {
+                                                        echo "<p>". ucfirst($file['type'])." Date: ".$file ."</p>";
+                                                    } elseif ($file->getname() == 'container') {
+                                                        echo "<p>". ucfirst($file['type']).": ". $file;
+                                                        $arr = explode(' ', ucfirst($file['type'])."-". $file);
+                                                        $component = $component."-". $arr[0] ."</p>";
                                                     }
-                                                } ?>
-                    </div>
-								<?php
-                                    } ?>
-						</div>
-                <?php
-            } ?>
-					<?php
-        } ?>
-          </div>
-<?php
+                                                }
+                                                if (isset($c->physdesc->extent)) {
+                                                    echo "<h4>Extent: ". $c->physdesc->extent."</h4>";
+                                                }
+                                                if (isset($c->unittitle->persname)) {
+                                                    echo "<br><h4>Person: ". $c->unittitle->persname."</h4>";
+                                                }
+                                                if (isset($c->unittitle->unitdate)) {
+                                                    echo "<br><h4>Date: ". $c->unittitle->unitdate."</h4>";
+                                                }
+                                            } elseif ($c->getname() == 'scopecontent') {
+                                                echo "<h4>Scope and Content</h4>";
+                                                foreach ($fileObj->scopecontent->p as $p) {
+                                                    echo "<p style='line-height: 1.6'>". $p ."</p>";
+                                                }
+                                            }
+                                        }
+                                        echo "</div>";
+                                    }
+                echo "</div>";
+            }
+        }
+        echo "</div>";
     }
 ?>
 
