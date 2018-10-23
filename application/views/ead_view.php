@@ -868,75 +868,55 @@ if ($controlledAccess == true) {
             $cAttr = $c->attributes();
             $cLevel = $cAttr["level"];
             if ($cLevel == 'file' || $cLevel == 'item' || $cLevel == 'otherlevel') {
-                ?>
-				<div class="fileRow">
-					<?php foreach ($c->did->children() as $child) {
-                    ?>
-
-	       					<?php if ($child->getname() == 'unittitle') {
-                        ?>
-            					<?php if (count($child) > 0) {
-                            ?>
-                              <?php if (isset($child->title->emph)) {
-                                ?>
-
-                                 <div class="fileTitle"><h4><?php echo ucfirst($cLevel).": ";
+                echo "<div class='fileRow'>";
+                foreach ($c->did->children() as $child) {
+                    if ($child->getname() == 'unittitle') {
+                       echo "$child";
+                        if (count($child) > 0) {
+                            if (isset($child->title->emph)) {
+                                echo "<div class='fileTitle'><h4>". ucfirst($cLevel).": ";
                                 $component = $child->title->emph;
                                 echo $component;
-                                $component = str_replace(" ", "", $component) ?></h4> </div>
-                              <?php
+                                $component = str_replace(" ", "", $component);
+                                echo "</h4> </div>";
                             } else {
-                                ?>
-                                 <div class="fileTitle"><h4><?php echo ucfirst($cLevel).": ";
+                                echo " <div class='fileTitle'><h4>". ucfirst($cLevel).": ";
                                 $component = $child->title;
                                 echo $component;
-                                $component = str_replace(" ", "", $component)?></h4></div>
-                              <?php
+                                $component = str_replace(" ", "", $component);
+                                echo "</h4></div>";
                             }
                         } else {
-                            ?>
-           							<div class="fileTitle"><h4><?php echo ucfirst($cLevel).": ";
+                            echo "<div class='fileTitle'><h4>". ucfirst($cLevel).": ";
                             $component =  $child;
                             echo $component;
-                            $component = str_replace(" ", "", $component) ?></h4></div>
-           						<?php
+                            $component = str_replace(" ", "", $component);
+                            echo "</h4></div>";
                         }
                     } elseif ($child->getname() == 'unitdate') {
-                        ?>
-          						<div class="fileDate"><p><?php echo ucfirst($child['type']).' Date: '.$child; ?></p></div>
-                              <?php
+                        echo "	<div class='fileDate'><p>". ucfirst($child['type']).' Date: '.$child ."</p></div>";
                     } elseif ($child->getname() == 'container') {
-                        ?>
-          						<div class="fileContainer"><p><?php echo ucfirst($child['type']).": ". $child;
+                        echo "	<div class='fileContainer'><p>". ucfirst($child['type']).": ". $child;
                         $arr = explode(' ', ucfirst($child['type'])."-". $child);
-                        $component = $component."-". $arr[0]; ?></p></div>
-                              <?php
+                        $component = $component."-". $arr[0];
+                        echo "</p></div>";
                     }
-                } ?>
-                <!--    <input type="checkbox" class="big-checkbox" id="<?php echo  "crtitm"."-".$collId."-".$component; ?>" value="<?php echo  $repository.substr(0, 13)."..."."-".$collId."-".$component; ?>">
-                -->
-                </div>
-			<?php
+                }
+                echo "</div>";
             } elseif ($cLevel == 'series' || $cLevel == 'collection' || $cLevel == 'recordgrp') {
                 seriesLevel($cLevel, $c, $collId, $repository);
             }
         } /* for each */
     } elseif ($otherfindaids != false) {
-        ?>
-  <h4>Download Container List:</h4>
-  <a href='<?php echo $downloadLink; ?>' itemprop="url"><img src='<?php echo $iconLink; ?>' class="doc-icon"></a>
-<?php
+        echo "<h4>Download Container List:</h4>";
+        echo "<a href='". $downloadLink."' itemprop='url'><img src='". $iconLink."' class='doc-icon'></a>";
     } else {
-        ?>
-		<h4 style="font-style: italic; margin-left: 17px;">Container List Not Available</h4>
-	<?php
+        echo "	<h4 style='font-style: italic; margin-left: 17px;'>Container List Not Available</h4>"; ?>
     }
-?>
-		</div><!-- componentList -->
-
-    <!-- Dynamic table of contents based on series and subseries -->
-      <?php if ($GLOBALS['tree'] != ' ') {
-    ?>
+		echo "</div><!-- componentList -->";
+    echo "<!-- Dynamic table of contents based on series and subseries -->";
+       if ($GLOBALS['tree'] != ' ') {
+         ?>
         <button id="tocbutton" type="button" class="btn btn-default" style="display: hidden;">Series in this Collection:</button>
 	 <div id='toc' style='position:absolute; width: 370px; height: 290px; overflow-y: auto;'>
             <label>Series in this Collection:</label>
