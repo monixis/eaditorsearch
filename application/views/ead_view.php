@@ -58,7 +58,6 @@
         if ($reader->nodeType == XMLReader::ELEMENT && $reader->name == 'ead') {
             $doc = new DOMDocument('1.0', 'UTF-8');
             $xml = simplexml_import_dom($doc->importNode($reader->expand(), true));
-
             $title = $xml->archdesc->did->unittitle;
             $repository = (isset($xml->archdesc->did->repository->corpname)? $xml->archdesc->did->repository->corpname : $xml->archdesc->did->repository);
             $subarea = (isset($xml->archdesc->did->repository->subarea)? $xml->archdesc->did->repository->subarea : $xml->archdesc->did->subarea);
@@ -197,7 +196,11 @@
                 $chronList = array();
                 foreach ($xml->archdesc->bioghist->children() as $p) {
                     if ($p->getname() == 'p') {
-                        $histNote = $histNote . $p . "<br /><br />\n" ;
+                        if (isset($p->emph)) {
+                            $histNote = $histNote. $p->emph . "<br /><br />\n" ;
+                        } else {
+                            $histNote = $histNote . $p . "<br /><br />\n" ;
+                        }
                     } elseif ($p ->getname() == 'chronlist') {
                         $is_chron_available = true;
                     }
@@ -339,6 +342,7 @@
                   if ($childObj->getname() == 'unittitle') {
                       if (count($childObj) > 0) {
                           echo "<h4 id = '". ucfirst($level) . $obj->did->unitid."'>";
+
                           if (isset($obj->did->unittitle)) {
                               echo ucfirst($level) . " " . $obj->did->unitid . ": " . $obj->did->unittitle."</h4>";
                           } else {
@@ -375,7 +379,6 @@
         if ($obj->did->unittitle != '') {
             $titleInfo = $obj->did->unittitle;
         }
-
         if ($obj->did->unittitle->emph != '') {
             $titleInfo = $obj->did->unittitle->emph;
         }
@@ -871,7 +874,11 @@ if ($controlledAccess == true) {
                 echo "<div class='fileRow'>";
                 foreach ($c->did->children() as $child) {
                     if ($child->getname() == 'unittitle') {
-                       echo "$child";
+                        if (isset($child->emph)) {
+                            echo " <div class='fileTitle'><h4>". $child->emph ."</h4></div>";
+                        } else {
+                            echo " <div class='fileTitle'><h4>". $child ."</h4></div>";
+                        }
                         if (count($child) > 0) {
                             if (isset($child->title->emph)) {
                                 echo "<div class='fileTitle'><h4>". ucfirst($cLevel).": ";
@@ -885,6 +892,9 @@ if ($controlledAccess == true) {
                                 echo $component;
                                 $component = str_replace(" ", "", $component);
                                 echo "</h4></div>";
+                            }
+                            if (isset($child->unitdate)) {
+                                echo "	<div class='fileDate'><p>". ucfirst($child->unitdate['type']).' Date: '.$child->unitdate ."</p></div>";
                             }
                         } else {
                             echo "<div class='fileTitle'><h4>". ucfirst($cLevel).": ";
@@ -901,6 +911,22 @@ if ($controlledAccess == true) {
                         $component = $component."-". $arr[0];
                         echo "</p></div>";
                     }
+                }
+                if (isset($c->scopecontent)) {
+                    foreach ($c->scopecontent->children() as $ab) {
+                        if ($ab->getname() == 'p') {
+                            $scopeContent = $scopeContent  . $ab . "<br /><br />\n" ;
+                        } elseif ($ab->getname() == 'list') {
+                            foreach ($c->scopecontent->list->children() as $c) {
+                                if ($c -> getname() == 'head') {
+                                    $scopeContent = $scopeContent . "<h4>" . $c . "</h4>";
+                                } else {
+                                    $scopeContent = $scopeContent . $c . "<br />";
+                                }
+                            }
+                        }
+                    }
+                    echo "<div class='fileContainer'><p>". $scopeContent."</div>";
                 }
                 echo "</div>";
             } elseif ($cLevel == 'series' || $cLevel == 'collection' || $cLevel == 'recordgrp') {
@@ -923,7 +949,7 @@ if ($controlledAccess == true) {
             <?php echo '<ul id="tree">' . $GLOBALS['tree'] . '</ul>'; ?>
           </div>
       <?php
-} ?>
+    } ?>
 
     <h4><label>Output formats:</label></h4>
 		    <a href='<?php echo $link; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-custm" >XML</button></a>
