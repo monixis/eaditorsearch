@@ -352,18 +352,18 @@
                           echo "<h4 id = '". ucfirst($level) . $obj->did->unitid."'>";
                           echo ucfirst($level) . " " . $obj->did->unitid . ": " . $childObj ."</h4>";
                           if (isset($obj->did->abstract)) {
-                              echo "<h4>Abstract: ". $obj->did->abstract."</h4>";
+                              echo "<h4 style='line-height: 24px;'>Abstract: ". $obj->did->abstract."</h4>";
                           }
 
                           if (isset($obj->phystech->note->p)) {
-                              echo "<h4>Physical Characteristics: ". $obj->phystech->note->p."</h4>";
+                              echo "<h4 style='line-height: 24px;'>Physical Characteristics: ". $obj->phystech->note->p."</h4>";
                           }
                       }
                       if (isset($obj->arrangement->p)) {
-                          echo "<h4>Arrangement: ". $obj->arrangement->p."</h4>";
+                          echo "<h4 style='line-height: 24px;'>Arrangement: ". $obj->arrangement->p."</h4>";
                       }
                       if (isset($obj->did->physdesc->extent)) {
-                          echo "<h4>Size: ". $obj->did->physdesc->extent."</h4>";
+                          echo "<h4 style='line-height: 24px;'>Size: ". $obj->did->physdesc->extent."</h4>";
                       }
                   } elseif ($childObj->getname() == 'unitdate') {
                       echo "<p>". ucfirst($childObj['type'])." Date: ".$childObj."</p>";
