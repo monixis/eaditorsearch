@@ -937,7 +937,7 @@ if ($controlledAccess == true) {
         echo "<h4>Download Container List:</h4>";
         echo "<a href='". $downloadLink."' itemprop='url'><img src='". $iconLink."' class='doc-icon'></a>";
     } else {
-        echo "	<h4 style='font-style: italic; margin-left: 17px;'>Container List Not Available</h4>"; ?>
+        echo "	<h4 style='font-style: italic; margin-left: 17px;'>Container List Not Available</h4>"; 
     }
 		echo "</div><!-- componentList -->";
     echo "<!-- Dynamic table of contents based on series and subseries -->";
