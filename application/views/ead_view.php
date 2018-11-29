@@ -160,8 +160,8 @@
                 $access = (isset($xml->archdesc->accessrestrict)? $xml->archdesc->accessrestrict : 'Unspecified');
                 if ($access != 'Unspecified') {
                     foreach ($xml->archdesc->accessrestrict->children() as $p) {
-                        if ($p->getname() == 'p') {
-                            $access = $access . $p . "<br />\n" ;
+                      if ($p->getname() == 'p') {
+                                                $access = $access . $p . "<br /><br />\n" ;
                         }
                     }
                 }
