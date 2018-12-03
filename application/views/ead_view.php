@@ -152,7 +152,7 @@
                 if ($access != 'Unspecified') {
                     foreach ($xml->archdesc->descgrp->accessrestrict->children() as $p) {
                         if ($p->getname() == 'p') {
-                                $access = $access . dom_import_simplexml($p)->textContent . "<br />\n" ;
+                            $access = $access . dom_import_simplexml($p)->textContent . "<br />\n" ;
                         }
                     }
                 }
@@ -161,7 +161,7 @@
                 if ($access != 'Unspecified') {
                     foreach ($xml->archdesc->accessrestrict->children() as $p) {
                         if ($p->getname() == 'p') {
-                                $access = $access . dom_import_simplexml($p)->textContent . "<br />\n" ;
+                            $access = $access . dom_import_simplexml($p)->textContent . "<br />\n" ;
                         }
                     }
                 }
@@ -171,7 +171,7 @@
                 if ($copyright!= 'Unspecified') {
                     foreach ($xml->archdesc->descgrp->userestrict->children() as $p) {
                         if ($p->getname() == 'p') {
-                                $copyright = $copyright . dom_import_simplexml($p)->textContent . "<br />\n" ;
+                            $copyright = $copyright . dom_import_simplexml($p)->textContent . "<br />\n" ;
                         }
                     }
                 }
@@ -180,7 +180,7 @@
                 if ($copyright!= 'Unspecified') {
                     foreach ($xml->archdesc->userestrict->children() as $p) {
                         if ($p->getname() == 'p') {
-                              $copyright = $copyright . dom_import_simplexml($p)->textContent . "<br />\n" ;
+                            $copyright = $copyright . dom_import_simplexml($p)->textContent . "<br />\n" ;
                         }
                     }
                 }
@@ -194,6 +194,19 @@
                             $acqInfo = $acqInfo . dom_import_simplexml($p)->textContent . "<br />\n" ;
                         } else {
                             $acqInfo = $acqInfo . $p . "<br />\n" ;
+                        }
+                    }
+                }
+            } else {
+                $acqInfo = (isset($xml->archdesc->acqinfo)? $xml->archdesc->acqinfo : 'Unspecified');
+                if ($acqInfo!= 'Unspecified') {
+                    foreach ($xml->archdesc->acqinfo->children() as $p) {
+                        if ($p->getname() == 'p') {
+                            if (isset($p->extref)) {
+                                $acqInfo = $acqInfo . dom_import_simplexml($p)->textContent . "<br />\n" ;
+                            } else {
+                                $acqInfo = $acqInfo . $p . "<br />\n" ;
+                            }
                         }
                     }
                 }
@@ -215,7 +228,7 @@
                 $chronList = array();
                 foreach ($xml->archdesc->bioghist->children() as $p) {
                     if ($p->getname() == 'p') {
-                            $histNote = $histNote .  dom_import_simplexml($p)->textContent . "<br /><br />\n" ;
+                        $histNote = $histNote .  dom_import_simplexml($p)->textContent . "<br /><br />\n" ;
                     } elseif ($p ->getname() == 'chronlist') {
                         $is_chron_available = true;
                     }
