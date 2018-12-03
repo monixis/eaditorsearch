@@ -293,6 +293,8 @@
                 $iconLink = '/empiresearch/icons/';
                 if ($ext == 'docx') {
                     $iconLink = $iconLink . 'word.png';
+                } elseif ($ext == 'doc') {
+                    $iconLink = $iconLink . 'word.png';
                 } elseif ($ext == 'pdf') {
                     $iconLink = $iconLink . 'adobe.png';
                 } elseif ($ext == 'xlsx') {
