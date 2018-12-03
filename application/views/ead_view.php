@@ -423,8 +423,8 @@
                                                             echo "<h4>". $file->emph;
                                                             echo $file ."</h4>";
                                                         } else {
-                                                            echo "<h4>". $file;
-                                                            echo  $component = $file."</h4>";
+                                                            echo "<h4>". $file."</h4>";
+                                                            $component = $file;
                                                         }
                                                     } elseif ($file->getname() == 'unitdate') {
                                                         echo "<p>". ucfirst($file['type'])." Date: ".$file ."</p>";
