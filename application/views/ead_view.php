@@ -152,7 +152,7 @@
                 if ($access != 'Unspecified') {
                     foreach ($xml->archdesc->descgrp->accessrestrict->children() as $p) {
                         if ($p->getname() == 'p') {
-                            $access = $access . $p . "<br />\n" ;
+                                $access = $access . dom_import_simplexml($p)->textContent . "<br />\n" ;
                         }
                     }
                 }
@@ -160,22 +160,41 @@
                 $access = (isset($xml->archdesc->accessrestrict)? $xml->archdesc->accessrestrict : 'Unspecified');
                 if ($access != 'Unspecified') {
                     foreach ($xml->archdesc->accessrestrict->children() as $p) {
-                      if ($p->getname() == 'p') {
-                                                $access = $access . $p . "<br /><br />\n" ;
+                        if ($p->getname() == 'p') {
+                                $access = $access . dom_import_simplexml($p)->textContent . "<br />\n" ;
                         }
                     }
                 }
             }
-            if (isset($xml->archdesc->descgrp->userestrict->p)) {
-                $copyright = (isset($xml->archdesc->descgrp->userestrict->p)? $xml->archdesc->descgrp->userestrict->p : 'Unspecified');
+            if (isset($xml->archdesc->descgrp->userestrict)) {
+                $copyright = (isset($xml->archdesc->descgrp->userestrict)? $xml->archdesc->descgrp->userestrict : 'Unspecified');
+                if ($copyright!= 'Unspecified') {
+                    foreach ($xml->archdesc->descgrp->userestrict->children() as $p) {
+                        if ($p->getname() == 'p') {
+                                $copyright = $copyright . dom_import_simplexml($p)->textContent . "<br />\n" ;
+                        }
+                    }
+                }
             } else {
-                $copyright = (isset($xml->archdesc->userestrict->p)? $xml->archdesc->userestrict->p : 'Unspecified');
+                $copyright = (isset($xml->archdesc->userestrict)? $xml->archdesc->userestrict : 'Unspecified');
+                if ($copyright!= 'Unspecified') {
+                    foreach ($xml->archdesc->userestrict->children() as $p) {
+                        if ($p->getname() == 'p') {
+                              $copyright = $copyright . dom_import_simplexml($p)->textContent . "<br />\n" ;
+                        }
+                    }
+                }
             }
+
             $acqInfo = (isset($xml->archdesc->descgrp->acqinfo)? $xml->archdesc->descgrp->acqinfo : 'Unspecified');
             if ($acqInfo != 'Unspecified') {
                 foreach ($xml->archdesc->descgrp->acqinfo->children() as $p) {
                     if ($p->getname() == 'p') {
-                        $acqInfo = $acqInfo . $p . "<br />\n" ;
+                        if (isset($p->extref)) {
+                            $acqInfo = $acqInfo . dom_import_simplexml($p)->textContent . "<br />\n" ;
+                        } else {
+                            $acqInfo = $acqInfo . $p . "<br />\n" ;
+                        }
                     }
                 }
             }
@@ -196,11 +215,7 @@
                 $chronList = array();
                 foreach ($xml->archdesc->bioghist->children() as $p) {
                     if ($p->getname() == 'p') {
-                        if (isset($p->emph)) {
-                            $histNote = $histNote. $p->emph . "<br /><br />\n" ;
-                        } else {
-                            $histNote = $histNote . $p . "<br /><br />\n" ;
-                        }
+                            $histNote = $histNote .  dom_import_simplexml($p)->textContent . "<br /><br />\n" ;
                     } elseif ($p ->getname() == 'chronlist') {
                         $is_chron_available = true;
                     }
@@ -217,7 +232,7 @@
                             if ($c -> getname() == 'head') {
                                 $scopeContent = $scopeContent . "<h4>" . $c . "</h4>";
                             } else {
-                                $scopeContent = $scopeContent . $c . "<br />";
+                                $scopeContent = $scopeContent . dom_import_simplexml($c)->textContent  . "<br />";
                             }
                         }
                     }
@@ -241,7 +256,7 @@
                             if ($c -> getname() == 'head') {
                                 $arrangement = $arrangement . "<h4>" . $c . "</h4>";
                             } else {
-                                $arrangement = $arrangement . $c . "<br />";
+                                $arrangement = $arrangement . dom_import_simplexml($c)->textContent  . "<br />";
                             }
                         }
                     }
@@ -268,8 +283,37 @@
                     $linksAvailable = false;
                     $i = 0;
                     foreach ($xml->archdesc->relatedmaterial->p as $rm) {
-                        $relatedMaterialLink[$i][0] = $rm;
-                        $i = $i + 1;
+                        if (isset($rm->emph)) {
+                            $relatedMaterialLink[$i][0] = dom_import_simplexml($rm)->textContent;
+                            $i = $i + 1;
+                        } elseif (isset($rm->extref)) {
+                            $relatedMaterialLink[$i][0] = dom_import_simplexml($rm)->textContent;
+                            $i = $i + 1;
+                        } else {
+                            $relatedMaterialLink[$i][0] = $rm;
+                            $i = $i + 1;
+                        }
+                    }
+                }
+            }
+
+            $bibliography = (isset($xml->archdesc->bibliography)? $xml->archdesc->bibliography : 'Unspecified');
+            if ($bibliography != 'Unspecified') {
+                foreach ($xml->archdesc->bibliography->children() as $p) {
+                    if ($p->getname() == 'p') {
+                        if (isset($p->emph)) {
+                            $bibliography = $bibliography . dom_import_simplexml($p)->textContent. "<br /><br />\n" ;
+                        } else {
+                            $bibliography = '<li > '.$bibliography  . $p . '</li>\n' ;
+                        }
+                    } elseif ($p->getname() == 'list') {
+                        foreach ($xml->archdesc->bibliography->list->children() as $c) {
+                            if ($c -> getname() == 'head') {
+                                $bibliography = $bibliography . "<h4>" . $c . "</h4>";
+                            } else {
+                                $bibliography = $bibliography . dom_import_simplexml($c)->textContent  . "<br />";
+                            }
+                        }
                     }
                 }
             }
@@ -446,7 +490,7 @@
                                             } elseif ($c->getname() == 'scopecontent') {
                                                 echo "<h4>Scope and Content</h4>";
                                                 foreach ($fileObj->scopecontent->p as $p) {
-                                                    echo "<p style='line-height: 1.6'>". $p ."</p>";
+                                                    echo "<p style='line-height: 1.6'>".  dom_import_simplexml($p)->textContent  ."</p>";
                                                 }
                                             }
                                         }
@@ -624,15 +668,24 @@
           <?php
                 } else {
                     ?>
-            <a style='pointer-events: none; '><?php echo $relatedMaterialLink[$i][0]; ?></a></br>
+                    <ul>
+            <li type="circle"><?php echo $relatedMaterialLink[$i][0]; ?></li>
+          </ul>
           <?php
                 }
             }
+            echo "</p>";
+        }
+
+        if ($bibliography != 'Unspecified') {
+            ?>
+            <label>Bibliography: </label><ul><?php echo auto_link($bibliography, 'both', true); ?></ul>
+          <?php
         }
 
         if ($accruals != 'Unspecified') {
             ?>
-          <label>Accruals and Additions: </label><p><?php echo auto_link($accruals, 'both', true); ?></p>
+          <label>Accruals and Additions: </label><p><?php echo auto_link($accruals, 'both', true); ?></p><br>
         <?php
         } ?>
 </div>
@@ -923,7 +976,7 @@ if ($controlledAccess == true) {
                                 if ($c -> getname() == 'head') {
                                     $scopeContent = $scopeContent . "<h4>" . $c . "</h4>";
                                 } else {
-                                    $scopeContent = $scopeContent . $c . "<br />";
+                                    $scopeContent = $scopeContent . dom_import_simplexml($c)->textContent  . "<br />";
                                 }
                             }
                         }
@@ -941,17 +994,17 @@ if ($controlledAccess == true) {
     } else {
         echo "	<h4 style='font-style: italic; margin-left: 17px;'>Container List Not Available</h4>";
     }
-		echo "</div><!-- componentList -->";
+        echo "</div><!-- componentList -->";
     echo "<!-- Dynamic table of contents based on series and subseries -->";
        if ($GLOBALS['tree'] != ' ') {
-         ?>
+           ?>
         <button id="tocbutton" type="button" class="btn btn-default" style="display: hidden;">Series in this Collection:</button>
 	 <div id='toc' style='position:absolute; width: 370px; height: 290px; overflow-y: auto;'>
             <label>Series in this Collection:</label>
             <?php echo '<ul id="tree">' . $GLOBALS['tree'] . '</ul>'; ?>
           </div>
       <?php
-    } ?>
+       } ?>
 
     <h4><label>Output formats:</label></h4>
 		    <a href='<?php echo $link; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-custm" >XML</button></a>
