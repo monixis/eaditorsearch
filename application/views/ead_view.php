@@ -152,7 +152,11 @@
                 if ($access != 'Unspecified') {
                     foreach ($xml->archdesc->descgrp->accessrestrict->children() as $p) {
                         if ($p->getname() == 'p') {
-                            $access = $access . $p . "<br />\n" ;
+                            if (isset($p->extref)) {
+                                $access = $access . dom_import_simplexml($p)->textContent . "<br />\n" ;
+                            } else {
+                                $access = $access . $p . "<br />\n" ;
+                            }
                         }
                     }
                 }
@@ -161,21 +165,53 @@
                 if ($access != 'Unspecified') {
                     foreach ($xml->archdesc->accessrestrict->children() as $p) {
                         if ($p->getname() == 'p') {
-                            $access = $access . $p . "<br /><br />\n" ;
+                            if (isset($p->extref)) {
+                                $access = $access . dom_import_simplexml($p)->textContent . "<br />\n" ;
+                            } else {
+                                $access = $access . $p . "<br />\n" ;
+                            }
                         }
                     }
                 }
             }
             if (isset($xml->archdesc->descgrp->userestrict->p)) {
                 $copyright = (isset($xml->archdesc->descgrp->userestrict->p)? $xml->archdesc->descgrp->userestrict->p : 'Unspecified');
+                $copyright = (isset($xml->archdesc->userestrict->p)? $xml->archdesc->userestrict->p : 'Unspecified');
+                if ($copyright!= 'Unspecified') {
+                    foreach ($xml->archdesc->descgrp->userestrict->children() as $p) {
+                        if ($p->getname() == 'p') {
+                            if (isset($p->extref)) {
+                                $copyright = $copyright . dom_import_simplexml($p)->textContent . "<br />\n" ;
+                            } else {
+                                $copyright = $copyright . $p . "<br />\n" ;
+                            }
+                        }
+                    }
+                }
             } else {
                 $copyright = (isset($xml->archdesc->userestrict->p)? $xml->archdesc->userestrict->p : 'Unspecified');
+                if ($copyright!= 'Unspecified') {
+                    foreach ($xml->archdesc->userestrict->children() as $p) {
+                        if ($p->getname() == 'p') {
+                            if (isset($p->extref)) {
+                                $copyright = $copyright . dom_import_simplexml($p)->textContent . "<br />\n" ;
+                            } else {
+                                $copyright = $copyright . $p . "<br />\n" ;
+                            }
+                        }
+                    }
+                }
             }
+
             $acqInfo = (isset($xml->archdesc->descgrp->acqinfo)? $xml->archdesc->descgrp->acqinfo : 'Unspecified');
             if ($acqInfo != 'Unspecified') {
                 foreach ($xml->archdesc->descgrp->acqinfo->children() as $p) {
                     if ($p->getname() == 'p') {
-                        $acqInfo = $acqInfo . $p . "<br />\n" ;
+                        if (isset($p->extref)) {
+                            $acqInfo = $acqInfo . dom_import_simplexml($p)->textContent . "<br />\n" ;
+                        } else {
+                            $acqInfo = $acqInfo . $p . "<br />\n" ;
+                        }
                     }
                 }
             }
@@ -268,8 +304,13 @@
                     $linksAvailable = false;
                     $i = 0;
                     foreach ($xml->archdesc->relatedmaterial->p as $rm) {
-                        $relatedMaterialLink[$i][0] = $rm;
-                        $i = $i + 1;
+                        if (isset($rm->emph)) {
+                            $relatedMaterialLink[$i][0] = dom_import_simplexml($rm)->textContent;
+                            $i = $i + 1;
+                        } else {
+                            $relatedMaterialLink[$i][0] = $rm;
+                            $i = $i + 1;
+                        }
                     }
                 }
             }
@@ -281,7 +322,7 @@
                         if (isset($p->emph)) {
                             $bibliography = $bibliography . dom_import_simplexml($p)->textContent. "<br /><br />\n" ;
                         } else {
-                            $bibliography = $bibliography  . $p . "<br /><br />\n" ;
+                            $bibliography = '<li > '.$bibliography  . $p . '</li>\n' ;
                         }
                     } elseif ($p->getname() == 'list') {
                         foreach ($xml->archdesc->bibliography->list->children() as $c) {
@@ -645,7 +686,9 @@
           <?php
                 } else {
                     ?>
-            <a style='pointer-events: none; '><?php echo $relatedMaterialLink[$i][0]; ?></a></br>
+                    <ul>
+            <li type="circle"><?php echo $relatedMaterialLink[$i][0]; ?></li>
+          </ul>
           <?php
                 }
             }
@@ -654,7 +697,7 @@
 
         if ($bibliography != 'Unspecified') {
             ?>
-            <label>Bibliography: </label><p><?php echo auto_link($bibliography, 'both', true); ?></p>
+            <label>Bibliography: </label><ul><?php echo auto_link($bibliography, 'both', true); ?></ul>
           <?php
         }
 
