@@ -274,6 +274,27 @@
                 }
             }
 
+            $bibliography = (isset($xml->archdesc->bibliography)? $xml->archdesc->bibliography : 'Unspecified');
+            if ($bibliography != 'Unspecified') {
+                foreach ($xml->archdesc->bibliography->children() as $p) {
+                    if ($p->getname() == 'p') {
+                        if (isset($p->emph)) {
+                            $bibliography = $bibliography . dom_import_simplexml($p)->textContent. "<br /><br />\n" ;
+                        } else {
+                            $bibliography = $bibliography  . $p . "<br /><br />\n" ;
+                        }
+                    } elseif ($p->getname() == 'list') {
+                        foreach ($xml->archdesc->bibliography->list->children() as $c) {
+                            if ($c -> getname() == 'head') {
+                                $bibliography = $bibliography . "<h4>" . $c . "</h4>";
+                            } else {
+                                $bibliography = $bibliography . $c . "<br />";
+                            }
+                        }
+                    }
+                }
+            }
+
             $seperateMaterial = (isset($xml->archdesc->separatedmaterial)? $xml->archdesc->separatedmaterial : 'Unspecified');
             if ($seperateMaterial != 'Unspecified') {
                 foreach ($xml->archdesc->separatedmaterial->children() as $p) {
@@ -628,11 +649,18 @@
           <?php
                 }
             }
+            echo "</p>";
+        }
+
+        if ($bibliography != 'Unspecified') {
+            ?>
+            <label>Bibliography: </label><p><?php echo auto_link($bibliography, 'both', true); ?></p>
+          <?php
         }
 
         if ($accruals != 'Unspecified') {
             ?>
-          <label>Accruals and Additions: </label><p><?php echo auto_link($accruals, 'both', true); ?></p>
+          <label>Accruals and Additions: </label><p><?php echo auto_link($accruals, 'both', true); ?></p><br>
         <?php
         } ?>
 </div>
