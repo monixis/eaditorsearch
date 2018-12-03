@@ -160,8 +160,8 @@
                 $access = (isset($xml->archdesc->accessrestrict)? $xml->archdesc->accessrestrict : 'Unspecified');
                 if ($access != 'Unspecified') {
                     foreach ($xml->archdesc->accessrestrict->children() as $p) {
-                      if ($p->getname() == 'p') {
-                                                $access = $access . $p . "<br /><br />\n" ;
+                        if ($p->getname() == 'p') {
+                            $access = $access . $p . "<br /><br />\n" ;
                         }
                     }
                 }
@@ -969,17 +969,17 @@ if ($controlledAccess == true) {
     } else {
         echo "	<h4 style='font-style: italic; margin-left: 17px;'>Container List Not Available</h4>";
     }
-		echo "</div><!-- componentList -->";
+        echo "</div><!-- componentList -->";
     echo "<!-- Dynamic table of contents based on series and subseries -->";
        if ($GLOBALS['tree'] != ' ') {
-         ?>
+           ?>
         <button id="tocbutton" type="button" class="btn btn-default" style="display: hidden;">Series in this Collection:</button>
 	 <div id='toc' style='position:absolute; width: 370px; height: 290px; overflow-y: auto;'>
             <label>Series in this Collection:</label>
             <?php echo '<ul id="tree">' . $GLOBALS['tree'] . '</ul>'; ?>
           </div>
       <?php
-    } ?>
+       } ?>
 
     <h4><label>Output formats:</label></h4>
 		    <a href='<?php echo $link; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-custm" >XML</button></a>
