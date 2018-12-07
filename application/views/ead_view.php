@@ -478,7 +478,8 @@
                                                             echo "<h4>". $file->title."</h4>";
                                                             $component = $file->title;
                                                             echo "<h4>". $file->emph;
-                                                            echo $file ."</h4>";
+                                                            #Disable not sure if needed
+                                                            #echo $file ."</h4>";
                                                         } else {
                                                             echo "<h4>". $file."</h4>";
                                                             $component = $file;
@@ -493,6 +494,9 @@
                                                 }
                                                 if (isset($c->physdesc->extent)) {
                                                     echo "<h4>Extent: ". $c->physdesc->extent."</h4>";
+                                                }
+                                                if (isset($c->note)) {
+                                                    echo "<h4>". $c->note->p."</h4>";
                                                 }
                                                 if (isset($c->unittitle->persname)) {
                                                     echo "<br><h4>Person: ". $c->unittitle->persname."</h4>";
