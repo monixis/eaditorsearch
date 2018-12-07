@@ -567,38 +567,39 @@
        <--?php } */?> -->
 
        <label>Repository:</label><a class="searchTerm" style="font-style: italic" href="#"><p style="width: 230px;"><?php echo $repository; ?></a><br><?php echo $subarea; ?></p>
-
-       <?php if ($address == true) {
-    foreach ($addressline as $a) {
-        ?>
-            <h5 style="font-style: italic"><?php echo $a; ?></h5>
-       <?php
-    }
-}
-      #Check if URL is missing the http and add it if is missing
-       $add= strpos($rURL, 'http://') !== false ? '' : 'http://';
-       $add .=$rURL;
-       ?>
-       <h5><a href='<?php echo $add; ?>' style='font-size: 15px' ><?php echo $rURL; ?></a></h5>
-
-       <label>Dates: </label>
-       <?php
-       foreach ($dateRange as $y) {
-           ?>
-          <p><?php echo $y; ?></p>
-      <?php
-       } ?>
-
+<?php
+   if ($address == true) {
+       foreach ($addressline as $a) {
+           if (strpos($a, 'URI') === 0) {
+               $a=substr($a, 4);
+               if (!preg_match("~^(?:f|ht)tps?://~i", $a)) {
+                   $a = "http://" .$a;
+                   $a=substr($a, 7);
+               }
+               #              $a = str_replace( 'http:', 'http://', $a );
+               #               $a = str_replace( 'http://', 'http://', $a );
+               echo "<h5>URI: <a target='_blank' href='".$a."'>".$a."</a></h5>";
+           } elseif (strpos($a, 'URL') === 0) {
+               $a=substr($a, 4);
+               $a = str_replace('http:', 'http://', $a);
+               echo "<h5>URL: <a target='_blank' href='".$a."'>".$a."</a></h5>";
+           } elseif (strpos($a, 'http') === 0) {
+               echo "<h5>URL: <a target='_blank' href='".$a."'>".$a."</a></h5>";
+           } else {
+               echo "<h5>".$a."</h5>";
+           }
+       }
+   }?>
       <label>Creator: </label>
       <!--?php foreach ($creatorList as $c){ ?>
             <p><span property="dcterms:creator"><a href="#" id="<?php echo $c[0][1]; ?>" class="controlledHeader"><?php echo $c[0][0]; ?></a></span></p>
       <!--?php } -->
 
       <?php for ($y = 0 ; $y < count($creatorList) ; $y++) {
-           ?>
+       ?>
             <p><span property="dcterms:creator"><a href="#" id="<?php echo $creatorList[$y][1]; ?>" class="controlledHeader"><?php echo $creatorList[$y][0]; ?></a></span></p>
       <?php
-       }
+   }
 
       if ($extent != 'Unspecified') {
           foreach ($extent as $y) {
