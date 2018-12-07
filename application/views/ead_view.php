@@ -594,7 +594,7 @@
            }
        }
    }?>
-      <label>Creator: </label>
+      <br><label>Creator: </label>
       <!--?php foreach ($creatorList as $c){ ?>
             <p><span property="dcterms:creator"><a href="#" id="<?php echo $c[0][1]; ?>" class="controlledHeader"><?php echo $c[0][0]; ?></a></span></p>
       <!--?php } -->
