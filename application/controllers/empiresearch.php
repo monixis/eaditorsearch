@@ -1,4 +1,5 @@
 <?php
+
 class empiresearch extends CI_Controller
 {
     public function __construct()
@@ -32,6 +33,7 @@ class empiresearch extends CI_Controller
     }
     public function AdvSearchKeyWords($key, $facet)
     {
+	$solr_url = $this->config->item('solr_url');
         $key = trim($key);
         $key = str_replace("%20", "+", $key);
         $key = str_replace("%2520", "+", $key);
@@ -44,9 +46,9 @@ class empiresearch extends CI_Controller
 
 
         if ($facet != "NULL") {
-            $resultsLink = "http://www.empireadc.org:8080/solr/eaditor-published/select?q=".$facet.":*\"".$key."\"&wt=json&indent=true&facet=true&facet.field=subject_facet&facet.field=agency_facet&facet.field=corpname_facet&facet.field=genreform_facet&facet.field=persname_facet&facet.field=language_facet&facet.field=century_num&facet.field=famname_facet&facet.field=geogname_facet&rows=1500";
+            $resultsLink = $solr_url."/solr/eaditor-published/select?q=".$facet.":*\"".$key."\"&wt=json&indent=true&facet=true&facet.field=subject_facet&facet.field=agency_facet&facet.field=corpname_facet&facet.field=genreform_facet&facet.field=persname_facet&facet.field=language_facet&facet.field=century_num&facet.field=famname_facet&facet.field=geogname_facet&rows=1500";
         } else {
-            $resultsLink = "http://www.empireadc.org:8080/solr/eaditor-published/select?indent=on&q=". $key ."&wt=json&facet=true&facet.field=subject_facet&facet.field=agency_facet&facet.field=corpname_facet&facet.field=genreform_facet&facet.field=persname_facet&facet.field=language_facet&facet.field=century_num&facet.field=famname_facet&facet.field=geogname_facet&rows=1500";
+            $resultsLink = $solr_url."/solr/eaditor-published/select?indent=on&q=". $key ."&wt=json&facet=true&facet.field=subject_facet&facet.field=agency_facet&facet.field=corpname_facet&facet.field=genreform_facet&facet.field=persname_facet&facet.field=language_facet&facet.field=century_num&facet.field=famname_facet&facet.field=geogname_facet&rows=1500";
         }
         //echo $resultsLink;
         $json = file_get_contents($resultsLink);
@@ -95,6 +97,7 @@ class empiresearch extends CI_Controller
 
     public function searchKeyWords($key, $facet)
     {
+	$solr_url = $this->config->item('solr_url');
         $key = trim($key);
         $key = str_replace("%20", "+", $key);
         $key = str_replace("%2520", "+", $key);
@@ -107,9 +110,9 @@ class empiresearch extends CI_Controller
 
 
         if ($facet != "NULL") {
-            $resultsLink = "http://www.empireadc.org:8080/solr/eaditor-published/select?indent=on&q=*:*&fq=".$facet.'%3A%22'. $key .'%22'."&wt=json&facet=true&facet.field=subject_facet&facet.field=agency_facet&facet.field=corpname_facet&facet.field=genreform_facet&facet.field=persname_facet&facet.field=language_facet&facet.field=century_num&facet.field=famname_facet&facet.field=geogname_facet&rows=1500";
+            $resultsLink = $solr_url."/solr/eaditor-published/select?indent=on&q=*:*&fq=".$facet.'%3A%22'. $key .'%22'."&wt=json&facet=true&facet.field=subject_facet&facet.field=agency_facet&facet.field=corpname_facet&facet.field=genreform_facet&facet.field=persname_facet&facet.field=language_facet&facet.field=century_num&facet.field=famname_facet&facet.field=geogname_facet&rows=1500";
         } else {
-            $resultsLink = "http://www.empireadc.org:8080/solr/eaditor-published/select?indent=on&q=". $key ."&wt=json&facet=true&facet.field=subject_facet&facet.field=agency_facet&facet.field=corpname_facet&facet.field=genreform_facet&facet.field=persname_facet&facet.field=language_facet&facet.field=century_num&facet.field=famname_facet&facet.field=geogname_facet&rows=1500";
+            $resultsLink = $solr_url."/solr/eaditor-published/select?indent=on&q=". $key ."&wt=json&facet=true&facet.field=subject_facet&facet.field=agency_facet&facet.field=corpname_facet&facet.field=genreform_facet&facet.field=persname_facet&facet.field=language_facet&facet.field=century_num&facet.field=famname_facet&facet.field=geogname_facet&rows=1500";
         }
         //echo $resultsLink;
         $json = file_get_contents($resultsLink);
@@ -158,7 +161,8 @@ class empiresearch extends CI_Controller
 
     public function searchAll()
     {
-        $resultsLink = "http://www.empireadc.org:8080/solr/eaditor-published/select?indent=on&q=*:*&wt=json&facet=true&facet.field=subject_facet&facet.field=agency_facet&facet.field=corpname_facet&facet.field=genreform_facet&facet.field=persname_facet&facet.field=language_facet&facet.field=century_num&facet.field=famname_facet&facet.field=geogname_facet&rows=1500";
+	$solr_url = $this->config->item('solr_url');
+        $resultsLink = $solr_url."/solr/eaditor-published/select?indent=on&q=*:*&wt=json&facet=true&facet.field=subject_facet&facet.field=agency_facet&facet.field=corpname_facet&facet.field=genreform_facet&facet.field=persname_facet&facet.field=language_facet&facet.field=century_num&facet.field=famname_facet&facet.field=geogname_facet&rows=1500";
         $json = file_get_contents($resultsLink);
         $data['results'] = json_decode($json);
         // echo $resultsLink;
@@ -212,7 +216,8 @@ class empiresearch extends CI_Controller
 
     public function browse()
     {
-        $resultsLink = "http://www.empireadc.org:8080/solr/eaditor-published/select?indent=on&q=*:*&wt=json&facet=true&facet.field=agency_facet";
+	$solr_url = $this->config->item('solr_url');
+        $resultsLink = $solr_url."/solr/eaditor-published/select?indent=on&q=*:*&wt=json&facet=true&facet.field=agency_facet";
         $json = file_get_contents($resultsLink);
         $data['results'] = json_decode($json);
         $this->load->view('browse', $data);

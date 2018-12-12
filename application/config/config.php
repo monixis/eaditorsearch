@@ -17,8 +17,8 @@
 |
 */
 $config['base_url']	= 'http://empireadc2.org/empiresearch';
-
-
+$config['exist_url']     = 'http://localhost:8899';
+$config['solr_url']     = 'http://localhost:8080';
 /*
 |--------------------------------------------------------------------------
 | Index File
