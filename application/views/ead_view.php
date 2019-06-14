@@ -44,6 +44,7 @@
   <?php
     #Define URL for solr and exist in config.php
     $exist_url= $this->config->item('exist_url');
+    $exist_url_ext= $this->config->item('exist_url_ext');
     $solr_url = $this->config->item('solr_url');
 
     $this->load->helper('url');
@@ -52,6 +53,7 @@
     #$link = "https://www.empireadc.org/ead/". strtolower($collId) ."/id/".$eadId.".xml";
     #Link directly to exist to help with large size xml
     $link =$exist_url."/exist/rest/db/empireADC/". strtolower($collId) ."/guides/".$eadId.".xml";
+$link_ext =$exist_url_ext."/exist/rest/db/empireADC/". strtolower($collId) ."/guides/".$eadId.".xml";
     $rdf = "https://www.empireadc.org/ead/". $collId ."/id/".$eadId.".rdf";
     $is_chron_available = false;
 
@@ -1029,7 +1031,7 @@ if ($controlledAccess == true) {
        } ?>
 
     <h4><label>Output formats:</label></h4>
-		    <a href='<?php echo $link; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-custm" >XML</button></a>
+		    <a href='<?php echo $link_ext; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-custm" >XML</button></a>
         <!--disable for now -->
     <!--    <a href='<?php echo $rdf; ?>' target='_blank' style='text-decoration: none; color: #ffffff;'><button type="button" class="btn btn-custm" >RDF/XML</button> </a> -->
     </div>

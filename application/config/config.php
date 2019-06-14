@@ -18,6 +18,7 @@
 */
 $config['base_url']	= 'https://www.empireadc.org/empiresearch';
 $config['exist_url']     = 'http://localhost:8899';
+$config['exist_url_ext']     = 'http://empireadc.org:8899';
 $config['solr_url']     = 'http://localhost:8080';
 /*
 |--------------------------------------------------------------------------

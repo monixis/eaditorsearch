@@ -46,7 +46,7 @@ class empiresearch extends CI_Controller
 
 
         if ($facet != "NULL") {
-            $resultsLink = $solr_url."/solr/eaditor-published/select?q=".$facet.":*\"".$key."\"&wt=json&indent=true&facet=true&facet.field=subject_facet&facet.field=agency_facet&facet.field=corpname_facet&facet.field=genreform_facet&facet.field=persname_facet&facet.field=language_facet&facet.field=century_num&facet.field=famname_facet&facet.field=geogname_facet&rows=1500";
+            $resultsLink = $solr_url."/solr/eaditor-published/select?q=".$facet.'%3A%22%22'. $key .'%22%22'."&wt=json&indent=true&facet=true&facet.field=subject_facet&facet.field=agency_facet&facet.field=corpname_facet&facet.field=genreform_facet&facet.field=persname_facet&facet.field=language_facet&facet.field=century_num&facet.field=famname_facet&facet.field=geogname_facet&rows=1500";
         } else {
             $resultsLink = $solr_url."/solr/eaditor-published/select?indent=on&q=". $key ."&wt=json&facet=true&facet.field=subject_facet&facet.field=agency_facet&facet.field=corpname_facet&facet.field=genreform_facet&facet.field=persname_facet&facet.field=language_facet&facet.field=century_num&facet.field=famname_facet&facet.field=geogname_facet&rows=1500";
         }
